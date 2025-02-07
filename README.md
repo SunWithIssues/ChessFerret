@@ -1,20 +1,9 @@
-## Helpful Links
+# ChessFerret
 
-#### Menu Header Examples
-https://doc.qt.io/qt-5/qtwidgets-mainwindows-application-example.html
-https://doc.qt.io/qt-6/qtwidgets-mainwindows-menus-example.html
+This is an open source chess management software. The project is trying to reduce the costs associated with being a Tournament Director/Arbiter, while also allowing for a completely offline management tool for linux operating systems.
 
-https://zetcode.com/gui/qt5/menusandtoolbars/
+## Releases
+No official release is completed at this time. (STILL IN DEVELOPMENT)
 
-#### Shortcut Reworking Examples
-https://stackoverflow.com/questions/9109952/how-to-specify-mnemonics-ampersand-shortcut-to-qactions-in-a-qmenu
-
-
-#### QTableView,.... 
-
-https://stackoverflow.com/questions/15290932/qtablewidget-vs-qtableview
-
-#### Diff Btwn show(), open(), exec()
-https://stackoverflow.com/questions/38265985/qdialog-show-vs-open
-
-https://topic.alibabacloud.com/a/the-difference-between-show-and-exec-in-the-qt-dialog-box_8_8_20181622.html
+## License
+Licensed under GNU General Public License, Version 3
