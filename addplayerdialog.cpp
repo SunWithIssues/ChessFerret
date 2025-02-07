@@ -13,7 +13,7 @@ AddPlayerDialog::AddPlayerDialog(QWidget *parent)
     ui->setupUi(this);
 
     ui->birthDateEdit->setDisplayFormat("MM/dd/yyyy");
-    ui->birthDateEdit->setMaximumDate(QDate.currentDate());
+    ui->birthDateEdit->setMaximumDate(QDate::currentDate());
 
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &AddPlayerDialog::onAccepted);
     connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &AddPlayerDialog::onApplied);
