@@ -1,9 +1,9 @@
-#include "mainwindow.h"
+#include "headers/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tournamentdialog.h"
-#include "setupdialog.h"
-#include "sectiondialog.h"
-#include "addplayerdialog.h"
+#include "headers/tournamentdialog.h"
+#include "headers/setupdialog.h"
+#include "headers/sectiondialog.h"
+#include "headers/addplayerdialog.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -192,8 +192,16 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
-    QTabWidget *tabWidget = ui->sectionTabWidget;
-    // tabWidget->
+    auto tableWidget = ui->currentAllView;
+    delete tableWidget->model();
+
+    if(!db->selectAll(tableWidget)){
+        // TODO: WHAT TO DO IF NOT WORKS
+        return;
+    }
+
+    qDebug() << "it worked?";
+    tableWidget->show();
 }
 
 

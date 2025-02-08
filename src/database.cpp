@@ -1,6 +1,12 @@
-#include "database.h"
-#include "addplayerdialog.h"
+#include "headers/database.h"
+#include "headers/addplayerdialog.h"
 
+
+#include <QSql>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlQueryModel>
+#include <QTableView>
 #include <QMessageBox>
 #include <QDebug>
 
@@ -11,6 +17,22 @@ Database::Database(QObject *parent)
 Database::~Database()
 {}
 
+
+bool Database::selectAll(QTableView *view)
+{
+    QSqlQueryModel *model = new QSqlQueryModel;
+    model->setQuery("SELECT * FROM players");
+    if (model->lastError().isValid())
+    {
+        qDebug() << "table could not be retrived";
+        qDebug() << model->lastError().databaseText() << model->lastError().driverText();        return false;
+        return false;
+    }
+
+    view->setModel(model);
+    return true;
+
+}
 
 bool Database::insert(AddPlayerDialog::playerInfo pi)
 {
@@ -49,14 +71,12 @@ bool Database::insert(AddPlayerDialog::playerInfo pi)
 }
 bool Database::remove()
 {
+    // TODO:
     return false;
 }
 
 bool Database::newDatabase(QString filepath)
 {
-
-    // TODO:
-    // Update database with information
 
     if (openDatabase(filepath)){
         QSqlQuery query;

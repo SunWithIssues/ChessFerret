@@ -1,6 +1,6 @@
-#include "tournamentdialog.h"
+#include "headers/tournamentdialog.h"
 #include "ui_tournamentdialog.h"
-#include "sectiondialog.h"
+#include "headers/sectiondialog.h"
 
 
 #include <QDir>

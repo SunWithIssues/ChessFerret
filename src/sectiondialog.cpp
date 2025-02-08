@@ -1,4 +1,4 @@
-#include "sectiondialog.h"
+#include "headers/sectiondialog.h"
 #include "ui_sectiondialog.h"
 
 SectionDialog::SectionDialog(QWidget *parent)

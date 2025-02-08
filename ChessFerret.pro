@@ -11,6 +11,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/addgroupdialog.cpp \
     src/addplayerdialog.cpp \
     src/database.cpp \
     src/main.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
     src/tournamentdialog.cpp \
 
 HEADERS += \
+    src/headers/addgroupdialog.h \
     src/headers/addplayerdialog.h \
     src/headers/database.h \
     src/headers/mainwindow.h \
@@ -28,6 +30,7 @@ HEADERS += \
     src/headers/tournamentdialog.h \
 
 FORMS += \
+    src/forms/addgroupdialog.ui \
     src/forms/addplayerdialog.ui \
     src/forms/mainwindow.ui \
     src/forms/sectiondialog.ui \

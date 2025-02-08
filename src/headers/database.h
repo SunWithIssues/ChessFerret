@@ -2,14 +2,12 @@
 #define DATABASE_H
 
 #include "addplayerdialog.h"
+
 #include <QObject>
-#include <QSql>
-#include <QSqlQuery>
-#include <QSqlError>
+
+#include <QTableView>
 #include <QSqlDatabase>
-#include <QFile>
-#include <QDate>
-#include <QDebug>  // TODO: might remove later
+// #include <QDebug>  // TODO: might remove later
 
 
 class Database : public QObject
@@ -19,6 +17,7 @@ public:
     explicit Database(QObject *parent = nullptr);
     ~Database();
 
+    bool selectAll(QTableView *view);
     bool insert(AddPlayerDialog::playerInfo pi);
     bool remove();
     bool openDatabase(QString filepath);
