@@ -12,25 +12,25 @@
 
 Database::Database(QObject *parent)
     : QObject{parent}
-{}
+{
+    QList<header> columns{header{"name", "QString", new int(100)}};
+}
 
 Database::~Database()
 {}
 
 
-bool Database::selectAll(QTableView *view)
+QAbstractItemModel* Database::selectAll()
 {
     QSqlQueryModel *model = new QSqlQueryModel;
     model->setQuery("SELECT * FROM players");
     if (model->lastError().isValid())
     {
         qDebug() << "table could not be retrived";
-        qDebug() << model->lastError().databaseText() << model->lastError().driverText();        return false;
-        return false;
+        qDebug() << model->lastError().databaseText() << model->lastError().driverText();
+        return nullptr;
     }
-
-    view->setModel(model);
-    return true;
+    return model;
 
 }
 

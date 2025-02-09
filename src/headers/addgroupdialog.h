@@ -15,8 +15,17 @@ public:
     explicit AddGroupDialog(QWidget *parent = nullptr);
     ~AddGroupDialog();
 
+    void init(QList<QString> headers);
+
+private slots:
+    void onToolButtonClicked();
+
+
 private:
     Ui::AddGroupDialog *ui;
+
+    void additionalUiSetup();
+
 };
 
 #endif // ADDGROUPDIALOG_H

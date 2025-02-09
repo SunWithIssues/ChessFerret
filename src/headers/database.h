@@ -17,7 +17,14 @@ public:
     explicit Database(QObject *parent = nullptr);
     ~Database();
 
-    bool selectAll(QTableView *view);
+    struct header
+    {
+        QString name;
+        QString type;
+        int *character_limit;
+    };
+
+    QAbstractItemModel* selectAll();
     bool insert(AddPlayerDialog::playerInfo pi);
     bool remove();
     bool openDatabase(QString filepath);

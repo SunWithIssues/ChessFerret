@@ -4,6 +4,7 @@
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
+#include "headers/addgroupdialog.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -102,7 +103,7 @@ void MainWindow::createMenus()
 
     // Connections
     connect(add1Act, &QAction::triggered, this, &MainWindow::add1Player);
-
+    connect(addNAct, &QAction::triggered, this, &MainWindow::addNPlayers);
 
     // ----------------------------------------
     // Sections
@@ -162,6 +163,23 @@ void MainWindow::additionalUiSetup()
 }
 
 
+void MainWindow::addNPlayers()
+{
+    AddGroupDialog dialog(this);
+    if (!tDialog)
+    {
+        qDebug() << "Tournament Not Initialized";
+        return;
+    }
+
+    // TODO::IMPORTANT:: have the comboboxes be populated with possible headers
+    dialog.init(QList<QString>());
+    dialog.show();
+
+
+    // updateTableViews();
+
+}
 
 void MainWindow::add1Player()
 {
@@ -192,16 +210,31 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
-    auto tableWidget = ui->currentAllView;
+    auto *tableWidget = ui->currentAllView; //
+    // QTableView *newTableWidget = new QTableView;
+
+    // qDebug() << "row count (b4)" << tableWidget->model()->rowCount();
+    // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
+
     delete tableWidget->model();
 
-    if(!db->selectAll(tableWidget)){
-        // TODO: WHAT TO DO IF NOT WORKS
+    qDebug() << "row count (deletion)" << tableWidget->model()->rowCount();
+
+    auto model_ptr = db->selectAll();
+    if(!model_ptr){
+        qDebug() << "did not work";
         return;
     }
 
     qDebug() << "it worked?";
-    tableWidget->show();
+    // qDebug() << "row count (old)" << tableWidget->model()->rowCount();
+    // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
+    // tableWidget->show();
+    ui->currentAllView->setModel(model_ptr);
+
+    qDebug() << "row count (after)" << ui->currentAllView->model()->rowCount();
+
+
 }
 
 

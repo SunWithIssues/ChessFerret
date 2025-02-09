@@ -27,94 +27,94 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="5" column="1">
-      <widget class="QComboBox" name="comboBox_7"/>
+      <widget class="QComboBox" name="teamsComboBox"/>
      </item>
      <item row="2" column="3">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="birthDateComboBox"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>TextLabel</string>
+        <string>File Path</string>
        </property>
       </widget>
      </item>
      <item row="4" column="2">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>TextLabel</string>
+        <string>FIDE Rating</string>
        </property>
       </widget>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Teams</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>TextLabel</string>
+        <string>FIDE ID</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Name</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>TextLabel</string>
+        <string>National ID</string>
        </property>
       </widget>
      </item>
      <item row="5" column="3">
-      <widget class="QComboBox" name="comboBox_8"/>
+      <widget class="QComboBox" name="sectionComboBox"/>
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Birthdate</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="nameComboBox"/>
      </item>
      <item row="3" column="1">
-      <widget class="QComboBox" name="comboBox_3"/>
+      <widget class="QComboBox" name="natIdComboBox"/>
      </item>
      <item row="3" column="2">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>TextLabel</string>
+        <string>National Rating</string>
        </property>
       </widget>
      </item>
      <item row="4" column="3">
-      <widget class="QComboBox" name="comboBox_6"/>
+      <widget class="QComboBox" name="fideRtgComboBox"/>
      </item>
      <item row="0" column="1" colspan="2">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="filePathEdit"/>
      </item>
      <item row="5" column="2">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Section</string>
        </property>
       </widget>
      </item>
      <item row="3" column="3">
-      <widget class="QComboBox" name="comboBox_4"/>
+      <widget class="QComboBox" name="natRtgComboBox"/>
      </item>
      <item row="4" column="1">
-      <widget class="QComboBox" name="comboBox_5"/>
+      <widget class="QComboBox" name="fideIdComboBox"/>
      </item>
      <item row="0" column="3">
       <widget class="QToolButton" name="toolButton">

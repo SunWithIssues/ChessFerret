@@ -22,17 +22,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    struct header
-    {
-        QString name;
-        QString type;
-    };
-
     struct headerPreferences
     {
-        QVector<header> *roster;
-        QVector<header> *round;
-        QVector<header> *pairings;
+        QVector<Database::header> *roster;
+        QVector<Database::header> *round;
+        QVector<Database::header> *pairings;
     };
 
 
@@ -43,10 +37,15 @@ public slots:
 
 private slots:
     void newTournamentDialog();
-    void add1Player();
-    void openSetupDialog();
-    void newSection();
     void loadExistingTournament();
+
+    void openSetupDialog();
+
+    void add1Player();
+    void addNPlayers();
+
+    void newSection();
+
 
 private:
     void createMenus();
