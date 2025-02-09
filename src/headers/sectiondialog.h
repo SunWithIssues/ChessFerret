@@ -5,6 +5,7 @@
 
 // Pairing
 #define SWISS 0
+#define DOUBLE_SWISS 7
 #define ROUND_ROBIN 1
 #define LADDER 2
 
@@ -64,6 +65,8 @@ private slots:
 
 private:
     Ui::SectionDialog *ui;
+    QHash<int, QString> pairingStyles;
+    QHash<int, QString> scoringstyles;
 
     void additionalUiSetup();
 

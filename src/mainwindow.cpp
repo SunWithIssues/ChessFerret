@@ -122,6 +122,7 @@ void MainWindow::createMenus()
     sectionsMenu->addAction(removeSectionAct);
 
     connect(add1SectionAct, &QAction::triggered, this, &MainWindow::newSection);
+    connect(editSectionAct, &QAction::triggered, this, &MainWindow::viewSection);
 
     // ----------------------------------------
     // Teams
@@ -198,9 +199,48 @@ void MainWindow::updateTableViews()
 }
 
 
+void MainWindow::viewSection()
+{
+    QTabWidget *tabWidget = ui->sectionTabWidget;
+
+    auto sectionNames = tDialog->getSectionNames();
+
+    QString tabLabel = tabWidget->tabText(tabWidget->currentIndex());
+
+    if(sectionNames.contains(tabLabel))
+    {
+        auto si0 = tDialog->getSectionsInfo().value(tabLabel);
+
+        SectionDialog dialog(this);
+        dialog.init(si0);
+
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            tDialog->replaceSectionInfo(si0, dialog.info);
+            tabWidget->setTabText(tabWidget->currentIndex(), dialog.info.sectionName);
+        }
+    }
+    else
+    {
+        QMessageBox mbox;
+
+        mbox.setText(tr("ALL is not a section."));
+        mbox.setWindowTitle(tr("Warning"));
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        QGridLayout* layout = (QGridLayout*)mbox.layout();
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
 
 
-void MainWindow::newSection(){
+        mbox.exec();
+    }
+
+
+
+}
+
+void MainWindow::newSection()
+{
     QTabWidget *tabWidget = ui->sectionTabWidget;
 
     //TODO::IMPORTANT:: this whole code logic is repeated in tournament dialog
@@ -223,7 +263,8 @@ void MainWindow::newSection(){
 }
 
 
-void MainWindow::openSetupDialog(){
+void MainWindow::openSetupDialog()
+{
     sDialog = new SetupDialog(this);
     sDialog->show();
 

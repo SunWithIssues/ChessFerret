@@ -46,6 +46,7 @@ private slots:
     void add1Player();
     void openSetupDialog();
     void newSection();
+    void viewSection();
     void loadExistingTournament();
 
 private:

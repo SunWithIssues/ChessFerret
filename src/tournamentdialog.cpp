@@ -94,6 +94,13 @@ bool TournamentDialog::addSectionInfo(SectionDialog::SectionInfo si)
     return true;
 }
 
+void TournamentDialog::replaceSectionInfo(SectionDialog::SectionInfo si0, SectionDialog::SectionInfo si1)
+{
+    // Remove
+    info->sections.remove(si0.sectionName);
+    // Add
+    info->sections.insert(si1.sectionName, si1);
+}
 
 
 void TournamentDialog::on_toolButton_clicked()

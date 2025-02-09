@@ -26,6 +26,7 @@ public:
     QHash<QString, SectionDialog::SectionInfo> getSectionsInfo();
     QList<QString> getSectionNames();
     bool addSectionInfo(SectionDialog::SectionInfo si);
+    void replaceSectionInfo(SectionDialog::SectionInfo si0, SectionDialog::SectionInfo si1);
 
 signals:
 
