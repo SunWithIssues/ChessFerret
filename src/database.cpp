@@ -15,7 +15,7 @@ Database::~Database()
 {
 
     closeDatabase();
-    QSqlDatabase::removeDatabase(CONNECTION_NAME);
+
 }
 
 
@@ -106,4 +106,6 @@ bool Database::openDatabase(QString filepath)
 void Database::closeDatabase()
 {
     db.close();
+    db = QSqlDatabase();
+    QSqlDatabase::removeDatabase(CONNECTION_NAME);
 }
