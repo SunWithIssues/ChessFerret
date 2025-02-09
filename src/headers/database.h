@@ -23,11 +23,12 @@ public:
     bool remove();
     bool openDatabase(QString filepath);
     bool newDatabase(QString filepath);
+    void closeDatabase();
 
 private:
     QSqlDatabase db;
 
-    void closeDatabase();
+
 
 
 };

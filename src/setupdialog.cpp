@@ -1,4 +1,4 @@
-#include "setupdialog.h"
+#include "headers/setupdialog.h"
 #include "ui_setupdialog.h"
 
 SetupDialog::SetupDialog(QWidget *parent)

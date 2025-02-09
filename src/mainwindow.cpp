@@ -1,9 +1,9 @@
-#include "mainwindow.h"
+#include "headers/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tournamentdialog.h"
-#include "setupdialog.h"
-#include "sectiondialog.h"
-#include "addplayerdialog.h"
+#include "headers/tournamentdialog.h"
+#include "headers/setupdialog.h"
+#include "headers/sectiondialog.h"
+#include "headers/addplayerdialog.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -237,18 +237,31 @@ void MainWindow::newTournamentDialog()
     //TODO::IMPORTANT:: figure out what to do if they open a new tournament
     //  db must close b4hand, old tDialog might be needed if they cancel, etc
 
-    tDialog = new TournamentDialog(this);
-    tDialog->setModal(true);
 
-    if (tDialog->exec() == QDialog::Accepted){
-        ui->tournamentName->setText(tDialog->getTournamentName());
 
-        foreach (auto section, tDialog->getSectionsInfo()) {
+    auto dialog = new TournamentDialog(this);
+    dialog->setModal(true);
+
+    if (dialog->exec() == QDialog::Accepted){
+        ui->tournamentName->setText(dialog->getTournamentName());
+
+        if(tDialog)
+        {
+            for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
+                ui->sectionTabWidget->removeTab(i);
+            }
+
+            delete db;
+            db = new Database();
+        }
+
+        foreach (auto section, dialog->getSectionsInfo()) {
             ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
         }
 
-        db->newDatabase(tDialog->getFilePath());
+        db->newDatabase(dialog->getFilePath());
 
+        tDialog = dialog;
     }
 
 

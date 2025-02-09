@@ -1,6 +1,6 @@
-#include "tournamentdialog.h"
+#include "headers/tournamentdialog.h"
 #include "ui_tournamentdialog.h"
-#include "sectiondialog.h"
+#include "headers/sectiondialog.h"
 
 
 #include <QDir>
@@ -34,6 +34,7 @@ void TournamentDialog::additionalUiSetup()
 
 void TournamentDialog::on_buttonBox_accepted()
 {
+    // Sets Tournament Info
     info = new Info;
     info->tournamentName = ui->tournamentNameEdit->text();
     info->location = ui->locationEdit->text();
@@ -43,16 +44,10 @@ void TournamentDialog::on_buttonBox_accepted()
     info->sections = tempSections;
 
 
-    // TODO::IMPORTANT:: check if filepath exist on this level
-    // if(!QFile(filepath).exists()){
-    //     // Give warning overriding existing tournament
-    //     QMessageBox msgBox;
-    //     msgBox.setText("You are about to override an existing tournament.");
-    //     msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    //     if(msgBox.exec() == QMessageBox::Cancel){
-    //         return false;
-    //     }
-    // }
+    // Removes existing filepath for overwriting purposes in database.cpp
+    if(QFile(info->filepath).exists()){
+        QFile::remove(info->filepath);
+    }
 }
 
 QString TournamentDialog::getTournamentName()

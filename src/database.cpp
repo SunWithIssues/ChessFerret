@@ -1,20 +1,27 @@
-#include "database.h"
-#include "addplayerdialog.h"
+#include "headers/database.h"
+#include "headers/addplayerdialog.h"
 
 #include <QMessageBox>
 #include <QDebug>
+
+
+#define CONNECTION_NAME "FC_DB"
 
 Database::Database(QObject *parent)
     : QObject{parent}
 {}
 
 Database::~Database()
-{}
+{
+
+    closeDatabase();
+    QSqlDatabase::removeDatabase(CONNECTION_NAME);
+}
 
 
 bool Database::insert(AddPlayerDialog::playerInfo pi)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString q = "INSERT INTO players (  birthdate, "
                                         "name,"
                                         "gender,"
@@ -59,7 +66,7 @@ bool Database::newDatabase(QString filepath)
     // Update database with information
 
     if (openDatabase(filepath)){
-        QSqlQuery query;
+        QSqlQuery query(db);
         QString q = "CREATE TABLE players"
                     "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "ranking INTEGER, "
@@ -86,7 +93,7 @@ bool Database::newDatabase(QString filepath)
 bool Database::openDatabase(QString filepath)
 {
     //TODO: figure out what I am doing here
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE", CONNECTION_NAME);
     db.setDatabaseName(filepath);
     if(db.open()){
         return true;
