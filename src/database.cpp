@@ -10,6 +10,9 @@
 
 
 #define CONNECTION_NAME "FC_DB"
+#define TBL_SECTIONS "sections"
+#define TBL_TOURNAMENT "tournament"
+#define TBL_PLAYERS "players"
 
 Database::Database(QObject *parent)
     : QObject{parent}
@@ -48,7 +51,7 @@ bool Database::insertSection(SectionInfo si)
 
     if(!query.exec())
     {
-        qDebug() << "Did not insert <section>";
+        qDebug() << "Did not insert:" << TBL_SECTIONS;
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return false;
     }
@@ -127,11 +130,12 @@ bool Database::newDatabase(QString filepath)
         if(!query.exec(q))
         {
             qDebug() << "DataBase <players>: error of create ";
-            qDebug() << query.lastError().text();
+            qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };
 
-        q = "CREATE TABLE sections"
+
+        q = "CREATE TABLE sections "
             "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "section_name TEXT NOT NULL,"
             "section_name_print TEXT,"
@@ -140,25 +144,26 @@ bool Database::newDatabase(QString filepath)
             "scoring_style TEXT,"
             "min_rtg INTEGER,"
             "max_rtg INTEGER,"
-            "time_control TEXT))";
+            "time_control TEXT)";
 
         if(!query.exec(q))
         {
-            qDebug() << "DataBase <sections>: error of create ";
-            qDebug() << query.lastError().text();
+            qDebug() << "DataBase" << TBL_SECTIONS << "error of create ";
+            qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };
+
 
         q = "CREATE TABLE tournament"
             "(tournament_name TEXT NOT NULL,"
             "location TEXT,"
             "begin_date DATE,"
-            "end_date DATE))";
+            "end_date DATE)";
 
         if(!query.exec(q))
         {
             qDebug() << "DataBase <tournament>: error of create ";
-            qDebug() << query.lastError().text();
+            qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };
 

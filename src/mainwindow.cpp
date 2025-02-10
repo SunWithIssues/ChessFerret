@@ -257,6 +257,7 @@ void MainWindow::newSection()
         auto tableWidget = new QTableWidget(this);
         tableWidget->setRowCount(10);
         tabWidget->addTab(tableWidget, dialog.info.sectionName);
+        db->insertSection(dialog.info);
 
     }
 
@@ -291,12 +292,13 @@ void MainWindow::newTournamentDialog()
             db = new Database();
         }
 
+        db->newDatabase(dialog->getFilePath());
+
         foreach (auto section, dialog->getSectionsInfo()) {
             ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
             db->insertSection(section);
         }
 
-        db->newDatabase(dialog->getFilePath());
 
         tDialog = dialog;
     }
