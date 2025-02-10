@@ -16,7 +16,8 @@ AddGroupDialog::~AddGroupDialog()
     delete ui;
 }
 
-void AddGroupDialog::init(QList<QString> headers){
+void AddGroupDialog::init(QList<QString> headers)
+{
 
 }
 

@@ -3,7 +3,7 @@
 #include "headers/info.h"
 
 
-
+#include <QStringBuilder>
 #include <QSql>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
@@ -22,7 +22,23 @@
 Database::Database(QObject *parent)
     : QObject{parent}
 {
-    QList<header> columns{header{"name", "QString", new int(100)}};
+
+    cols_tournament = {
+        header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date" "DATE"},
+        header{"end_date", "DATE"}
+    };
+    cols_sections = {
+        header{"section_name", "TEXT"}, header{"section_name_print" "TEXT"},
+        header{"num_rounds", "INTEGER"}, header{"pairing_style", "TEXT"},
+        header{"scoring_style", "TEXT"}, header{"min_rtg", "INTEGER"},
+        header{"max_rtg", "INTEGER"}, header{"time_control", "TEXT"}
+    };
+    cols_players = {
+        header{"name", "TEXT"}, header{"ranking", "INTEGER"}, header{"birthdate", "DATE"},
+        header{"gender", "TEXT"}, header{"id_national", "TEXT"},
+        header{"rtg_national ","INTEGER"}, header{"id_fide","TEXT"},
+        header{"rtg_fide","INTEGER"}, header{"section", "TEXT"}, header{"teams", "TEXT"}
+    };
 }
 
 Database::~Database()
@@ -30,6 +46,11 @@ Database::~Database()
     closeDatabase();
 }
 
+
+QList<header> Database::getColsPlayers()
+{
+    return cols_players;
+}
 
 QAbstractItemModel* Database::selectAll()
 {
@@ -228,16 +249,16 @@ bool Database::newDatabase(QString filepath)
         QSqlQuery query(db);
         QString q = "CREATE TABLE players"
                     "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "name TEXT,"
                     "ranking INTEGER, "
-                    "name VARCHAR(100),"
                     "birthdate DATE,"
-                    "gender VARCHAR(3),"
-                    "id_national VARCHAR(30),"
+                    "gender TEXT,"
+                    "id_national TEXT,"
                     "rtg_national INTEGER,"
-                    "id_fide VARCHAR(30),"
+                    "id_fide TEXT,"
                     "rtg_fide INTEGER,"
                     "section TEXT NOT NULL,"
-                    "teams VARCHAR(100))";
+                    "teams TEXT)";
 
         if(!query.exec(q))
         {

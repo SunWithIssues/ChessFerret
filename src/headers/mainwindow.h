@@ -24,9 +24,9 @@ public:
 
     struct headerPreferences
     {
-        QVector<Database::header> *roster;
-        QVector<Database::header> *round;
-        QVector<Database::header> *pairings;
+        QHash<QString, QString> *roster;
+        QHash<QString, QString> *round;
+        QHash<QString, QString> *pairings;
     };
 
 
@@ -53,14 +53,16 @@ private:
     void createMenus();
     void createEmptyRoster();
     void additionalUiSetup();
+    void restartUiState();
     void updateTableViews();
-    QVector<headerPreferences> populateHeaderPreferences();
+    headerPreferences populateHeaderPreferences();
 
 
     Ui::MainWindow *ui;
     TournamentDialog *tDialog;
     SetupDialog *sDialog;
     Database *db;
+    headerPreferences *hp;
 
 };
 #endif // MAINWINDOW_H

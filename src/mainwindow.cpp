@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     additionalUiSetup();
 
     db = new Database();
+
 }
 
 MainWindow::~MainWindow()
@@ -167,6 +168,32 @@ void MainWindow::additionalUiSetup()
 }
 
 
+
+MainWindow::headerPreferences MainWindow::populateHeaderPreferences()
+{
+
+    // TODO::IMPORTANT:: this is a quick dirty method for associating
+    //   database attributes with columns headers. will prob change in future
+
+
+    hp = new headerPreferences();
+
+    auto cols = db->getColsPlayers();
+    auto r = new QHash<QString, QString>({
+        {tr("Name"), cols.at(0).name}, {tr("Ranking"), cols.at(1).name},
+        {tr("Birthdate"), cols.at(2).name}, {tr("Gender"), cols.at(3).name},
+        {tr("ID National"), cols.at(4).name}, {tr("Rating National"), cols.at(5).name},
+        {tr("ID FIDE"), cols.at(6).name}, {tr("Rating FIDE"), cols.at(7).name},
+        {tr("Section"), cols.at(8).name}, {tr("Teams"), cols.at(9).name}
+    });
+
+    hp->roster = r;
+
+
+}
+
+
+
 void MainWindow::addNPlayers()
 {
     AddGroupDialog dialog(this);
@@ -177,8 +204,8 @@ void MainWindow::addNPlayers()
     }
 
     // TODO::IMPORTANT:: have the comboboxes be populated with possible headers
-    dialog.init(QList<QString>());
-    dialog.show();
+    dialog.init(hp->roster->keys());
+    dialog.exec();
 
 
     // updateTableViews();
@@ -220,23 +247,23 @@ void MainWindow::updateTableViews()
     // qDebug() << "row count (b4)" << tableWidget->model()->rowCount();
     // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
 
-    delete tableWidget->model();
+    // delete tableWidget->model();
 
-    qDebug() << "row count (deletion)" << tableWidget->model()->rowCount();
+    // qDebug() << "row count (deletion)" << tableWidget->model()->rowCount();
 
-    auto model_ptr = db->selectAll();
-    if(!model_ptr){
-        qDebug() << "did not work";
-        return;
-    }
+    // auto model_ptr = db->selectAll();
+    // if(!model_ptr){
+    //     qDebug() << "did not work";
+    //     return;
+    // }
 
-    qDebug() << "it worked?";
-    // qDebug() << "row count (old)" << tableWidget->model()->rowCount();
-    // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
-    // tableWidget->show();
-    ui->currentAllView->setModel(model_ptr);
+    // qDebug() << "it worked?";
+    // // qDebug() << "row count (old)" << tableWidget->model()->rowCount();
+    // // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
+    // // tableWidget->show();
+    // ui->currentAllView->setModel(model_ptr);
 
-    qDebug() << "row count (after)" << ui->currentAllView->model()->rowCount();
+    // qDebug() << "row count (after)" << ui->currentAllView->model()->rowCount();
 
 
 }
@@ -323,17 +350,14 @@ void MainWindow::newTournamentDialog()
 
         if(tDialog)
         {
-            for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
-                ui->sectionTabWidget->removeTab(i);
-            }
-
-            delete db;
-            db = new Database();
+            restartUiState();
         }
 
         db->newDatabase(dialog->getFilePath());
-
         db->insertTournament(dialog->getTournamentInfo());
+
+        // Populate Header Preferences b4 tabwidget decisions
+        populateHeaderPreferences();
 
         foreach (auto section, dialog->getSectionsInfo()) {
             ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
@@ -363,6 +387,11 @@ void MainWindow::loadExistingTournament()
     }
     filepaths = dialog.selectedFiles();
 
+    if(tDialog)
+    {
+        restartUiState();
+    }
+
     // Retrieve info from database
     db->openDatabase(filepaths[0]);
     auto ti = db->setupTournament();
@@ -371,6 +400,9 @@ void MainWindow::loadExistingTournament()
     tDialog = new TournamentDialog(this);
     tDialog->init(ti);
 
+    // Populate Header Preferences b4 tabwidget decisions
+    populateHeaderPreferences();
+
     // UI. Add Tabs
     foreach (auto si, ti->sections) {
         ui->sectionTabWidget->addTab(new QWidget(), si.sectionName);
@@ -378,6 +410,15 @@ void MainWindow::loadExistingTournament()
 
     // UI. Update Tables
     updateTableViews();
-
 }
 
+void MainWindow::restartUiState()
+{
+    for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
+        ui->sectionTabWidget->removeTab(i);
+    }
+
+    delete db;
+    db = new Database();
+
+}

@@ -20,7 +20,6 @@ public:
     {
         QString name;
         QString type;
-        int *character_limit;
     };
 
     QAbstractItemModel* selectAll();
@@ -34,13 +33,17 @@ public:
     bool newDatabase(QString filepath);
     void closeDatabase();
 
+    QList<header> getColsPlayers();
+
     TournamentInfo* setupTournament();
 
 
 private:
     QSqlDatabase db;
 
-
+    QList<header> cols_players;
+    QList<header> cols_sections;
+    QList<header> cols_tournament;
 
 
 };
