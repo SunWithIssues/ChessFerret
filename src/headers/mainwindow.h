@@ -22,6 +22,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void show();
+
+    void init();
+
     struct header
     {
         QString name;

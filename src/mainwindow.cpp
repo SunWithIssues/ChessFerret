@@ -4,6 +4,7 @@
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
+#include "headers/onstartupdialog.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -32,6 +33,17 @@ MainWindow::~MainWindow()
     delete db;
 }
 
+
+void MainWindow::show()
+{
+    QMainWindow::show();
+    OnStartUpDialog dialog(this);
+    QObject::connect(&dialog, &QDialog::rejected, qApp, QApplication::quit);
+    qDebug() << dialog.exec();
+
+    qDebug() << "not";
+
+}
 
 void MainWindow::createMenus()
 {

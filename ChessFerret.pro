@@ -15,6 +15,7 @@ SOURCES += \
     src/database.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/onstartupdialog.cpp \
     src/sectiondialog.cpp \
     src/setupdialog.cpp \
     src/tournamentdialog.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     src/headers/sectiondialog.h \
     src/headers/setupdialog.h \
     src/headers/tournamentdialog.h \
+    src/headers/onstartupdialog.h
 
 FORMS += \
     src/forms/addplayerdialog.ui \
@@ -34,6 +36,7 @@ FORMS += \
     src/forms/sectiondialog.ui \
     src/forms/setupdialog.ui \
     src/forms/tournamentdialog.ui \
+    src/forms/onstartupdialog.ui
 
 TRANSLATIONS += \
     translations/ChessFerret_en_US.ts
