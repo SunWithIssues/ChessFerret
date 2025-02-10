@@ -20,7 +20,7 @@ SectionDialog::SectionDialog(QWidget *parent)
 
 }
 
-void SectionDialog::init(SectionDialog::SectionInfo si)
+void SectionDialog::init(SectionInfo si)
 {
 
     ui->nameEdit->setText(si.sectionName);

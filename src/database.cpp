@@ -1,7 +1,5 @@
 #include "headers/database.h"
-#include "headers/addplayerdialog.h"
-#include "headers/sectiondialog.h"
-#include "headers/tournamentdialog.h"
+#include "headers/info.h"
 
 
 #include <QSql>
@@ -24,7 +22,7 @@ Database::~Database()
 
 }
 
-bool Database::insertSection(SectionDialog::SectionInfo si)
+bool Database::insertSection(SectionInfo si)
 {
     QSqlQuery query(db);
     QString q = "INSERT INTO sections ( section_name,"
@@ -56,7 +54,7 @@ bool Database::insertSection(SectionDialog::SectionInfo si)
     }
     return true;
 }
-bool Database::insertPlayer(AddPlayerDialog::playerInfo pi)
+bool Database::insertPlayer(PlayerInfo pi)
 {
     QSqlQuery query(db);
     QString q = "INSERT INTO players (  birthdate, "
@@ -92,17 +90,19 @@ bool Database::insertPlayer(AddPlayerDialog::playerInfo pi)
     return true;
 
 }
-bool Database::remove()
+bool Database::removePlayer()
 {
     return false;
 }
 
-TournamentDialog::Info Database::setupTournament()
+TournamentInfo Database::setupTournament()
 {
 
-    TournamentDialog::Info tInfo;
+    TournamentInfo tInfo;
+
 
     //TODO::IMPORTANT:: get the info from tables <sections> and <tournament>
+    return tInfo;
 }
 
 

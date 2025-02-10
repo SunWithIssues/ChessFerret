@@ -1,7 +1,6 @@
 #include "headers/addplayerdialog.h"
 #include "ui_addplayerdialog.h"
 
-#include "headers/tournamentdialog.h"
 
 #include <QDate>
 
@@ -55,7 +54,7 @@ void AddPlayerDialog::onApplied()
     additionalUiSetup();
 }
 
-QList<AddPlayerDialog::playerInfo> AddPlayerDialog::getPlayers()
+QList<PlayerInfo> AddPlayerDialog::getPlayers()
 {
     return players;
 }
@@ -63,7 +62,7 @@ QList<AddPlayerDialog::playerInfo> AddPlayerDialog::getPlayers()
 
 void AddPlayerDialog::addPlayerToList()
 {
-    playerInfo pi;
+    PlayerInfo pi;
 
     pi.birthdate = ui->birthDateEdit->date();
     pi.gender = ui->genderEdit->text();

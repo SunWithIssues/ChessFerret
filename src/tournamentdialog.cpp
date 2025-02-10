@@ -35,7 +35,7 @@ void TournamentDialog::additionalUiSetup()
 void TournamentDialog::on_buttonBox_accepted()
 {
     // Sets Tournament Info
-    info = new Info;
+    info = new TournamentInfo;
     info->tournamentName = ui->tournamentNameEdit->text();
     info->location = ui->locationEdit->text();
     info->beginDate = ui->beginDateEdit->date();
@@ -71,7 +71,7 @@ QString TournamentDialog::getFilePath()
     return info->filepath;
 }
 
-QHash<QString,SectionDialog::SectionInfo> TournamentDialog::getSectionsInfo()
+QHash<QString,SectionInfo> TournamentDialog::getSectionsInfo()
 {
     return info->sections;
 }
@@ -82,7 +82,7 @@ QList<QString> TournamentDialog::getSectionNames()
 }
 
 
-bool TournamentDialog::addSectionInfo(SectionDialog::SectionInfo si)
+bool TournamentDialog::addSectionInfo(SectionInfo si)
 {
     if(!info)
     {
@@ -94,7 +94,7 @@ bool TournamentDialog::addSectionInfo(SectionDialog::SectionInfo si)
     return true;
 }
 
-void TournamentDialog::replaceSectionInfo(SectionDialog::SectionInfo si0, SectionDialog::SectionInfo si1)
+void TournamentDialog::replaceSectionInfo(SectionInfo si0, SectionInfo si1)
 {
     // Remove
     info->sections.remove(si0.sectionName);
@@ -124,7 +124,7 @@ void TournamentDialog::viewSection()
     if(selected.count() < 1){
         return;
     }
-    SectionDialog::SectionInfo si = tempSections.value(selected.at(0)->text(0));
+    SectionInfo si = tempSections.value(selected.at(0)->text(0));
 
     SectionDialog dialog(this);
     dialog.init(si);

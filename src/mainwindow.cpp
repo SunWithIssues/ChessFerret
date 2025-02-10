@@ -179,11 +179,11 @@ void MainWindow::add1Player()
     dialog.init(tDialog->getSectionNames());
     dialog.exec();
 
-    QList<AddPlayerDialog::playerInfo> players = dialog.getPlayers();
+    QList<PlayerInfo> players = dialog.getPlayers();
 
     // Inserts a player if they exist
     foreach (auto player, players) {
-        db->insert(player);
+        db->insertPlayer(player);
     }
 
     // Updates Table Views Accordingly
@@ -319,17 +319,18 @@ void MainWindow::loadExistingTournament()
         return;
     }
     filepath = dialog.selectedFiles();
+    qDebug() << filepath;
 
     //TODO: setup database
-    db->openDatabase(filepath);
-    auto tInfo = db->setupTournament();
+    // db->openDatabase(filepath);
+    // auto tInfo = db->setupTournament();
 
 
     //TODO: read file info
 
     //TODO: set file info in dialog
     tDialog = new TournamentDialog(this);
-    tDialog->init(tInfo);
+    // tDialog->init(tInfo);
 
 
 

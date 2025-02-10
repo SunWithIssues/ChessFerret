@@ -1,7 +1,10 @@
 #ifndef SECTIONDIALOG_H
 #define SECTIONDIALOG_H
 
+#include "info.h"
+
 #include <QDialog>
+
 
 // Pairing
 #define SWISS 0
@@ -29,26 +32,7 @@ class SectionDialog : public QDialog
     Q_OBJECT
 
 public:
-    struct SectionInfo
-    {
-        int sectionId;
 
-        QString sectionName;
-        int numRounds;
-
-        // Pairing Attributes
-        // TODO: these are comboBoxes
-        QString pairingRule;
-        QString scoringStyle;
-
-        // Database Validators
-        int ratingRangeMin;
-        int ratingRangeMax;
-
-        // Printing Specific Attributes
-        QString sectionNameForPrinting;
-        QString timeControl;
-    };
 
     // TODO: plan is to update section table of the database
     SectionInfo info;
@@ -57,7 +41,7 @@ public:
     explicit SectionDialog(QWidget *parent = nullptr);
     ~SectionDialog();
 
-    void init(SectionDialog::SectionInfo si);
+    void init(SectionInfo si);
 
 
 private slots:

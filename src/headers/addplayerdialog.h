@@ -1,6 +1,8 @@
 #ifndef ADDPLAYERDIALOG_H
 #define ADDPLAYERDIALOG_H
 
+#include "info.h"
+
 #include <QDialog>
 #include <QDate>
 #include <QList>
@@ -17,28 +19,16 @@ public:
     explicit AddPlayerDialog(QWidget *parent = nullptr);
     ~AddPlayerDialog();
 
-    struct playerInfo
-    {
-        QString player_name;
-        QDate birthdate;
-        QString gender;
-        QString id_national;
-        int rtg_national;
-        QString id_fide;
-        int rtg_fide;
-        QString section;
-        QString teams;
-
-    };
 
 
-    QList<AddPlayerDialog::playerInfo> getPlayers();
+
+    QList<PlayerInfo> getPlayers();
     void init(QList<QString> sectioinNames);
 
 
 private:
     Ui::AddPlayerDialog *ui;
-    QList<AddPlayerDialog::playerInfo> players;
+    QList<PlayerInfo> players;
 
     void onAccepted();
     void onApplied();
