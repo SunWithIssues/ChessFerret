@@ -1,11 +1,6 @@
 #include "headers/addplayerdialog.h"
 #include "ui_addplayerdialog.h"
 
-<<<<<<< HEAD
-#include "headers/tournamentdialog.h"
-=======
->>>>>>> main
-
 #include <QDate>
 
 

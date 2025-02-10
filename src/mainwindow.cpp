@@ -1,13 +1,12 @@
 #include "headers/mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "headers/tournamentdialog.h"
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
-<<<<<<< HEAD
 #include "headers/addgroupdialog.h"
-=======
->>>>>>> main
+
 
 #include <QMenu>
 #include <QDebug>

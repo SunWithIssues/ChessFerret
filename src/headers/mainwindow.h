@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "tournamentdialog.h" //TODO: name change in the future
+#include "tournamentdialog.h"
 #include "setupdialog.h"
 #include "database.h"
 
@@ -37,21 +37,16 @@ public slots:
 
 private slots:
     void newTournamentDialog();
-<<<<<<< HEAD
-=======
-    void add1Player();
+    void loadExistingTournament();
     void openSetupDialog();
+
     void newSection();
     void viewSection();
->>>>>>> main
-    void loadExistingTournament();
 
-    void openSetupDialog();
 
     void add1Player();
     void addNPlayers();
 
-    void newSection();
 
 
 private:

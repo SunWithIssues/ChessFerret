@@ -1,21 +1,15 @@
 #include "headers/database.h"
-<<<<<<< HEAD
-#include "headers/addplayerdialog.h"
-=======
+
 #include "headers/info.h"
->>>>>>> main
+
 
 
 #include <QSql>
 #include <QSqlQuery>
-<<<<<<< HEAD
-#include <QSqlError>
 #include <QSqlQueryModel>
 #include <QTableView>
-=======
 #include <QSqlRecord>
 #include <QSqlError>
->>>>>>> main
 #include <QMessageBox>
 #include <QDebug>
 
@@ -32,8 +26,9 @@ Database::Database(QObject *parent)
 }
 
 Database::~Database()
-<<<<<<< HEAD
-{}
+{
+    closeDatabase();
+}
 
 
 QAbstractItemModel* Database::selectAll()
@@ -50,14 +45,7 @@ QAbstractItemModel* Database::selectAll()
 
 }
 
-bool Database::insert(AddPlayerDialog::playerInfo pi)
-=======
->>>>>>> main
-{
 
-    closeDatabase();
-
-}
 bool Database::insertTournament(TournamentInfo *ti)
 {
     QSqlQuery query(db);
