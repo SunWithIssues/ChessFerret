@@ -243,14 +243,10 @@ void MainWindow::newSection()
 {
     QTabWidget *tabWidget = ui->sectionTabWidget;
 
-    //TODO::IMPORTANT:: this whole code logic is repeated in tournament dialog
-    //  should be a public function SectionDialog
-
     //Open New Section Dialog
     SectionDialog dialog(this);
     if(dialog.exec() == QDialog::Accepted)
     {
-        //
         tDialog->addSectionInfo(dialog.info);
 
         //Populate section name, setup preferences, etc
@@ -328,12 +324,17 @@ void MainWindow::loadExistingTournament()
     db->openDatabase(filepaths[0]);
     auto ti = db->setupTournament();
 
-
     // Initilize tournament with info
     tDialog = new TournamentDialog(this);
     tDialog->init(ti);
 
-    //TODO: update window w/ additional ui setup
+    // UI. Add Tabs
+    foreach (auto si, ti->sections) {
+        ui->sectionTabWidget->addTab(new QWidget(), si.sectionName);
+    }
+
+    // UI. Update Tables
+    updateTableViews();
 
 }
 
