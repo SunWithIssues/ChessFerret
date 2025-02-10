@@ -24,6 +24,7 @@ HEADERS += \
     src/headers/addgroupdialog.h \
     src/headers/addplayerdialog.h \
     src/headers/database.h \
+    src/headers/info.h \
     src/headers/mainwindow.h \
     src/headers/sectiondialog.h \
     src/headers/setupdialog.h \

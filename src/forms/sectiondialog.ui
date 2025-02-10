@@ -16,9 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="1">
-      <widget class="QSpinBox" name="roundsSpinBox"/>
-     </item>
      <item row="3" column="2" colspan="2">
       <widget class="QLabel" name="rtgLabel">
        <property name="text">
@@ -26,33 +23,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="3">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Name for Printing</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="roundsLabel">
        <property name="text">
         <string>Rounds</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3" colspan="2">
-      <widget class="QLineEdit" name="nameEdit"/>
-     </item>
-     <item row="1" column="3" colspan="2">
-      <widget class="QLineEdit" name="printNameEdit"/>
-     </item>
-     <item row="3" column="4">
-      <widget class="QSpinBox" name="minSpinBox"/>
-     </item>
-     <item row="0" column="0" colspan="3">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Section Name:</string>
        </property>
       </widget>
      </item>
@@ -100,6 +74,9 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="roundsSpinBox"/>
+     </item>
      <item row="4" column="5">
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="orientation">
@@ -109,6 +86,51 @@
         <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
        </property>
       </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QSpinBox" name="minSpinBox"/>
+     </item>
+     <item row="0" column="5">
+      <widget class="QGroupBox" name="pairingGroupBox">
+       <property name="title">
+        <string>Pairing Style</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QComboBox" name="pairingComboBox"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLabel" name="printNameLabel">
+       <property name="text">
+        <string>Name for Printing:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" colspan="3">
+      <widget class="QLineEdit" name="printNameEdit"/>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="nameLabel">
+       <property name="text">
+        <string>Section Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" colspan="3">
+      <widget class="QLineEdit" name="nameEdit"/>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QLabel" name="timeControlLabel">
+       <property name="text">
+        <string>Time Control:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QLineEdit" name="timeControlEdit"/>
      </item>
     </layout>
    </item>

@@ -37,6 +37,13 @@ public slots:
 
 private slots:
     void newTournamentDialog();
+<<<<<<< HEAD
+=======
+    void add1Player();
+    void openSetupDialog();
+    void newSection();
+    void viewSection();
+>>>>>>> main
     void loadExistingTournament();
 
     void openSetupDialog();

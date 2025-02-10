@@ -4,7 +4,10 @@
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
+<<<<<<< HEAD
 #include "headers/addgroupdialog.h"
+=======
+>>>>>>> main
 
 #include <QMenu>
 #include <QDebug>
@@ -30,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete db;
 }
 
 
@@ -122,6 +126,7 @@ void MainWindow::createMenus()
     sectionsMenu->addAction(removeSectionAct);
 
     connect(add1SectionAct, &QAction::triggered, this, &MainWindow::newSection);
+    connect(editSectionAct, &QAction::triggered, this, &MainWindow::viewSection);
 
     // ----------------------------------------
     // Teams
@@ -195,11 +200,11 @@ void MainWindow::add1Player()
     dialog.init(tDialog->getSectionNames());
     dialog.exec();
 
-    QList<AddPlayerDialog::playerInfo> players = dialog.getPlayers();
+    QList<PlayerInfo> players = dialog.getPlayers();
 
     // Inserts a player if they exist
     foreach (auto player, players) {
-        db->insert(player);
+        db->insertPlayer(player);
     }
 
     // Updates Table Views Accordingly
@@ -238,32 +243,69 @@ void MainWindow::updateTableViews()
 }
 
 
-
-
-void MainWindow::newSection(){
+void MainWindow::viewSection()
+{
     QTabWidget *tabWidget = ui->sectionTabWidget;
 
-    //TODO::IMPORTANT:: this whole code logic is repeated in tournament dialog
-    //  should be a public function SectionDialog
+    auto sectionNames = tDialog->getSectionNames();
+
+    QString tabLabel = tabWidget->tabText(tabWidget->currentIndex());
+
+    if(sectionNames.contains(tabLabel))
+    {
+        auto si0 = tDialog->getSectionsInfo().value(tabLabel);
+
+        SectionDialog dialog(this);
+        dialog.init(si0);
+
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            tDialog->replaceSectionInfo(si0, dialog.info);
+            tabWidget->setTabText(tabWidget->currentIndex(), dialog.info.sectionName);
+        }
+    }
+    else
+    {
+        QMessageBox mbox;
+
+        mbox.setText(tr("ALL is not a section."));
+        mbox.setWindowTitle(tr("Warning"));
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        QGridLayout* layout = (QGridLayout*)mbox.layout();
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+
+        mbox.exec();
+    }
+
+
+
+}
+
+void MainWindow::newSection()
+{
+    QTabWidget *tabWidget = ui->sectionTabWidget;
 
     //Open New Section Dialog
     SectionDialog dialog(this);
     if(dialog.exec() == QDialog::Accepted)
     {
-        //
         tDialog->addSectionInfo(dialog.info);
 
         //Populate section name, setup preferences, etc
         auto tableWidget = new QTableWidget(this);
         tableWidget->setRowCount(10);
         tabWidget->addTab(tableWidget, dialog.info.sectionName);
+        db->insertSection(dialog.info);
 
     }
 
 }
 
 
-void MainWindow::openSetupDialog(){
+void MainWindow::openSetupDialog()
+{
     sDialog = new SetupDialog(this);
     sDialog->show();
 
@@ -274,22 +316,33 @@ void MainWindow::openSetupDialog(){
 
 void MainWindow::newTournamentDialog()
 {
+    auto dialog = new TournamentDialog(this);
+    dialog->setModal(true);
 
-    //TODO::IMPORTANT:: figure out what to do if they open a new tournament
-    //  db must close b4hand, old tDialog might be needed if they cancel, etc
+    if (dialog->exec() == QDialog::Accepted){
+        ui->tournamentName->setText(dialog->getTournamentName());
 
-    tDialog = new TournamentDialog(this);
-    tDialog->setModal(true);
+        if(tDialog)
+        {
+            for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
+                ui->sectionTabWidget->removeTab(i);
+            }
 
-    if (tDialog->exec() == QDialog::Accepted){
-        ui->tournamentName->setText(tDialog->getTournamentName());
-
-        foreach (auto section, tDialog->getSectionsInfo()) {
-            ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
+            delete db;
+            db = new Database();
         }
 
-        db->newDatabase(tDialog->getFilePath());
+        db->newDatabase(dialog->getFilePath());
 
+        db->insertTournament(dialog->getTournamentInfo());
+
+        foreach (auto section, dialog->getSectionsInfo()) {
+            ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
+            db->insertSection(section);
+        }
+
+
+        tDialog = dialog;
     }
 
 
@@ -303,21 +356,29 @@ void MainWindow::loadExistingTournament()
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setNameFilter(tr("Database (*.db)"));
 
-    QStringList fileNames;
-    if (dialog.exec())
-        fileNames = dialog.selectedFiles();
+    QStringList filepaths;
+    if (!dialog.exec())
+    {
+        // TODO: what to do on cancel
+        return;
+    }
+    filepaths = dialog.selectedFiles();
 
-    //TODO: read file info
+    // Retrieve info from database
+    db->openDatabase(filepaths[0]);
+    auto ti = db->setupTournament();
 
-    //TODO: set file info in dialog
+    // Initilize tournament with info
     tDialog = new TournamentDialog(this);
+    tDialog->init(ti);
 
-    //TODO: setup database
-    db->openDatabase(tDialog->getFilePath());
+    // UI. Add Tabs
+    foreach (auto si, ti->sections) {
+        ui->sectionTabWidget->addTab(new QWidget(), si.sectionName);
+    }
 
-    //TODO: read header preferences for view displaying
-
-    //TODO: update window w/ additional ui setup
+    // UI. Update Tables
+    updateTableViews();
 
 }
 
