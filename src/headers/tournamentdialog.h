@@ -18,6 +18,8 @@ public:
     explicit TournamentDialog(QWidget *parent = nullptr);
     ~TournamentDialog();
 
+    void init(TournamentDialog::Info ti);
+
     QString getTournamentName();
     QString getLocation();
     QDate getEndDate();
@@ -32,7 +34,6 @@ signals:
 
 private slots:
     void on_buttonBox_accepted();
-
     void on_toolButton_clicked();
 
     void addSection();

@@ -275,12 +275,6 @@ void MainWindow::openSetupDialog()
 
 void MainWindow::newTournamentDialog()
 {
-
-    //TODO::IMPORTANT:: figure out what to do if they open a new tournament
-    //  db must close b4hand, old tDialog might be needed if they cancel, etc
-
-
-
     auto dialog = new TournamentDialog(this);
     dialog->setModal(true);
 
@@ -299,6 +293,7 @@ void MainWindow::newTournamentDialog()
 
         foreach (auto section, dialog->getSectionsInfo()) {
             ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
+            db->insertSection(section);
         }
 
         db->newDatabase(dialog->getFilePath());
@@ -317,17 +312,26 @@ void MainWindow::loadExistingTournament()
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setNameFilter(tr("Database (*.db)"));
 
-    QStringList fileNames;
-    if (dialog.exec())
-        fileNames = dialog.selectedFiles();
+    QStringList filepath;
+    if (!dialog.exec())
+    {
+        // TODO: what to do on cancel
+        return;
+    }
+    filepath = dialog.selectedFiles();
+
+    //TODO: setup database
+    db->openDatabase(filepath);
+    auto tInfo = db->setupTournament();
+
 
     //TODO: read file info
 
     //TODO: set file info in dialog
     tDialog = new TournamentDialog(this);
+    tDialog->init(tInfo);
 
-    //TODO: setup database
-    db->openDatabase(tDialog->getFilePath());
+
 
     //TODO: read header preferences for view displaying
 

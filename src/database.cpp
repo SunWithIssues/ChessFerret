@@ -1,6 +1,12 @@
 #include "headers/database.h"
 #include "headers/addplayerdialog.h"
+#include "headers/sectiondialog.h"
+#include "headers/tournamentdialog.h"
 
+
+#include <QSql>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <QMessageBox>
 #include <QDebug>
 
@@ -18,8 +24,39 @@ Database::~Database()
 
 }
 
+bool Database::insertSection(SectionDialog::SectionInfo si)
+{
+    QSqlQuery query(db);
+    QString q = "INSERT INTO sections ( section_name,"
+                                        "section_name_print,"
+                                        "num_rounds,"
+                                        "pairing_style,"
+                                        "scoring_style,"
+                                        "min_rtg,"
+                                        "max_rtg,"
+                                        "time_control )"
+                "VALUES (:sName, :sNamePrint, :nRounds, :pStyle, :sStyle, "
+                        ":minRtg, :maxRtg, :tControl)";
 
-bool Database::insert(AddPlayerDialog::playerInfo pi)
+    query.prepare(q);
+    query.bindValue(":sName", si.sectionName);
+    query.bindValue(":sNamePrint", si.sectionNameForPrinting);
+    query.bindValue(":nRounds", si.numRounds);
+    query.bindValue(":pStyles", si.pairingRule);
+    query.bindValue(":sStyle", si.scoringStyle);
+    query.bindValue(":minRtg", si.ratingRangeMin);
+    query.bindValue(":maxRtg", si.ratingRangeMax);
+    query.bindValue(":tControl", si.timeControl);
+
+    if(!query.exec())
+    {
+        qDebug() << "Did not insert <section>";
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
+}
+bool Database::insertPlayer(AddPlayerDialog::playerInfo pi)
 {
     QSqlQuery query(db);
     QString q = "INSERT INTO players (  birthdate, "
@@ -48,8 +85,9 @@ bool Database::insert(AddPlayerDialog::playerInfo pi)
 
     if(!query.exec())
     {
-        qDebug() << "Did not insert";
-        qDebug() << query.lastError().databaseText() << query.lastError().driverText();        return false;
+        qDebug() << "Did not insert <player>";
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
     }
     return true;
 
@@ -59,11 +97,17 @@ bool Database::remove()
     return false;
 }
 
-bool Database::newDatabase(QString filepath)
+TournamentDialog::Info Database::setupTournament()
 {
 
-    // TODO:
-    // Update database with information
+    TournamentDialog::Info tInfo;
+
+    //TODO::IMPORTANT:: get the info from tables <sections> and <tournament>
+}
+
+
+bool Database::newDatabase(QString filepath)
+{
 
     if (openDatabase(filepath)){
         QSqlQuery query(db);
@@ -77,15 +121,47 @@ bool Database::newDatabase(QString filepath)
                     "rtg_national INTEGER,"
                     "id_fide VARCHAR(30),"
                     "rtg_fide INTEGER,"
-                    "section VARCHAR(50) NOT NULL,"
+                    "section TEXT NOT NULL,"
                     "teams VARCHAR(100))";
 
         if(!query.exec(q))
         {
-            qDebug() << "DataBase: error of create ";
+            qDebug() << "DataBase <players>: error of create ";
             qDebug() << query.lastError().text();
             return false;
         };
+
+        q = "CREATE TABLE sections"
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "section_name TEXT NOT NULL,"
+            "section_name_print TEXT,"
+            "num_rounds INTEGER,"
+            "pairing_style TEXT,"
+            "scoring_style TEXT,"
+            "min_rtg INTEGER,"
+            "max_rtg INTEGER,"
+            "time_control TEXT))";
+
+        if(!query.exec(q))
+        {
+            qDebug() << "DataBase <sections>: error of create ";
+            qDebug() << query.lastError().text();
+            return false;
+        };
+
+        q = "CREATE TABLE tournament"
+            "(tournament_name TEXT NOT NULL,"
+            "location TEXT,"
+            "begin_date DATE,"
+            "end_date DATE))";
+
+        if(!query.exec(q))
+        {
+            qDebug() << "DataBase <tournament>: error of create ";
+            qDebug() << query.lastError().text();
+            return false;
+        };
+
         return true;
     }
     return false;
@@ -98,7 +174,7 @@ bool Database::openDatabase(QString filepath)
     if(db.open()){
         return true;
     } else {
-        qDebug() << "Did not open database " << filepath;
+        qDebug() << "Did not open database at " << filepath;
         return false;
     }
 }
