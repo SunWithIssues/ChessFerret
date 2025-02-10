@@ -4,6 +4,7 @@
 
 #include <QSql>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QSqlError>
 #include <QMessageBox>
 #include <QDebug>
@@ -125,20 +126,75 @@ bool Database::removePlayer()
 
 TournamentInfo* Database::setupTournament()
 {
+
     QSqlQuery query(db);
-    QString q = "SELECT * FROM tournament";
+    QString q = "SELECT * FROM " TBL_SECTIONS;
+    query.prepare(q);
+    query.exec();
 
-
-    if(!query.exec())
+    SectionInfo si;
+    int idx;
+    QHash<QString, SectionInfo> sections;
+    while(query.next())
     {
-        qDebug() << "Did not insert:" << TBL_TOURNAMENT;
+        idx = query.record().indexOf("section_name");
+        si.sectionName = query.value(idx).toString();
+
+        idx = query.record().indexOf("section_name_print");
+        si.sectionNameForPrinting = query.value(idx).toString();
+
+        idx = query.record().indexOf("num_rounds");
+        si.numRounds = query.value(idx).toInt();
+
+        idx = query.record().indexOf("pairing_style");
+        si.pairingRule = query.value(idx).toString();
+
+        idx = query.record().indexOf("scoring_style");
+        si.scoringStyle = query.value(idx).toString();
+
+        idx = query.record().indexOf("min_rtg");
+        si.ratingRangeMin = query.value(idx).toInt();
+
+        idx = query.record().indexOf("max_rtg");
+        si.ratingRangeMax = query.value(idx).toInt();
+
+        idx = query.record().indexOf("time_control");
+        si.timeControl = query.value(idx).toString();
+
+
+        sections.insert(si.sectionName, si);
+    }
+
+
+
+    q = "SELECT * FROM " TBL_TOURNAMENT;
+    query.prepare(q);
+    query.exec();
+
+    if(!query.next())
+    {
+        qDebug() << "could not read:" << TBL_TOURNAMENT;
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return nullptr;
     }
 
     TournamentInfo *ti = new TournamentInfo();
 
-    //TODO::IMPORTANT:: get the info from tables <sections> and <tournament>
+    idx = query.record().indexOf("begin_date");
+    ti->beginDate = query.value(idx).toDate();
+
+    idx = query.record().indexOf("end_date");
+    ti->endDate = query.value(idx).toDate();
+
+    idx = query.record().indexOf("tournament_name");
+    ti->tournamentName = query.value(idx).toString();
+
+    idx = query.record().indexOf("location");
+    ti->location= query.value(idx).toString();
+
+    ti->sections = sections;
+    ti->filepath = db.databaseName();
+
     return ti;
 }
 

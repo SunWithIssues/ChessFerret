@@ -316,29 +316,22 @@ void MainWindow::loadExistingTournament()
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setNameFilter(tr("Database (*.db)"));
 
-    QStringList filepath;
+    QStringList filepaths;
     if (!dialog.exec())
     {
         // TODO: what to do on cancel
         return;
     }
-    filepath = dialog.selectedFiles();
-    qDebug() << filepath;
+    filepaths = dialog.selectedFiles();
 
-    //TODO: setup database
-    // db->openDatabase(filepath);
-    // auto tInfo = db->setupTournament();
+    // Retrieve info from database
+    db->openDatabase(filepaths[0]);
+    auto ti = db->setupTournament();
 
 
-    //TODO: read file info
-
-    //TODO: set file info in dialog
+    // Initilize tournament with info
     tDialog = new TournamentDialog(this);
-    // tDialog->init(tInfo);
-
-
-
-    //TODO: read header preferences for view displaying
+    tDialog->init(ti);
 
     //TODO: update window w/ additional ui setup
 

@@ -18,7 +18,7 @@ public:
     explicit TournamentDialog(QWidget *parent = nullptr);
     ~TournamentDialog();
 
-    void init(TournamentInfo ti);
+    void init(TournamentInfo* ti);
 
     QString getTournamentName();
     QString getLocation();

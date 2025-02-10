@@ -31,7 +31,10 @@ void TournamentDialog::additionalUiSetup()
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
 }
 
-
+void TournamentDialog::init(TournamentInfo* ti)
+{
+    info = ti;
+}
 void TournamentDialog::on_buttonBox_accepted()
 {
     // Sets Tournament Info
