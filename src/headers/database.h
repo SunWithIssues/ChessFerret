@@ -14,6 +14,7 @@ public:
     explicit Database(QObject *parent = nullptr);
     ~Database();
 
+    bool insertTournament(TournamentInfo* ti);
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
     bool removePlayer();
@@ -22,7 +23,7 @@ public:
     bool newDatabase(QString filepath);
     void closeDatabase();
 
-    TournamentInfo setupTournament();
+    TournamentInfo* setupTournament();
 
 
 private:

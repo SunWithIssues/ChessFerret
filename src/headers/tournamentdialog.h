@@ -25,6 +25,7 @@ public:
     QDate getEndDate();
     QDate getBeginDate();
     QString getFilePath();
+    TournamentInfo* getTournamentInfo();
     QHash<QString, SectionInfo> getSectionsInfo();
     QList<QString> getSectionNames();
     bool addSectionInfo(SectionInfo si);

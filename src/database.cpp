@@ -24,7 +24,30 @@ Database::~Database()
     closeDatabase();
 
 }
+bool Database::insertTournament(TournamentInfo *ti)
+{
+    QSqlQuery query(db);
+    QString q = "INSERT INTO tournament ( tournament_name,"
+                "location, "
+                "begin_date, "
+                "end_date )"
+                "VALUES (:tName, :loc, :bDate, :eDate)";
 
+    query.prepare(q);
+    query.bindValue(":tName", ti->tournamentName);
+    query.bindValue(":loc", ti->location);
+    query.bindValue(":bDate", ti->beginDate);
+    query.bindValue(":eDate", ti->endDate);
+
+    if(!query.exec())
+    {
+        qDebug() << "Did not insert:" << TBL_TOURNAMENT;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
+
+}
 bool Database::insertSection(SectionInfo si)
 {
     QSqlQuery query(db);
@@ -98,14 +121,25 @@ bool Database::removePlayer()
     return false;
 }
 
-TournamentInfo Database::setupTournament()
+
+
+TournamentInfo* Database::setupTournament()
 {
+    QSqlQuery query(db);
+    QString q = "SELECT * FROM tournament";
 
-    TournamentInfo tInfo;
 
+    if(!query.exec())
+    {
+        qDebug() << "Did not insert:" << TBL_TOURNAMENT;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return nullptr;
+    }
+
+    TournamentInfo *ti = new TournamentInfo();
 
     //TODO::IMPORTANT:: get the info from tables <sections> and <tournament>
-    return tInfo;
+    return ti;
 }
 
 

@@ -49,7 +49,10 @@ void TournamentDialog::on_buttonBox_accepted()
         QFile::remove(info->filepath);
     }
 }
-
+TournamentInfo* TournamentDialog::getTournamentInfo()
+{
+    return info;
+}
 QString TournamentDialog::getTournamentName()
 {
     return info->tournamentName;
@@ -70,12 +73,10 @@ QString TournamentDialog::getFilePath()
 {
     return info->filepath;
 }
-
 QHash<QString,SectionInfo> TournamentDialog::getSectionsInfo()
 {
     return info->sections;
 }
-
 QList<QString> TournamentDialog::getSectionNames()
 {
     return info->sections.keys();

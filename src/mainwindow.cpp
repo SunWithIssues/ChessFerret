@@ -294,6 +294,8 @@ void MainWindow::newTournamentDialog()
 
         db->newDatabase(dialog->getFilePath());
 
+        db->insertTournament(dialog->getTournamentInfo());
+
         foreach (auto section, dialog->getSectionsInfo()) {
             ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
             db->insertSection(section);
