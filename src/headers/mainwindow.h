@@ -4,6 +4,7 @@
 #include "tournamentdialog.h" //TODO: name change in the future
 #include "setupdialog.h"
 #include "database.h"
+#include "onstartupdialog.h"
 
 #include <QMainWindow>
 #include <QApplication>
@@ -22,7 +23,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void show();
+    void show(OnStartUpDialog* dialog);
 
     void init();
 

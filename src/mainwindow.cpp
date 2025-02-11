@@ -34,20 +34,16 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::show()
+void MainWindow::show(OnStartUpDialog* dialog)
 {
-    qDebug() << "About to call QMainWindow::show()";
     QMainWindow::show();
-    OnStartUpDialog dialog(this);
 
-    connect(&dialog, &QDialog::rejected, qApp, QCoreApplication::quit);
-    connect(&dialog, &OnStartUpDialog::newTournamentClicked, this, &MainWindow::newTournamentDialog);
-    connect(&dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
-    connect(this, &MainWindow::closeOnStartUp, &dialog, &QDialog::accept);
+    connect(dialog, &QDialog::rejected, qApp, QCoreApplication::quit);
+    connect(dialog, &OnStartUpDialog::newTournamentClicked, this, &MainWindow::newTournamentDialog);
+    connect(dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
+    connect(this, &MainWindow::closeOnStartUp, dialog, &QDialog::accept);
 
-    qDebug() << "About to call OnStartUpDialog::exec()";
-    dialog.show();
-    qDebug() << "end of override show()";
+    // dialog->setModal(true);
 }
 
 void MainWindow::createMenus()
