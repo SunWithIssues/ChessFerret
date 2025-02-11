@@ -38,7 +38,11 @@ void MainWindow::show()
 {
     QMainWindow::show();
     OnStartUpDialog dialog(this);
-    QObject::connect(&dialog, &QDialog::rejected, qApp, QApplication::quit);
+    connect(&dialog, &QDialog::rejected, qApp, QApplication::quit);
+    connect(&dialog, &OnStartUpDialog::newTournamentClicked, this, &MainWindow::newTournamentDialog);
+    connect(&dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
+    connect(this, &MainWindow::closeOnStartUp, &dialog, &QDialog::accept);
+
     qDebug() << dialog.exec();
 
     qDebug() << "not";
@@ -311,6 +315,7 @@ void MainWindow::newTournamentDialog()
 
 
         tDialog = dialog;
+        emit closeOnStartUp();
     }
 
 
@@ -347,6 +352,8 @@ void MainWindow::loadExistingTournament()
 
     // UI. Update Tables
     updateTableViews();
+
+    emit closeOnStartUp();
 
 }
 

@@ -40,7 +40,8 @@ public:
     };
 
 
-protected:
+signals:
+    void closeOnStartUp();
 
 public slots:
 

@@ -23,14 +23,14 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QPushButton" name="newButton">
+         <widget class="QPushButton" name="pushButton">
           <property name="text">
            <string>New Tournament</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="openButton">
+         <widget class="QPushButton" name="pushButton_2">
           <property name="text">
            <string>Open Tournament</string>
           </property>
@@ -46,7 +46,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QComboBox" name="langComboBox"/>
+         <widget class="QComboBox" name="comboBox"/>
         </item>
        </layout>
       </widget>

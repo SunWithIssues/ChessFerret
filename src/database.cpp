@@ -93,7 +93,7 @@ bool Database::insertPlayer(PlayerInfo pi)
                                         "rtg_fide,"
                                         "section ,"
                                         "teams )"
-                "VALUES (:birthdateVal, :nameVal, :genderVal, :id_nationlVal,  "
+                "VALUES (:birthdateVal, :nameVal, :genderVal, :id_nationalVal,  "
                         ":rtg_nationalVal, :id_fideVal, :rtg_fideVal, :sectionVal, "
                         ":teamsVal)";
 

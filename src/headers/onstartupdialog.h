@@ -15,12 +15,16 @@ public:
     explicit OnStartUpDialog(QWidget *parent = nullptr);
     ~OnStartUpDialog();
 
+public slots:
+
 signals:
     void newTournamentClicked();
     void openTournamentClicked();
 
 private:
     Ui::OnStartUpDialog *ui;
+
+
 };
 
 #endif // ONSTARTUPDIALOG_H
