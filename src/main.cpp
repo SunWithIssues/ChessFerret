@@ -29,8 +29,5 @@ int main(int argc, char *argv[])
     dialog->raise();
     dialog->activateWindow();
 
-
-
-    qDebug() << "About to call a.exec()";
     return a.exec();
 }

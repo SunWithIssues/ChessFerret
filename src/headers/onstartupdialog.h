@@ -26,7 +26,6 @@ signals:
 private:
     Ui::OnStartUpDialog *ui;
 
-
 };
 
 #endif // ONSTARTUPDIALOG_H

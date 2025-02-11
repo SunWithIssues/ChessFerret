@@ -39,7 +39,8 @@ FORMS += \
     src/forms/onstartupdialog.ui
 
 TRANSLATIONS += \
-    translations/ChessFerret_en_US.ts
+    translations/ChessFerret_en_US.ts \
+    translations/ChessFerret_es_419.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 

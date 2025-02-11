@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     createMenus();
     additionalUiSetup();
 
+    sDialog = new SetupDialog(this);
+
     db = new Database();
 }
 
@@ -43,7 +45,7 @@ void MainWindow::show(OnStartUpDialog* dialog)
     connect(dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
     connect(this, &MainWindow::closeOnStartUp, dialog, &QDialog::accept);
 
-    // dialog->setModal(true);
+    dialog->setModal(true);
 }
 
 void MainWindow::createMenus()
@@ -275,7 +277,7 @@ void MainWindow::newSection()
 
 void MainWindow::openSetupDialog()
 {
-    sDialog = new SetupDialog(this);
+
     sDialog->show();
 
 
