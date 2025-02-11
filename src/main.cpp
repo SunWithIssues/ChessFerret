@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -21,5 +22,6 @@ int main(int argc, char *argv[])
     w.setWindowTitle("ChessFerret");
     w.show();
 
+    qDebug() << "About to call a.exec()";
     return a.exec();
 }

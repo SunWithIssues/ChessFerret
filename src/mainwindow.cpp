@@ -36,17 +36,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::show()
 {
+    qDebug() << "About to call QMainWindow::show()";
     QMainWindow::show();
     OnStartUpDialog dialog(this);
-    connect(&dialog, &QDialog::rejected, qApp, QApplication::quit);
+
+    connect(&dialog, &QDialog::rejected, qApp, QCoreApplication::quit);
     connect(&dialog, &OnStartUpDialog::newTournamentClicked, this, &MainWindow::newTournamentDialog);
     connect(&dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
     connect(this, &MainWindow::closeOnStartUp, &dialog, &QDialog::accept);
 
-    qDebug() << dialog.exec();
-
-    qDebug() << "not";
-
+    qDebug() << "About to call OnStartUpDialog::exec()";
+    dialog.show();
+    qDebug() << "end of override show()";
 }
 
 void MainWindow::createMenus()
@@ -353,6 +354,7 @@ void MainWindow::loadExistingTournament()
     // UI. Update Tables
     updateTableViews();
 
+    qDebug() << "emit closeStartUp()";
     emit closeOnStartUp();
 
 }

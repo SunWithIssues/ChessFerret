@@ -16,10 +16,12 @@ public:
     ~OnStartUpDialog();
 
 public slots:
+    // void reject();
 
 signals:
     void newTournamentClicked();
     void openTournamentClicked();
+    void closeMainWindow();
 
 private:
     Ui::OnStartUpDialog *ui;
