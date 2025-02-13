@@ -83,7 +83,7 @@ QHash<QString,SectionInfo> TournamentDialog::getSectionsInfo()
 }
 QList<QString> TournamentDialog::getSectionNames()
 {
-    return info->sections.keys();
+    return info->sectionNames;
 }
 
 
@@ -107,6 +107,8 @@ void TournamentDialog::replaceSectionInfo(SectionInfo si0, SectionInfo si1)
     // Add
     info->sections.insert(si1.sectionName, si1);
 
+    //TODO: make better idk how
+    // REPLACE for vector
     info->sectionNames.replace(info->sectionNames.indexOf(si0.sectionName), si1.sectionName);
 
 }
@@ -135,6 +137,7 @@ void TournamentDialog::viewSection()
     }
     SectionInfo si = tempSections.value(selected.at(0)->text(0));
 
+
     SectionDialog dialog(this);
     dialog.init(si);
 
@@ -144,6 +147,7 @@ void TournamentDialog::viewSection()
             tempSections[selected.at(0)->text(0)] = dialog.info;
         }
         else{
+
 
             //-----
             // ADD NEW NAME
@@ -165,6 +169,13 @@ void TournamentDialog::viewSection()
             delete selected.at(0);
 
 
+            //-----
+            // REPLACE for vector
+            //-----
+            int idx = ui->sectionsTreeWidget->currentIndex().row();
+            tempSectionNames.replace(idx, dialog.info.sectionName);
+
+
         }
 
     }
@@ -179,6 +190,8 @@ void TournamentDialog::removeSection(){
     tempSections.remove(selected.at(0)->text(0));
     delete selected.at(0);
 
+    int idx = ui->sectionsTreeWidget->currentIndex().row();
+    tempSectionNames.remove(idx);
 
 }
 

@@ -241,20 +241,19 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
-    auto *tableWidget = ui->currentAllView; //
     auto model_ptr = db->selectAll();
     ui->currentAllView->setModel(model_ptr);
 
     int len = ui->sectionTabWidget->count();
     for(int i=1; i < len; i++)
     {
+        // TODO: this is def not the best way to get tv widget
         QTableView *tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
-        model_ptr = db->selectPlayersFromSection(tDialog->getTournamentInfo()->sectionNames.value(0));
+
+        auto s = tDialog->getSectionNames();
+        model_ptr = db->selectPlayersFromSection(s.value(i-1));
         tv->setModel(model_ptr);
     }
-
-
-    // qDebug() << "row count (after)" << ui->currentAllView->model()->rowCount();
 
 
 }

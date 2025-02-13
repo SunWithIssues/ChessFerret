@@ -56,7 +56,7 @@ QList<Database::header> Database::getColsPlayers()
 
 QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
 {
-    QString q = "SELECT * FROM players WHERE section = " % section_name;
+    QString q = "SELECT * FROM players WHERE section = '" % section_name % "'";
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setQuery(q, db);
     if (model->lastError().isValid())
@@ -194,6 +194,7 @@ TournamentInfo* Database::setupTournament()
     SectionInfo si;
     int idx;
     QHash<QString, SectionInfo> sections;
+    QList<QString> sectionNames;
     while(query.next())
     {
         idx = query.record().indexOf("section_name");
@@ -222,6 +223,7 @@ TournamentInfo* Database::setupTournament()
 
 
         sections.insert(si.sectionName, si);
+        sectionNames.append(si.sectionName);
     }
 
 
@@ -252,6 +254,7 @@ TournamentInfo* Database::setupTournament()
     ti->location= query.value(idx).toString();
 
     ti->sections = sections;
+    ti->sectionNames = sectionNames;
     ti->filepath = db.databaseName();
 
     return ti;
@@ -285,8 +288,7 @@ bool Database::newDatabase(QString filepath)
 
 
         q = "CREATE TABLE sections "
-            "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "section_name TEXT NOT NULL,"
+            "section_name PRIMARY KEY,"
             "section_name_print TEXT,"
             "num_rounds INTEGER,"
             "pairing_style TEXT,"
