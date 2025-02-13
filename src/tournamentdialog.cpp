@@ -26,6 +26,14 @@ TournamentDialog::~TournamentDialog()
 void TournamentDialog::additionalUiSetup()
 {
     ui->savePathEdit->setText(QDir::homePath());
+
+    ui->beginDateEdit->setDisplayFormat("MM/dd/yyyy");
+    ui->endDateEdit->setDisplayFormat("MM/dd/yyyy");
+
+    ui->beginDateEdit->setDate(QDate::currentDate());
+    ui->endDateEdit->setDate(QDate::currentDate());
+
+
     connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
     connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);

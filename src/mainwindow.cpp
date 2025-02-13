@@ -352,7 +352,6 @@ void MainWindow::loadExistingTournament()
     // UI. Update Tables
     updateTableViews();
 
-    qDebug() << "emit closeStartUp()";
     emit closeOnStartUp();
 
 }
