@@ -55,6 +55,8 @@ private:
     void additionalUiSetup();
     void restartUiState();
     void updateTableViews();
+    QWidget* emptyTabQWidget();
+
     headerPreferences populateHeaderPreferences();
 
 

@@ -47,6 +47,7 @@ private:
 
 
     TournamentInfo* info;
+    QList<QString> tempSectionNames;
     QHash<QString,SectionInfo> tempSections;
 
 

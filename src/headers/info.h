@@ -49,7 +49,8 @@ struct TournamentInfo{
     QDate beginDate;
     QDate endDate;
     QString filepath;
-    // QList<SectionInfo> sections;
+
+    QList<QString> sectionNames;
     QHash<QString,SectionInfo> sections;
 };
 

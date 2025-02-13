@@ -45,6 +45,7 @@ void TournamentDialog::on_buttonBox_accepted()
     info->endDate = ui->endDateEdit->date();
     info->filepath = forceDbEnding(ui->savePathEdit->text());
     info->sections = tempSections;
+    info->sectionNames = tempSectionNames;
 
 
     // Removes existing filepath for overwriting purposes in database.cpp
@@ -95,6 +96,7 @@ bool TournamentDialog::addSectionInfo(SectionInfo si)
     }
 
     info->sections.insert(si.sectionName, si);
+    info->sectionNames.append(si.sectionName);
     return true;
 }
 
@@ -104,6 +106,9 @@ void TournamentDialog::replaceSectionInfo(SectionInfo si0, SectionInfo si1)
     info->sections.remove(si0.sectionName);
     // Add
     info->sections.insert(si1.sectionName, si1);
+
+    info->sectionNames.replace(info->sectionNames.indexOf(si0.sectionName), si1.sectionName);
+
 }
 
 
@@ -185,6 +190,7 @@ void TournamentDialog::addSection()
     {
         // Add info to temporary section list
         tempSections.insert(dialog.info.sectionName, dialog.info);
+        tempSectionNames.append(dialog.info.sectionName);
 
         // Update UI accordingly
         ui->sectionsTreeWidget->addTopLevelItem(new QTreeWidgetItem(

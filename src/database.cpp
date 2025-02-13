@@ -14,14 +14,16 @@
 #include <QDebug>
 
 
-#define CONNECTION_NAME "FC_DB"
-#define TBL_SECTIONS "sections"
-#define TBL_TOURNAMENT "tournament"
-#define TBL_PLAYERS "players"
+
 
 Database::Database(QObject *parent)
     : QObject{parent}
 {
+
+    CONNECTION_NAME = "FC_DB";
+    TBL_SECTIONS = "sections";
+    TBL_TOURNAMENT = "tournament";
+    TBL_PLAYERS = "players";
 
     cols_tournament = {
         header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date" "DATE"},
@@ -47,15 +49,29 @@ Database::~Database()
 }
 
 
-QList<header> Database::getColsPlayers()
+QList<Database::header> Database::getColsPlayers()
 {
     return cols_players;
 }
 
+QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
+{
+    QString q = "SELECT * FROM players WHERE section = " % section_name;
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery(q, db);
+    if (model->lastError().isValid())
+    {
+        qDebug() << "table could not be retrived";
+        qDebug() << model->lastError().databaseText() << model->lastError().driverText();
+        return nullptr;
+    }
+    return model;
+}
+
 QAbstractItemModel* Database::selectAll()
 {
-    QSqlQueryModel *model = new QSqlQueryModel;
-    model->setQuery("SELECT * FROM players");
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery("SELECT * FROM players", db);
     if (model->lastError().isValid())
     {
         qDebug() << "table could not be retrived";
@@ -171,7 +187,7 @@ TournamentInfo* Database::setupTournament()
 {
 
     QSqlQuery query(db);
-    QString q = "SELECT * FROM " TBL_SECTIONS;
+    QString q = "SELECT * FROM " % TBL_SECTIONS;
     query.prepare(q);
     query.exec();
 
@@ -210,7 +226,7 @@ TournamentInfo* Database::setupTournament()
 
 
 
-    q = "SELECT * FROM " TBL_TOURNAMENT;
+    q = "SELECT * FROM " % TBL_TOURNAMENT;
     query.prepare(q);
     query.exec();
 
@@ -262,7 +278,7 @@ bool Database::newDatabase(QString filepath)
 
         if(!query.exec(q))
         {
-            qDebug() << "DataBase <players>: error of create ";
+            qDebug() << "DataBase " % TBL_PLAYERS % ": error of create ";
             qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };
@@ -281,7 +297,7 @@ bool Database::newDatabase(QString filepath)
 
         if(!query.exec(q))
         {
-            qDebug() << "DataBase" << TBL_SECTIONS << "error of create ";
+            qDebug() << "DataBase " % TBL_SECTIONS % ": error of create ";
             qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };
@@ -295,7 +311,7 @@ bool Database::newDatabase(QString filepath)
 
         if(!query.exec(q))
         {
-            qDebug() << "DataBase <tournament>: error of create ";
+            qDebug() << "DataBase " % TBL_TOURNAMENT % ": error of create ";
             qDebug() << query.lastError().databaseText() << query.lastError().driverText();
             return false;
         };

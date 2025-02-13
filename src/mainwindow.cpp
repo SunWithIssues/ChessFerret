@@ -208,7 +208,7 @@ void MainWindow::addNPlayers()
     dialog.exec();
 
 
-    // updateTableViews();
+    updateTableViews();
 
 }
 
@@ -242,31 +242,24 @@ void MainWindow::updateTableViews()
 {
 
     auto *tableWidget = ui->currentAllView; //
-    // QTableView *newTableWidget = new QTableView;
+    auto model_ptr = db->selectAll();
+    ui->currentAllView->setModel(model_ptr);
 
-    // qDebug() << "row count (b4)" << tableWidget->model()->rowCount();
-    // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
+    int len = ui->sectionTabWidget->count();
+    for(int i=1; i < len; i++)
+    {
+        QTableView *tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
+        model_ptr = db->selectPlayersFromSection(tDialog->getTournamentInfo()->sectionNames.value(0));
+        tv->setModel(model_ptr);
+    }
 
-    // delete tableWidget->model();
-
-    // qDebug() << "row count (deletion)" << tableWidget->model()->rowCount();
-
-    // auto model_ptr = db->selectAll();
-    // if(!model_ptr){
-    //     qDebug() << "did not work";
-    //     return;
-    // }
-
-    // qDebug() << "it worked?";
-    // // qDebug() << "row count (old)" << tableWidget->model()->rowCount();
-    // // qDebug() << "row count (new)" << newTableWidget->model()->rowCount();
-    // // tableWidget->show();
-    // ui->currentAllView->setModel(model_ptr);
 
     // qDebug() << "row count (after)" << ui->currentAllView->model()->rowCount();
 
 
 }
+
+
 
 
 void MainWindow::viewSection()
@@ -309,6 +302,7 @@ void MainWindow::viewSection()
 
 }
 
+
 void MainWindow::newSection()
 {
     QTabWidget *tabWidget = ui->sectionTabWidget;
@@ -320,9 +314,8 @@ void MainWindow::newSection()
         tDialog->addSectionInfo(dialog.info);
 
         //Populate section name, setup preferences, etc
-        auto tableWidget = new QTableWidget(this);
-        tableWidget->setRowCount(10);
-        tabWidget->addTab(tableWidget, dialog.info.sectionName);
+        auto w = emptyTabQWidget();
+        tabWidget->addTab(w, dialog.info.sectionName);
         db->insertSection(dialog.info);
 
     }
@@ -359,8 +352,10 @@ void MainWindow::newTournamentDialog()
         // Populate Header Preferences b4 tabwidget decisions
         populateHeaderPreferences();
 
+
         foreach (auto section, dialog->getSectionsInfo()) {
-            ui->sectionTabWidget->addTab(new QWidget(), section.sectionName);
+            auto w = emptyTabQWidget();
+            ui->sectionTabWidget->addTab(w, section.sectionName);
             db->insertSection(section);
         }
 
@@ -404,12 +399,24 @@ void MainWindow::loadExistingTournament()
     populateHeaderPreferences();
 
     // UI. Add Tabs
+
+
     foreach (auto si, ti->sections) {
-        ui->sectionTabWidget->addTab(new QWidget(), si.sectionName);
+
+        auto w = emptyTabQWidget();
+
+        ui->sectionTabWidget->addTab(w, si.sectionName);
     }
 
     // UI. Update Tables
     updateTableViews();
+}
+
+QWidget* MainWindow::emptyTabQWidget(){
+    QWidget *w = new QWidget();
+    QGridLayout *l = new QGridLayout(w);
+    l->addWidget(new QTableView(), 0,0);
+    return w;
 }
 
 void MainWindow::restartUiState()
