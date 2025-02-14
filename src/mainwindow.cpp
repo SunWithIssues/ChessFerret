@@ -169,7 +169,7 @@ void MainWindow::additionalUiSetup()
 
 
 
-MainWindow::headerPreferences MainWindow::populateHeaderPreferences()
+void MainWindow::populateHeaderPreferences()
 {
 
     // TODO::IMPORTANT:: this is a quick dirty method for associating
@@ -241,18 +241,26 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
-    auto model_ptr = db->selectAll();
+    QAbstractItemModel *model_ptr = db->selectAll();
     ui->currentAllView->setModel(model_ptr);
+    formatTableView(ui->currentAllView);
 
+    QHash<int, SectionInfo> sections = tDialog->getSectionsInfo();
+    QList<int> ids = tDialog->getSectionIds();
+    SectionInfo s;
+    QTableView *tv;
     int len = ui->sectionTabWidget->count();
     for(int i=1; i < len; i++)
     {
-        // TODO: this is def not the best way to get tv widget
-        QTableView *tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
+        s = sections.value(ids.value(i-1));
 
-        auto s = tDialog->getSectionNames();
-        model_ptr = db->selectPlayersFromSection(s.value(i-1));
+        model_ptr = db->selectPlayersFromSection(s.sectionName);
+
+        // TODO: this is def not the best way to get tv widget
+
+        tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
         tv->setModel(model_ptr);
+        formatTableView(tv);
     }
 
 
@@ -265,21 +273,23 @@ void MainWindow::viewSection()
 {
     QTabWidget *tabWidget = ui->sectionTabWidget;
 
-    auto sectionNames = tDialog->getSectionNames();
+    int idx = tabWidget->currentIndex();
 
-    QString tabLabel = tabWidget->tabText(tabWidget->currentIndex());
 
-    if(sectionNames.contains(tabLabel))
+    if(idx != 0)
     {
-        auto si0 = tDialog->getSectionsInfo().value(tabLabel);
+        QList<int> ids = tDialog->getSectionIds();
+
+        int selectedId = ids.value(idx-1);
+        SectionInfo si0 = tDialog->getSectionsInfo().value(selectedId);
 
         SectionDialog dialog(this);
         dialog.init(si0);
 
         if(dialog.exec() == QDialog::Accepted)
         {
-            tDialog->replaceSectionInfo(si0, dialog.info);
-            tabWidget->setTabText(tabWidget->currentIndex(), dialog.info.sectionName);
+            tDialog->replaceSectionInfo(selectedId, dialog.info);
+            tabWidget->setTabText(idx, dialog.info.sectionName);
         }
     }
     else
@@ -310,12 +320,13 @@ void MainWindow::newSection()
     SectionDialog dialog(this);
     if(dialog.exec() == QDialog::Accepted)
     {
-        tDialog->addSectionInfo(dialog.info);
+        // Update DB then add to tDialog
+        db->insertSection(dialog.info);
+        tDialog->addSectionInfo(db->getSectionsSeq(), dialog.info);
 
-        //Populate section name, setup preferences, etc
+        // Change UI Accordingly
         auto w = emptyTabQWidget();
         tabWidget->addTab(w, dialog.info.sectionName);
-        db->insertSection(dialog.info);
 
     }
 
@@ -400,11 +411,13 @@ void MainWindow::loadExistingTournament()
     // UI. Add Tabs
 
 
-    foreach (auto si, ti->sections) {
+    QString sn;
+    foreach (auto id, ti->sectionIds) {
 
+        sn = ti->sections.value(id).sectionName;
         auto w = emptyTabQWidget();
 
-        ui->sectionTabWidget->addTab(w, si.sectionName);
+        ui->sectionTabWidget->addTab(w, sn);
     }
 
     // UI. Update Tables
@@ -416,6 +429,10 @@ QWidget* MainWindow::emptyTabQWidget(){
     QGridLayout *l = new QGridLayout(w);
     l->addWidget(new QTableView(), 0,0);
     return w;
+}
+
+void MainWindow::formatTableView(QTableView *tv){
+    tv->horizontalHeader()->setStretchLastSection(true);
 }
 
 void MainWindow::restartUiState()

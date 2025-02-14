@@ -26,10 +26,14 @@ public:
     QDate getBeginDate();
     QString getFilePath();
     TournamentInfo* getTournamentInfo();
-    QHash<QString, SectionInfo> getSectionsInfo();
+
+    QHash<int, SectionInfo> getSectionsInfo();
+    QList<int> getSectionIds();
     QList<QString> getSectionNames();
-    bool addSectionInfo(SectionInfo si);
-    void replaceSectionInfo(SectionInfo si0, SectionInfo si1);
+
+    void swapSectionIds(int index0, int index1);
+    void addSectionInfo(int id, SectionInfo si);
+    void replaceSectionInfo(int id, SectionInfo si);
 
 signals:
 
@@ -47,8 +51,8 @@ private:
 
 
     TournamentInfo* info;
-    QList<QString> tempSectionNames;
-    QHash<QString,SectionInfo> tempSections;
+    QList<int> tempSectionIds;
+    QHash<int,SectionInfo> tempSections;
 
 
     QString forceDbEnding(QString filepath);

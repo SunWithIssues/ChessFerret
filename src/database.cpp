@@ -19,6 +19,7 @@
 Database::Database(QObject *parent)
     : QObject{parent}
 {
+    sectionSeq = 0; // TODO: maybe better inside newTournament
 
     CONNECTION_NAME = "FC_DB";
     TBL_SECTIONS = "sections";
@@ -48,6 +49,9 @@ Database::~Database()
     closeDatabase();
 }
 
+int Database::getSectionsSeq(){
+    return sectionSeq;
+}
 
 QList<Database::header> Database::getColsPlayers()
 {
@@ -137,6 +141,9 @@ bool Database::insertSection(SectionInfo si)
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return false;
     }
+
+    sectionSeq++;
+
     return true;
 }
 bool Database::insertPlayer(PlayerInfo pi)
@@ -187,14 +194,22 @@ TournamentInfo* Database::setupTournament()
 {
 
     QSqlQuery query(db);
-    QString q = "SELECT * FROM " % TBL_SECTIONS;
+
+    QString q = "SELECT seq FROM sqlite_sequence WHERE name = " % TBL_SECTIONS;
+    query.prepare(q);
+    if(query.exec()){
+        sectionSeq = query.value(0).toInt();
+    }
+    else{ sectionSeq = 0; }
+
+    q = "SELECT * FROM " % TBL_SECTIONS;
     query.prepare(q);
     query.exec();
 
     SectionInfo si;
-    int idx;
-    QHash<QString, SectionInfo> sections;
-    QList<QString> sectionNames;
+    int idx, id;
+    QHash<int, SectionInfo> sections;
+    QList<int> sectionIds;
     while(query.next())
     {
         idx = query.record().indexOf("section_name");
@@ -221,9 +236,11 @@ TournamentInfo* Database::setupTournament()
         idx = query.record().indexOf("time_control");
         si.timeControl = query.value(idx).toString();
 
+        idx = query.record().indexOf("id");
+        id = query.value(idx).toInt();
 
-        sections.insert(si.sectionName, si);
-        sectionNames.append(si.sectionName);
+        sections.insert(id, si);
+        sectionIds.append(id);
     }
 
 
@@ -254,7 +271,7 @@ TournamentInfo* Database::setupTournament()
     ti->location= query.value(idx).toString();
 
     ti->sections = sections;
-    ti->sectionNames = sectionNames;
+    ti->sectionIds = sectionIds;
     ti->filepath = db.databaseName();
 
     return ti;
@@ -288,6 +305,7 @@ bool Database::newDatabase(QString filepath)
 
 
         q = "CREATE TABLE sections "
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "section_name PRIMARY KEY,"
             "section_name_print TEXT,"
             "num_rounds INTEGER,"

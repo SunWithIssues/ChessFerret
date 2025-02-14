@@ -23,36 +23,13 @@ TournamentDialog::~TournamentDialog()
     delete ui;
 }
 
-void TournamentDialog::additionalUiSetup()
-{
-    ui->savePathEdit->setText(QDir::homePath());
-    connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
-    connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
-    connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
-}
+
 
 void TournamentDialog::init(TournamentInfo* ti)
 {
     info = ti;
 }
-void TournamentDialog::on_buttonBox_accepted()
-{
-    // Sets Tournament Info
-    info = new TournamentInfo;
-    info->tournamentName = ui->tournamentNameEdit->text();
-    info->location = ui->locationEdit->text();
-    info->beginDate = ui->beginDateEdit->date();
-    info->endDate = ui->endDateEdit->date();
-    info->filepath = forceDbEnding(ui->savePathEdit->text());
-    info->sections = tempSections;
-    info->sectionNames = tempSectionNames;
 
-
-    // Removes existing filepath for overwriting purposes in database.cpp
-    if(QFile(info->filepath).exists()){
-        QFile::remove(info->filepath);
-    }
-}
 TournamentInfo* TournamentDialog::getTournamentInfo()
 {
     return info;
@@ -77,42 +54,72 @@ QString TournamentDialog::getFilePath()
 {
     return info->filepath;
 }
-QHash<QString,SectionInfo> TournamentDialog::getSectionsInfo()
+QHash<int,SectionInfo> TournamentDialog::getSectionsInfo()
 {
     return info->sections;
 }
+QList<int> TournamentDialog::getSectionIds()
+{
+    return info->sectionIds;
+}
+
 QList<QString> TournamentDialog::getSectionNames()
 {
-    return info->sectionNames;
-}
-
-
-bool TournamentDialog::addSectionInfo(SectionInfo si)
-{
-    if(!info)
+    QList<QString> sn;
+    for(auto id: info->sectionIds)
     {
-        qDebug() << "Tournament Not Initialized";
-        return false;
+        sn.append(info->sections.value(id).sectionName);
     }
-
-    info->sections.insert(si.sectionName, si);
-    info->sectionNames.append(si.sectionName);
-    return true;
+    return sn;
 }
 
-void TournamentDialog::replaceSectionInfo(SectionInfo si0, SectionInfo si1)
+void TournamentDialog::swapSectionIds(int index0, int index1)
 {
-    // Remove
-    info->sections.remove(si0.sectionName);
-    // Add
-    info->sections.insert(si1.sectionName, si1);
+    info->sectionIds.swapItemsAt(index0, index1);
+}
 
-    //TODO: make better idk how
-    // REPLACE for vector
-    info->sectionNames.replace(info->sectionNames.indexOf(si0.sectionName), si1.sectionName);
+void TournamentDialog::addSectionInfo(int id, SectionInfo si)
+{
+    info->sections.insert(id, si);
+    info->sectionIds.append(id);
+}
+
+void TournamentDialog::replaceSectionInfo(int id, SectionInfo si)
+{
+    // Replaces old value at id
+    info->sections.insert(id, si);
 
 }
 
+// -------------------------------------
+// PRIVATE FUNCTIONS
+// -------------------------------------
+void TournamentDialog::additionalUiSetup()
+{
+    ui->savePathEdit->setText(QDir::homePath());
+    connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
+    connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
+    connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
+}
+
+void TournamentDialog::on_buttonBox_accepted()
+{
+    // Sets Tournament Info
+    info = new TournamentInfo;
+    info->tournamentName = ui->tournamentNameEdit->text();
+    info->location = ui->locationEdit->text();
+    info->beginDate = ui->beginDateEdit->date();
+    info->endDate = ui->endDateEdit->date();
+    info->filepath = forceDbEnding(ui->savePathEdit->text());
+    info->sections = tempSections;
+    info->sectionIds = tempSectionIds;
+
+
+    // Removes existing filepath for overwriting purposes in database.cpp
+    if(QFile(info->filepath).exists()){
+        QFile::remove(info->filepath);
+    }
+}
 
 void TournamentDialog::on_toolButton_clicked()
 {
@@ -125,17 +132,15 @@ void TournamentDialog::on_toolButton_clicked()
 }
 
 
-
-
-
-
 void TournamentDialog::viewSection()
 {
     auto selected = ui->sectionsTreeWidget->selectedItems();
     if(selected.count() < 1){
         return;
     }
-    SectionInfo si = tempSections.value(selected.at(0)->text(0));
+    int idx = ui->sectionsTreeWidget->currentIndex().row();
+    int id = tempSectionIds.value(idx);
+    SectionInfo si = tempSections.value(id);
 
 
     SectionDialog dialog(this);
@@ -143,40 +148,18 @@ void TournamentDialog::viewSection()
 
     if(dialog.exec() == QDialog::Accepted)
     {
-        if(dialog.info.sectionName == selected.at(0)->text(0)){
-            tempSections[selected.at(0)->text(0)] = dialog.info;
-        }
-        else{
-
-
-            //-----
-            // ADD NEW NAME
-            //-----
-
-            // Add info to temporary section list
-            tempSections.insert(dialog.info.sectionName, dialog.info);
-
+        if(dialog.info.sectionName != selected.at(0)->text(0)){
             // Update UI accordingly
             ui->sectionsTreeWidget->addTopLevelItem(new QTreeWidgetItem(
                 static_cast<QTreeWidget *>(nullptr),
                 QStringList() << dialog.info.sectionName
                 ));
-
-            //-----
-            // REMOVE OLD NAME
-            //-----
-            tempSections.remove(selected.at(0)->text(0));
             delete selected.at(0);
-
-
-            //-----
-            // REPLACE for vector
-            //-----
-            int idx = ui->sectionsTreeWidget->currentIndex().row();
-            tempSectionNames.replace(idx, dialog.info.sectionName);
-
-
         }
+
+
+        tempSections.insert(id, dialog.info);
+
 
     }
 
@@ -187,11 +170,13 @@ void TournamentDialog::removeSection(){
         return;
     }
 
-    tempSections.remove(selected.at(0)->text(0));
-    delete selected.at(0);
-
     int idx = ui->sectionsTreeWidget->currentIndex().row();
-    tempSectionNames.remove(idx);
+    int id = tempSectionIds.value(idx);
+
+    tempSections.remove(id);
+    tempSectionIds.remove(idx);
+
+    delete selected.at(0);
 
 }
 
@@ -199,11 +184,12 @@ void TournamentDialog::addSection()
 {
     //Open New Section Dialog
     SectionDialog dialog(this);
+    int idx = tempSectionIds.count() + 1;
     if(dialog.exec() == QDialog::Accepted)
     {
         // Add info to temporary section list
-        tempSections.insert(dialog.info.sectionName, dialog.info);
-        tempSectionNames.append(dialog.info.sectionName);
+        tempSections.insert(idx, dialog.info);
+        tempSectionIds.append(idx);
 
         // Update UI accordingly
         ui->sectionsTreeWidget->addTopLevelItem(new QTreeWidgetItem(

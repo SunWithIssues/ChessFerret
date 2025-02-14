@@ -26,6 +26,9 @@ public:
     QAbstractItemModel* selectPlayersFromSection(QString section_name);
 
 
+    int getSectionsSeq();
+
+
     bool insertTournament(TournamentInfo* ti);
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
@@ -46,6 +49,8 @@ private:
     QList<header> cols_players;
     QList<header> cols_sections;
     QList<header> cols_tournament;
+
+    int sectionSeq;
 
     QString CONNECTION_NAME;
     QString TBL_SECTIONS ;
