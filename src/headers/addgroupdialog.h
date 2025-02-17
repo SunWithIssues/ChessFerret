@@ -19,6 +19,7 @@ public:
 
 private slots:
     void onToolButtonClicked();
+    void shouldDisableHeaderStyle();
 
 
 private:

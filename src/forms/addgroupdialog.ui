@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>566</width>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,98 +25,140 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="5" column="1">
-      <widget class="QComboBox" name="teamsComboBox"/>
-     </item>
-     <item row="2" column="3">
-      <widget class="QComboBox" name="birthDateComboBox"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>File Path</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="label_4">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0" columnminimumwidth="0,0,0,0,0,0">
+     <item row="6" column="2">
+      <widget class="QLabel" name="fideRtgLabel">
        <property name="text">
         <string>FIDE Rating</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_8">
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="hRadioButton">
        <property name="text">
-        <string>Teams</string>
+        <string>Horizontal</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>FIDE ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>National ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="3">
+     <item row="7" column="3">
       <widget class="QComboBox" name="sectionComboBox"/>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Birthdate</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="nameComboBox"/>
-     </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="natIdComboBox"/>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="label_5">
+     <item row="5" column="2">
+      <widget class="QLabel" name="natRtgLabel">
        <property name="text">
         <string>National Rating</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="3">
-      <widget class="QComboBox" name="fideRtgComboBox"/>
+     <item row="0" column="0">
+      <widget class="QLabel" name="filePathLabel">
+       <property name="text">
+        <string>File Path</string>
+       </property>
+      </widget>
      </item>
-     <item row="0" column="1" colspan="2">
+     <item row="7" column="1">
+      <widget class="QComboBox" name="teamsComboBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="headersCheckBox">
+       <property name="text">
+        <string>Headers</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="nameComboBox"/>
+     </item>
+     <item row="3" column="0" colspan="6">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QComboBox" name="fideIdComboBox"/>
+     </item>
+     <item row="0" column="1" colspan="3">
       <widget class="QLineEdit" name="filePathEdit"/>
      </item>
-     <item row="5" column="2">
-      <widget class="QLabel" name="label_7">
+     <item row="4" column="0">
+      <widget class="QLabel" name="nameLabel">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="natIdLabel">
+       <property name="text">
+        <string>National ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="birthDateLabel">
+       <property name="text">
+        <string>Birthdate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="fideIdLabel">
+       <property name="text">
+        <string>FIDE ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="3">
+      <widget class="QPushButton" name="autoButton">
+       <property name="text">
+        <string>Automate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QRadioButton" name="vRadioButton">
+       <property name="text">
+        <string>Vertical</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="sectionLabel">
        <property name="text">
         <string>Section</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
+     <item row="5" column="1">
+      <widget class="QComboBox" name="natIdComboBox"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="fieldSepLabel">
+       <property name="text">
+        <string>Field Separator</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="teamsLabel">
+       <property name="text">
+        <string>Teams</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QComboBox" name="fideRtgComboBox"/>
+     </item>
+     <item row="5" column="3">
       <widget class="QComboBox" name="natRtgComboBox"/>
      </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="fideIdComboBox"/>
+     <item row="4" column="3">
+      <widget class="QComboBox" name="birthDateComboBox"/>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="4">
       <widget class="QToolButton" name="toolButton">
        <property name="text">
         <string>...</string>
@@ -126,12 +168,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="4">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-      </widget>
+     <item row="1" column="4">
+      <widget class="QComboBox" name="fieldSepComboBox"/>
      </item>
     </layout>
    </item>
