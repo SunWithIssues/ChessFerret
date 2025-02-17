@@ -58,6 +58,21 @@ QList<Database::header> Database::getColsPlayers()
     return cols_players;
 }
 
+bool runSpecialQueries(QStringList queries)
+{
+    QSqlQuery query();
+
+    qDebug() << "queries " << queries;
+    foreach(auto q, queries){
+        query.prepare(q);
+        if(!query.exec()){
+            qDebug() << "special query failed" << q;
+            return false;
+        }
+    }
+    return true;
+}
+
 QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
 {
     QString q = "SELECT * FROM players WHERE section = '" % section_name % "'";

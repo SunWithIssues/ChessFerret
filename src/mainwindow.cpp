@@ -202,10 +202,8 @@ void MainWindow::addNPlayers()
         qDebug() << "Tournament Not Initialized";
         return;
     }
-
-    // TODO::IMPORTANT:: have the comboboxes be populated with possible headers
-    dialog.init(hp->roster->keys());
     dialog.exec();
+    connect(&dialog, &AddGroupDialog::specialQuery, db, &Database::runSpecialQueries);
 
 
     updateTableViews();

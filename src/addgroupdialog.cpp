@@ -2,6 +2,7 @@
 #include "ui_addgroupdialog.h"
 
 #include <QFileDialog>
+#include <QStringBuilder>
 
 AddGroupDialog::AddGroupDialog(QWidget *parent)
     : QDialog(parent)
@@ -32,15 +33,72 @@ void AddGroupDialog::additionalUiSetup()
     ui->vRadioButton->setDisabled(true);
     ui->hRadioButton->setDisabled(true);
 
-    connect(ui->headersCheckBox, &QCheckBox::stateChanged, this, &AddGroupDialog::shouldDisableHeaderStyle);
+    connect(ui->headersCheckBox, &QCheckBox::checkStateChanged, this, &AddGroupDialog::shouldDisableHeaderStyle);
 
     // Field Separator
-    QStringList seps = {",", ";", "/", tr("tab")};
+    QStringList seps = {",", ";", "/", "\\t"};
     ui->fieldSepComboBox->addItems(seps);
     ui->fieldSepComboBox->setEditable(true);
 
     // Automate Button
     ui->autoButton->setDisabled(true);
+
+    connect(ui->autoButton, &QPushButton::clicked, this, &AddGroupDialog::queryBuilding);
+
+}
+
+void AddGroupDialog::queryBuilding()
+{
+    QStringList q;
+    QString sep = ui->fieldSepComboBox->currentText();
+    QString filepath = ui->filePathEdit->text();
+
+
+    q.append(".mode csv");
+
+    // TODO::IMPORTANT:: check if this works for all cases
+    // Put string double quotes around for safety
+    q.append(".separator \"" % sep % "\"");
+
+
+    // there is a header
+    if(ui->headersCheckBox->checkState() == Qt::Checked)
+    {
+        q.append(".import " % filepath % " imported");
+
+        // TODO::IMPORTANT:: the csv needs to be transposed
+        if(ui->hRadioButton->isChecked()){
+
+        }
+
+    }
+    else{ // there is NO HEADER
+        QFile file(filepath);
+        if (!file.open(QIODevice::ReadOnly)){
+            qDebug() << "could not read file << " << filepath;
+        }
+
+        QStringList row1;
+        QByteArray line = file.readLine();
+        row1.append(line.split(QChar(sep)));
+
+        QString s;
+        s.append("CREATE TABLE imported (");
+        for(int i=1; i < row1.count()+1; ++i){
+            s.append("column" % QString(i) % " TEXT, ");
+        }
+        s.removeLast();
+        s.append(")");
+
+        q.append(s);
+
+        q.append(".import " % filepath % " imported");
+    }
+
+
+
+    emit specialQuery(q);
+
 
 }
 

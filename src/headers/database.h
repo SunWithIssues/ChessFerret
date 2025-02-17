@@ -29,6 +29,8 @@ public:
     int getSectionsSeq();
 
 
+
+
     bool insertTournament(TournamentInfo* ti);
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
@@ -41,6 +43,11 @@ public:
     QList<header> getColsPlayers();
 
     TournamentInfo* setupTournament();
+
+public slots:
+    bool runSpecialQueries(QStringList queries);
+
+signals:
 
 
 private:

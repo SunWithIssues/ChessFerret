@@ -17,9 +17,13 @@ public:
 
     void init(QList<QString> headers);
 
+signals:
+    void specialQuery(QStringList queries);
+
 private slots:
     void onToolButtonClicked();
     void shouldDisableHeaderStyle();
+    void queryBuilding();
 
 
 private:
