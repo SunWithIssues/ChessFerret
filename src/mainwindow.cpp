@@ -344,6 +344,10 @@ void MainWindow::loadExistingTournament()
     tDialog = new TournamentDialog(this);
     tDialog->init(ti);
 
+
+    // UI. Tournament Name.
+    ui->tournamentName->setText(ti->tournamentName);
+
     // UI. Add Tabs
     foreach (auto si, ti->sections) {
         ui->sectionTabWidget->addTab(new QWidget(), si.sectionName);
