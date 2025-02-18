@@ -60,16 +60,28 @@ QList<Database::header> Database::getColsPlayers()
 
 bool runSpecialQueries(QStringList queries)
 {
-    QSqlQuery query();
+    QString connection = "CSV_DB";
+    QSqlDatabase dbTemp = QSqlDatabase::addDatabase("QSQLITE", connection);
+    if(!dbTemp.open()){
+        qDebug() << "special query failed: no connection ";
+        return false;
+    }
 
+
+    QSqlQuery query(dbTemp);
     qDebug() << "queries " << queries;
     foreach(auto q, queries){
         query.prepare(q);
         if(!query.exec()){
             qDebug() << "special query failed" << q;
+            dbTemp.close();
+            QSqlDatabase::removeDatabase(connection);
             return false;
         }
     }
+
+    dbTemp.close();
+    QSqlDatabase::removeDatabase(connection);
     return true;
 }
 

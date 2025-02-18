@@ -77,15 +77,15 @@ void AddGroupDialog::queryBuilding()
         if (!file.open(QIODevice::ReadOnly)){
             qDebug() << "could not read file << " << filepath;
         }
-
         QStringList row1;
         QByteArray line = file.readLine();
+
         row1.append(line.split(QChar(sep)));
 
         QString s;
         s.append("CREATE TABLE imported (");
         for(int i=1; i < row1.count()+1; ++i){
-            s.append("column" % QString(i) % " TEXT, ");
+            s.append("\n column" % QString(i) % " TEXT,");
         }
         s.removeLast();
         s.append(")");
