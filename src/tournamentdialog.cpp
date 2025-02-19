@@ -53,6 +53,7 @@ void TournamentDialog::on_buttonBox_accepted()
     info->endDate = ui->endDateEdit->date();
     info->filepath = forceDbEnding(ui->savePathEdit->text());
     info->sections = tempSections;
+    info->federation = ui->fedComboBox->currentText();
 
 
     // Removes existing filepath for overwriting purposes in database.cpp

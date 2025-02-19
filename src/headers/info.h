@@ -45,6 +45,7 @@ struct SectionInfo
 
 struct TournamentInfo{
     QString tournamentName;
+    QString federation;
     QString location;
     QDate beginDate;
     QDate endDate;
