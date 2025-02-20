@@ -9,6 +9,14 @@ AddGroupDialog::AddGroupDialog(QWidget *parent)
     , ui(new Ui::AddGroupDialog)
 {
     ui->setupUi(this);
+
+
+    //TODO: there must be a better method for this
+    seps.insert(",", ',');
+    seps.insert(";", ';');
+    seps.insert("/", '/');
+    seps.insert("\\t", '\t');
+
     additionalUiSetup();
 }
 
@@ -36,8 +44,8 @@ void AddGroupDialog::additionalUiSetup()
     connect(ui->headersCheckBox, &QCheckBox::checkStateChanged, this, &AddGroupDialog::shouldDisableHeaderStyle);
 
     // Field Separator
-    QStringList seps = {",", ";", "/", "\\t"};
-    ui->fieldSepComboBox->addItems(seps);
+
+    ui->fieldSepComboBox->addItems(seps.keys());
     ui->fieldSepComboBox->setEditable(true);
 
     // Automate Button
@@ -49,8 +57,8 @@ void AddGroupDialog::additionalUiSetup()
 
 void AddGroupDialog::queryBuilding()
 {
-    QStringList q;
-    QString sep = ui->fieldSepComboBox->currentText();
+    QList<QString> q = QList<QString>();
+    QString sepKey = ui->fieldSepComboBox->currentText();
     QString filepath = ui->filePathEdit->text();
 
 
@@ -58,7 +66,7 @@ void AddGroupDialog::queryBuilding()
 
     // TODO::IMPORTANT:: check if this works for all cases
     // Put string double quotes around for safety
-    q.append(".separator \"" % sep % "\"");
+    q.append(".separator \"" % sepKey % "\"");
 
 
     // there is a header
@@ -77,15 +85,15 @@ void AddGroupDialog::queryBuilding()
         if (!file.open(QIODevice::ReadOnly)){
             qDebug() << "could not read file << " << filepath;
         }
-        QStringList row1;
+        QList<QByteArray> row1;
         QByteArray line = file.readLine();
 
-        row1.append(line.split(QChar(sep)));
+        row1.append(line.split(seps.value(sepKey)));
 
         QString s;
         s.append("CREATE TABLE imported (");
         for(int i=1; i < row1.count()+1; ++i){
-            s.append("\n column" % QString(i) % " TEXT,");
+            s.append("\n column" % QString::number(i) % " TEXT,");
         }
         s.removeLast();
         s.append(")");

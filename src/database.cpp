@@ -27,11 +27,11 @@ Database::Database(QObject *parent)
     TBL_PLAYERS = "players";
 
     cols_tournament = {
-        header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date" "DATE"},
+        header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date","DATE"},
         header{"end_date", "DATE"}
     };
     cols_sections = {
-        header{"section_name", "TEXT"}, header{"section_name_print" "TEXT"},
+        header{"section_name", "TEXT"}, header{"section_name_print", "TEXT"},
         header{"num_rounds", "INTEGER"}, header{"pairing_style", "TEXT"},
         header{"scoring_style", "TEXT"}, header{"min_rtg", "INTEGER"},
         header{"max_rtg", "INTEGER"}, header{"time_control", "TEXT"}
@@ -58,7 +58,7 @@ QList<Database::header> Database::getColsPlayers()
     return cols_players;
 }
 
-bool runSpecialQueries(QStringList queries)
+bool runSpecialQueries(QList<QString> queries)
 {
     QString connection = "CSV_DB";
     QSqlDatabase dbTemp = QSqlDatabase::addDatabase("QSQLITE", connection);

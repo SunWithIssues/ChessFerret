@@ -18,7 +18,7 @@ public:
     void init(QList<QString> headers);
 
 signals:
-    void specialQuery(QStringList queries);
+    void specialQuery(QList<QString> queries);
 
 private slots:
     void onToolButtonClicked();
@@ -29,6 +29,7 @@ private slots:
 private:
     Ui::AddGroupDialog *ui;
 
+    QHash<QString, char> seps;
     void additionalUiSetup();
 
 };

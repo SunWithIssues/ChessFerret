@@ -202,11 +202,11 @@ void MainWindow::addNPlayers()
         qDebug() << "Tournament Not Initialized";
         return;
     }
-    dialog.exec();
+    dialog.show();
+
     connect(&dialog, &AddGroupDialog::specialQuery, db, &Database::runSpecialQueries);
 
-
-    updateTableViews();
+    connect(&dialog, &AddGroupDialog::accepted, this, &MainWindow::updateTableViews);
 
 }
 

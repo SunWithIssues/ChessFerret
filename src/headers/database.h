@@ -45,7 +45,7 @@ public:
     TournamentInfo* setupTournament();
 
 public slots:
-    bool runSpecialQueries(QStringList queries);
+    bool runSpecialQueries(QList<QString> queries);
 
 signals:
 
