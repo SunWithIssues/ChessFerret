@@ -50,5 +50,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    configs/default-config.txt
+    configs/default-config.txt \
     configs/personal-config.txt
