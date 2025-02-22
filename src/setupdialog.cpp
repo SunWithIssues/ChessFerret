@@ -9,7 +9,6 @@ SetupDialog::SetupDialog(QWidget *parent)
     , ui(new Ui::SetupDialog)
 {
     ui->setupUi(this);
-    // TODO: this is build location
 }
 
 SetupDialog::~SetupDialog()
@@ -17,11 +16,8 @@ SetupDialog::~SetupDialog()
     delete ui;
 }
 
-// QString SetupDialog::langPath = QApplication::applicationDirPath().append("/.qm");
-
 QList<QString> SetupDialog::populateLangChoices()
 {
-    // TODO::IMPORTANT:: I want langPath to be static, currently pointed to build
     QString langPath = QApplication::applicationDirPath();
     langPath.append("/.qm");
 

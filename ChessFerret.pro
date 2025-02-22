@@ -11,6 +11,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/aboutdialog.cpp \
     src/addplayerdialog.cpp \
     src/database.cpp \
     src/main.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     src/tournamentdialog.cpp \
 
 HEADERS += \
+    src/headers/aboutdialog.h \
     src/headers/addplayerdialog.h \
     src/headers/database.h \
     src/headers/info.h \
@@ -31,6 +33,7 @@ HEADERS += \
     src/headers/onstartupdialog.h
 
 FORMS += \
+    src/forms/aboutdialog.ui \
     src/forms/addplayerdialog.ui \
     src/forms/mainwindow.ui \
     src/forms/sectiondialog.ui \
@@ -49,6 +52,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    configs/default-config.txt \
-    configs/personal-config.txt
+RESOURCES = application.qrc
+
