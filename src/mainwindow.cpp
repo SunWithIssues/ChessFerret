@@ -5,6 +5,7 @@
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
 #include "headers/onstartupdialog.h"
+#include "headers/aboutdialog.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -168,6 +169,8 @@ void MainWindow::createMenus()
     helpMenu->addAction(documentationAct);
     helpMenu->addAction(aboutAct);
 
+    connect(aboutAct, &QAction::triggered, this, &MainWindow::openAboutDialog);
+
 }
 
 
@@ -274,7 +277,12 @@ void MainWindow::newSection()
 
 }
 
+void MainWindow::openAboutDialog()
+{
+    AboutDialog dialog(this);
 
+    dialog.exec();
+}
 void MainWindow::openSetupDialog()
 {
 
