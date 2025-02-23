@@ -58,32 +58,40 @@ QList<Database::header> Database::getColsPlayers()
     return cols_players;
 }
 
-bool runSpecialQueries(QList<QString> queries)
+void Database::runSpecialQueries(QList<QString> queries)
 {
+
     QString connection = "CSV_DB";
-    QSqlDatabase dbTemp = QSqlDatabase::addDatabase("QSQLITE", connection);
-    if(!dbTemp.open()){
-        qDebug() << "special query failed: no connection ";
-        return false;
-    }
-
-
-    QSqlQuery query(dbTemp);
-    qDebug() << "queries " << queries;
-    foreach(auto q, queries){
-        query.prepare(q);
-        if(!query.exec()){
-            qDebug() << "special query failed" << q;
-            dbTemp.close();
-            QSqlDatabase::removeDatabase(connection);
-            return false;
+    {
+        QSqlDatabase dbTemp = QSqlDatabase::addDatabase("QSQLITE", connection);
+        if(!dbTemp.open()){
+            qDebug() << "special query failed: no connection ";
+            // return false;
+            return;
         }
-    }
 
-    dbTemp.close();
+
+        QSqlQuery query(dbTemp);
+        qDebug() << "queries " << queries;
+
+        foreach(auto q, queries){
+            query.prepare(q);
+            if(!query.exec()){
+                qDebug() << "special query failed" << q;
+                qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+                break;
+                // return false;
+            }
+
+        }
+
+        dbTemp.close();
+    }
     QSqlDatabase::removeDatabase(connection);
-    return true;
+    // return true;
 }
+
+
 
 QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
 {

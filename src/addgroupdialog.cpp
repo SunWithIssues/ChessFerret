@@ -1,6 +1,7 @@
 #include "headers/addgroupdialog.h"
 #include "ui_addgroupdialog.h"
 
+#include <algorithm>
 #include <QFileDialog>
 #include <QStringBuilder>
 
@@ -16,6 +17,10 @@ AddGroupDialog::AddGroupDialog(QWidget *parent)
     seps.insert(";", ';');
     seps.insert("/", '/');
     seps.insert("\\t", '\t');
+
+
+    list = seps.keys();
+    std::sort(list.begin(), list.end());
 
     additionalUiSetup();
 }
@@ -44,8 +49,7 @@ void AddGroupDialog::additionalUiSetup()
     connect(ui->headersCheckBox, &QCheckBox::checkStateChanged, this, &AddGroupDialog::shouldDisableHeaderStyle);
 
     // Field Separator
-
-    ui->fieldSepComboBox->addItems(seps.keys());
+    ui->fieldSepComboBox->addItems(list);
     ui->fieldSepComboBox->setEditable(true);
 
     // Automate Button
@@ -53,7 +57,11 @@ void AddGroupDialog::additionalUiSetup()
 
     connect(ui->autoButton, &QPushButton::clicked, this, &AddGroupDialog::queryBuilding);
 
+    // ButtonBox
+    ui->buttonBox->setDisabled(true);
+
 }
+
 
 void AddGroupDialog::queryBuilding()
 {
@@ -104,6 +112,7 @@ void AddGroupDialog::queryBuilding()
     }
 
 
+    ui->buttonBox->setDisabled(false);
 
     emit specialQuery(q);
 

@@ -15,7 +15,6 @@ public:
     explicit Database(QObject *parent = nullptr);
     ~Database();
 
-
     struct header
     {
         QString name;
@@ -45,9 +44,7 @@ public:
     TournamentInfo* setupTournament();
 
 public slots:
-    bool runSpecialQueries(QList<QString> queries);
-
-signals:
+    void runSpecialQueries(QList<QString> queries);
 
 
 private:

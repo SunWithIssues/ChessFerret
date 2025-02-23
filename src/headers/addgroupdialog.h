@@ -30,6 +30,8 @@ private:
     Ui::AddGroupDialog *ui;
 
     QHash<QString, char> seps;
+    QList<QString> list;
+
     void additionalUiSetup();
 
 };
