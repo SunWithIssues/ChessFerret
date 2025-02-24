@@ -64,23 +64,39 @@ void AddGroupDialog::verifyCombos()
     QList<QComboBox *> allCBoxes = ui->groupBox->findChildren<QComboBox *>();
     QSet<QString> chosen;
     QString txt;
+    bool flag = true;
     foreach (auto cb, allCBoxes) {
         txt = cb->currentText();
-        qDebug() << txt;
         if (txt != ""){
-            qDebug() << "not null";
             if(chosen.contains(txt))
             {
-                qDebug() << "mBox called";
                 // TODO: duplicate found
-                QMessageBox mBox(this);
-                mBox.setText("DUPLICATE FOUND: " % txt % "used more than once");
-                // mBox.setDetailedText();
-                mBox.exec();
+                QMessageBox mbox(this);
+                mbox.setText("DUPLICATE FOUND:\n <" % txt % "> used more than once");
+                mbox.setWindowTitle(tr("Warning"));
+
+                QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
+                QGridLayout* layout = (QGridLayout*)mbox.layout();
+                layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+                mbox.exec();
+
+                flag = false;
                 break;
             }
-            chosen.insert(txt)
+            chosen.insert(txt);
         }
+    }
+    if(ui->sectionComboBox->currentText() == "")
+    {
+        // TODO: message box detailing that player sections must be selected manually and continue
+
+        // TODO: if continue, new playerSectionDialog with players without section
+
+        // TODO: else, do not allow ok
+    }
+    if(flag){
+        ui->buttonBox->setDisabled(false);
     }
 
 
@@ -177,8 +193,6 @@ void AddGroupDialog::queryBuilding()
     // update ui => populate headers
     // ----------------------------------
 
-
-    ui->buttonBox->setDisabled(false);
     ui->verifyButton->setDisabled(false);
 
     headers.prepend("");
