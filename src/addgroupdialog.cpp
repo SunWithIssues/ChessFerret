@@ -44,10 +44,6 @@ void AddGroupDialog::additionalUiSetup()
 
     // Header Related Actions
     ui->headersCheckBox->setChecked(false);
-    ui->vRadioButton->setDisabled(true);
-    ui->hRadioButton->setDisabled(true);
-
-    connect(ui->headersCheckBox, &QCheckBox::checkStateChanged, this, &AddGroupDialog::shouldDisableHeaderStyle);
 
     // Field Separator
     ui->fieldSepComboBox->addItems(list);
@@ -156,13 +152,10 @@ void AddGroupDialog::queryBuilding()
 
     headers.prepend("");
 
-    ui->fideIdComboBox->addItems(headers);
-    ui->birthDateComboBox->addItems(headers);
-    ui->fideRtgComboBox->addItems(headers);
-    ui->nameComboBox->addItems(headers);
-    ui->natIdComboBox->addItems(headers);
-    ui->natRtgComboBox->addItems(headers);
-    ui->sectionComboBox->addItems(headers);
+    QList<QComboBox *> allCBoxes = ui->groupBox->findChildren<QComboBox *>();
+    foreach (auto cb, allCBoxes) {
+        cb->addItems(headers);
+    }
 
     emit specialQuery(q);
 
@@ -189,15 +182,3 @@ void AddGroupDialog::onToolButtonClicked()
 
 }
 
-void AddGroupDialog::shouldDisableHeaderStyle()
-{
-    if(ui->headersCheckBox->checkState() == Qt::Checked){
-        ui->hRadioButton->setDisabled(false);
-        ui->vRadioButton->setDisabled(false);
-    }
-    else
-    {
-        ui->hRadioButton->setDisabled(true);
-        ui->vRadioButton->setDisabled(true);
-    }
-}

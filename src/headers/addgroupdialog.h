@@ -22,7 +22,6 @@ signals:
 
 private slots:
     void onToolButtonClicked();
-    void shouldDisableHeaderStyle();
     void queryBuilding();
 
 
