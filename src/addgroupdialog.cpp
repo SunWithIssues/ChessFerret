@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <QFileDialog>
 #include <QStringBuilder>
+#include <QTextStream>
 
 AddGroupDialog::AddGroupDialog(QWidget *parent)
     : QDialog(parent)
@@ -20,7 +21,7 @@ AddGroupDialog::AddGroupDialog(QWidget *parent)
 
 
     list = seps.keys();
-    std::sort(list.begin(), list.end());
+    std::sort(list.begin(), list.end()); //TODO: this might be reimplemented or deleted
 
     additionalUiSetup();
 }
@@ -50,7 +51,6 @@ void AddGroupDialog::additionalUiSetup()
 
     // Field Separator
     ui->fieldSepComboBox->addItems(list);
-    ui->fieldSepComboBox->setEditable(true);
 
     // Automate Button
     ui->autoButton->setDisabled(true);
@@ -70,49 +70,99 @@ void AddGroupDialog::queryBuilding()
     QString filepath = ui->filePathEdit->text();
 
 
-    q.append(".mode csv");
+    QStringList headers;
 
-    // TODO::IMPORTANT:: check if this works for all cases
-    // Put string double quotes around for safety
-    q.append(".separator \"" % sepKey % "\"");
+    // ----------------------------------
+    // read csv
+    // ----------------------------------
+    QFile file(filepath);
+    if (!file.open(QIODevice::ReadOnly)){
+        qDebug() << "could not read file << " << filepath;
+    }
+
+    // ----------------------------------
+    // create header if needed (create table ...)
+    // ----------------------------------
 
 
-    // there is a header
+    QTextStream stream(&file);
+
+    QList<QString> row;
+    QString line = stream.readLine();
+
+    QString s;
+    s.append("CREATE TABLE imported (");
+
+    row.append(line.split(seps.value(sepKey)));
+
     if(ui->headersCheckBox->checkState() == Qt::Checked)
     {
-        q.append(".import " % filepath % " imported");
-
-        // TODO::IMPORTANT:: the csv needs to be transposed
-        if(ui->hRadioButton->isChecked()){
-
-        }
-
-    }
-    else{ // there is NO HEADER
-        QFile file(filepath);
-        if (!file.open(QIODevice::ReadOnly)){
-            qDebug() << "could not read file << " << filepath;
-        }
-        QList<QByteArray> row1;
-        QByteArray line = file.readLine();
-
-        row1.append(line.split(seps.value(sepKey)));
-
-        QString s;
-        s.append("CREATE TABLE imported (");
-        for(int i=1; i < row1.count()+1; ++i){
-            s.append("\n column" % QString::number(i) % " TEXT,");
+        for(int i=0; i < row.count(); ++i){
+            s.append("\n \"" % row.value(i) % "\" TEXT,"); // TODO: might need to use tostring
+            headers.append(row.value(i));
         }
         s.removeLast();
         s.append(")");
 
         q.append(s);
 
-        q.append(".import " % filepath % " imported");
+    }
+    else
+    {
+        QString s2;
+        s2.append("INSERT INTO imported VALUES ( ");
+        for(int i=1; i < row.count()+1; ++i){
+            s.append("\n column" % QString::number(i) % " TEXT,");
+            s2.append("\n \"" % row.value(i-1) % "\",");
+            headers.append("column" % QString::number(i));
+        }
+        s.removeLast();
+        s.append(")");
+
+        s2.removeLast();
+        s2.append(")");
+
+        q.append(s);
+        q.append(s2);
+    }
+    // ----------------------------------
+    // loop (insert into ...)
+    // ----------------------------------
+
+    while (stream.atEnd() == false)
+    {
+        line = stream.readLine();
+        row.clear();
+        row.append(line.split(seps.value(sepKey)));
+
+        s.clear();
+        s.append("INSERT INTO imported VALUES ( ");
+        for(int i=0; i < row.count(); ++i){
+            s.append("\n \"" % row.value(i) % "\",");
+        }
+        s.removeLast();
+        s.append(")");
+
+        q.append(s);
     }
 
 
+    // ----------------------------------
+    // update ui => populate headers
+    // ----------------------------------
+
+
     ui->buttonBox->setDisabled(false);
+
+    headers.prepend("");
+
+    ui->fideIdComboBox->addItems(headers);
+    ui->birthDateComboBox->addItems(headers);
+    ui->fideRtgComboBox->addItems(headers);
+    ui->nameComboBox->addItems(headers);
+    ui->natIdComboBox->addItems(headers);
+    ui->natRtgComboBox->addItems(headers);
+    ui->sectionComboBox->addItems(headers);
 
     emit specialQuery(q);
 

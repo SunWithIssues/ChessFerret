@@ -64,6 +64,7 @@ void Database::runSpecialQueries(QList<QString> queries)
     QString connection = "CSV_DB";
     {
         QSqlDatabase dbTemp = QSqlDatabase::addDatabase("QSQLITE", connection);
+        dbTemp.setDatabaseName("./imported.db");
         if(!dbTemp.open()){
             qDebug() << "special query failed: no connection ";
             // return false;
@@ -82,7 +83,6 @@ void Database::runSpecialQueries(QList<QString> queries)
                 break;
                 // return false;
             }
-
         }
 
         dbTemp.close();
