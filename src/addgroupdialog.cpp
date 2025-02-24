@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QStringBuilder>
 #include <QTextStream>
+#include <QMessageBox>
 
 AddGroupDialog::AddGroupDialog(QWidget *parent)
     : QDialog(parent)
@@ -31,11 +32,6 @@ AddGroupDialog::~AddGroupDialog()
     delete ui;
 }
 
-void AddGroupDialog::init(QList<QString> headers)
-{
-
-}
-
 void AddGroupDialog::additionalUiSetup()
 {
     // File Path Actions
@@ -56,7 +52,41 @@ void AddGroupDialog::additionalUiSetup()
     // ButtonBox
     ui->buttonBox->setDisabled(true);
 
+    // Verify Button
+    ui->verifyButton->setDisabled(true);
+    connect(ui->verifyButton, &QPushButton::clicked, this, &AddGroupDialog::verifyCombos);
+
 }
+
+void AddGroupDialog::verifyCombos()
+{
+
+    QList<QComboBox *> allCBoxes = ui->groupBox->findChildren<QComboBox *>();
+    QSet<QString> chosen;
+    QString txt;
+    foreach (auto cb, allCBoxes) {
+        txt = cb->currentText();
+        qDebug() << txt;
+        if (txt != ""){
+            qDebug() << "not null";
+            if(chosen.contains(txt))
+            {
+                qDebug() << "mBox called";
+                // TODO: duplicate found
+                QMessageBox mBox(this);
+                mBox.setText("DUPLICATE FOUND: " % txt % "used more than once");
+                // mBox.setDetailedText();
+                mBox.exec();
+                break;
+            }
+            chosen.insert(txt)
+        }
+    }
+
+
+
+}
+
 
 
 void AddGroupDialog::queryBuilding()
@@ -149,6 +179,7 @@ void AddGroupDialog::queryBuilding()
 
 
     ui->buttonBox->setDisabled(false);
+    ui->verifyButton->setDisabled(false);
 
     headers.prepend("");
 

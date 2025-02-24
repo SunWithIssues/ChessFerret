@@ -1,6 +1,8 @@
 #ifndef ADDGROUPDIALOG_H
 #define ADDGROUPDIALOG_H
 
+#include "addplayerdialog.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -15,15 +17,13 @@ public:
     explicit AddGroupDialog(QWidget *parent = nullptr);
     ~AddGroupDialog();
 
-    void init(QList<QString> headers);
-
 signals:
     void specialQuery(QList<QString> queries);
 
 private slots:
     void onToolButtonClicked();
     void queryBuilding();
-
+    void verifyCombos();
 
 private:
     Ui::AddGroupDialog *ui;
@@ -32,6 +32,8 @@ private:
     QList<QString> list;
 
     void additionalUiSetup();
+
+
 
 };
 

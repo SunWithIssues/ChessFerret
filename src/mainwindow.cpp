@@ -213,7 +213,19 @@ void MainWindow::addNPlayers()
 
     connect(&dialog, &AddGroupDialog::accepted, this, &MainWindow::updateTableViews);
 
+    // dialog.init(tDialog->getSectionNames());
     dialog.exec();
+
+    // QList<PlayerInfo> players = dialog.getPlayers();
+
+
+    // // Inserts a player if they exist
+    // foreach (auto player, players) {
+    //     db->insertPlayer(player);
+    // }
+
+    // Updates Table Views Accordingly
+    updateTableViews();
 
 }
 
