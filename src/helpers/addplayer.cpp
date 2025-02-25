@@ -4,6 +4,10 @@ AddPlayer::AddPlayer(QList<QString> sectionNames) {
     this->sectionNames = sectionNames;
 }
 
+QList<QString> AddPlayer::getSectionNames()
+{
+    return sectionNames;
+}
 
 QList<PlayerInfo> AddPlayer::getPlayers()
 {
@@ -14,3 +18,5 @@ void AddPlayer::addPlayerToList(PlayerInfo pi)
 {
     players.append(pi);
 }
+
+

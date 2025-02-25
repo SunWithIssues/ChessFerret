@@ -1,6 +1,8 @@
 #include "headers/addgroupdialog.h"
 #include "ui_addgroupdialog.h"
 
+#include "headers/playertosectiondialog.h"
+
 #include <algorithm>
 #include <QFileDialog>
 #include <QStringBuilder>
@@ -49,12 +51,14 @@ void AddGroupDialog::additionalUiSetup()
 
     connect(ui->autoButton, &QPushButton::clicked, this, &AddGroupDialog::queryBuilding);
 
-    // ButtonBox
-    ui->buttonBox->setDisabled(true);
 
     // Verify Button
     ui->verifyButton->setDisabled(true);
     connect(ui->verifyButton, &QPushButton::clicked, this, &AddGroupDialog::verifyCombos);
+
+
+    // Next Button
+    ui->nextButton->setDisabled(true);
 
 }
 
@@ -72,7 +76,7 @@ void AddGroupDialog::verifyCombos()
             {
                 // TODO: duplicate found
                 QMessageBox mbox(this);
-                mbox.setText("DUPLICATE FOUND:\n <" % txt % "> used more than once");
+                mbox.setText("DUPLICATE FOUND: <" % txt % "> used more than once");
                 mbox.setWindowTitle(tr("Warning"));
 
                 QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -87,16 +91,35 @@ void AddGroupDialog::verifyCombos()
             chosen.insert(txt);
         }
     }
-    if(ui->sectionComboBox->currentText() == "")
+    if(flag && ui->sectionComboBox->currentText() == "")
     {
         // TODO: message box detailing that player sections must be selected manually and continue
+        QMessageBox mbox(this);
+        mbox.setText(tr("Imported players require manual sections assignment"));
+        mbox.setWindowTitle(tr("Warning"));
+        mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        QGridLayout* layout = (QGridLayout*)mbox.layout();
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
 
         // TODO: if continue, new playerSectionDialog with players without section
+        if (mbox.exec() == QMessageBox::Ok)
+        {
+            // TODO: get the players from csv and convert to playerInfo list
 
-        // TODO: else, do not allow ok
+            // TODO: open the new dialog with players inserted first??
+            PlayerToSectionDialog dialog(this);
+        }
+        else // else, do not allow ok
+        {
+            flag = false;
+        }
+
+
     }
     if(flag){
-        ui->buttonBox->setDisabled(false);
+        ui->nextButton->setDisabled(false);
     }
 
 
@@ -120,6 +143,7 @@ void AddGroupDialog::queryBuilding()
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly)){
         qDebug() << "could not read file << " << filepath;
+        return;
     }
 
     // ----------------------------------
@@ -203,8 +227,6 @@ void AddGroupDialog::queryBuilding()
     }
 
     emit specialQuery(q);
-
-
 }
 
 
