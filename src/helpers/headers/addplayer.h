@@ -11,6 +11,7 @@ public:
     AddPlayer(QList<QString> sectionNames);
 
     QList<PlayerInfo> getPlayers();
+    QList<QString> getSectionNames();
     void addPlayerToList(PlayerInfo pi);
 
 private:
