@@ -33,10 +33,12 @@ void TournamentDialog::additionalUiSetup()
     ui->beginDateEdit->setDate(QDate::currentDate());
     ui->endDateEdit->setDate(QDate::currentDate());
 
+    ui->buttonBox->setDisabled(true);
 
     connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
     connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
+
 }
 
 void TournamentDialog::init(TournamentInfo* ti)
@@ -179,6 +181,10 @@ void TournamentDialog::removeSection(){
     if(selected.count() < 1){
         return;
     }
+    if(tempSections.count() == 1)
+    {
+        ui->buttonBox->setDisabled(true);
+    }
 
     tempSections.remove(selected.at(0)->text(0));
     delete selected.at(0);
@@ -200,6 +206,8 @@ void TournamentDialog::addSection()
                         static_cast<QTreeWidget *>(nullptr),
                         QStringList() << dialog.info.sectionName
             ));
+
+        ui->buttonBox->setDisabled(false);
     }
 }
 
