@@ -1,7 +1,8 @@
 #ifndef ADDPLAYERDIALOG_H
 #define ADDPLAYERDIALOG_H
 
-#include "info.h"
+
+#include "../helpers/headers/addplayer.h"
 
 #include <QDialog>
 #include <QDate>
@@ -11,29 +12,26 @@ namespace Ui {
 class AddPlayerDialog;
 }
 
-class AddPlayerDialog : public QDialog
+class AddPlayerDialog : public QDialog, public AddPlayer
 {
     Q_OBJECT
 
 public:
-    explicit AddPlayerDialog(QWidget *parent = nullptr);
+    explicit AddPlayerDialog(QWidget *parent = nullptr, QList<QString> sectionNames = QList<QString>());
     ~AddPlayerDialog();
-
-
-
-
-    QList<PlayerInfo> getPlayers();
-    void init(QList<QString> sectioinNames);
 
 
 private:
     Ui::AddPlayerDialog *ui;
-    QList<PlayerInfo> players;
 
+    void additionalUiSetup();
+    PlayerInfo getUiPlayerInfo();
+
+private slots:
     void onAccepted();
     void onApplied();
-    void additionalUiSetup();
-    void addPlayerToList();
+
+
 };
 
 #endif // ADDPLAYERDIALOG_H

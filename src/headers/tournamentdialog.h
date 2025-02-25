@@ -1,7 +1,7 @@
 #ifndef TOURNAMENTDIALOG_H
 #define TOURNAMENTDIALOG_H
 
-#include "info.h"
+#include "../helpers/headers/info.h"
 
 #include <QDialog>
 #include <QDate>

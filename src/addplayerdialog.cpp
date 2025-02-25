@@ -4,14 +4,16 @@
 #include <QDate>
 
 
-AddPlayerDialog::AddPlayerDialog(QWidget *parent)
-    : QDialog(parent)
+AddPlayerDialog::AddPlayerDialog(QWidget *parent, QList<QString> sectionNames)
+    : QDialog(parent), AddPlayer(sectionNames)
     , ui(new Ui::AddPlayerDialog)
 {
     ui->setupUi(this);
 
     ui->birthDateEdit->setDisplayFormat("MM/dd/yyyy");
     ui->birthDateEdit->setMaximumDate(QDate::currentDate());
+
+    ui->sectionComboBox->addItems(sectionNames);
 
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &AddPlayerDialog::onAccepted);
     connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &AddPlayerDialog::onApplied);
@@ -34,32 +36,20 @@ void AddPlayerDialog::additionalUiSetup(){
     ui->fideIDEdit->setText("");
     ui->natIdEdit->setText("");
     ui->teamsEdit->setText("");
-
-}
-
-void AddPlayerDialog::init(QList<QString> sectionNames)
-{
-    ui->sectionComboBox->addItems(sectionNames);
 }
 
 void AddPlayerDialog::onAccepted()
 {
-    addPlayerToList();
+    addPlayerToList(getUiPlayerInfo());
 
 }
 void AddPlayerDialog::onApplied()
 {
-    addPlayerToList();
+    addPlayerToList(getUiPlayerInfo());
     additionalUiSetup();
 }
 
-QList<PlayerInfo> AddPlayerDialog::getPlayers()
-{
-    return players;
-}
-
-
-void AddPlayerDialog::addPlayerToList()
+PlayerInfo AddPlayerDialog::getUiPlayerInfo()
 {
     PlayerInfo pi;
 
@@ -73,5 +63,5 @@ void AddPlayerDialog::addPlayerToList()
     pi.section = ui->sectionComboBox->currentText();
     pi.teams = ui->teamsEdit->text();
 
-    players.append(pi);
+    return pi;
 }

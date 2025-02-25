@@ -1,7 +1,7 @@
 #ifndef ADDGROUPDIALOG_H
 #define ADDGROUPDIALOG_H
 
-#include "addplayerdialog.h"
+#include "../helpers/headers/addplayer.h"
 
 #include <QDialog>
 
@@ -9,12 +9,12 @@ namespace Ui {
 class AddGroupDialog;
 }
 
-class AddGroupDialog : public QDialog
+class AddGroupDialog : public QDialog, public AddPlayer
 {
     Q_OBJECT
 
 public:
-    explicit AddGroupDialog(QWidget *parent = nullptr);
+    explicit AddGroupDialog(QWidget *parent = nullptr, QList<QString> sectionNames = QList<QString>());
     ~AddGroupDialog();
 
 signals:

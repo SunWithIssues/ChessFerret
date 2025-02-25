@@ -196,7 +196,7 @@ void MainWindow::populateHeaderPreferences()
 
 void MainWindow::addNPlayers()
 {
-    AddGroupDialog dialog(this);
+
     if (!tDialog)
     {
         qDebug() << "Tournament Not Initialized";
@@ -204,7 +204,7 @@ void MainWindow::addNPlayers()
     }
 
 
-
+    AddGroupDialog dialog(this, tDialog->getSectionNames());
     // connect(&dialog, &AddGroupDialog::valueChanged, db, &Database::setValue);
     // dialog.setValue(QStringList({"hello", "world"}));
     // qDebug() << db->m_value;
@@ -232,7 +232,7 @@ void MainWindow::addNPlayers()
 void MainWindow::add1Player()
 {
 
-    AddPlayerDialog dialog(this);
+
 
     if (!tDialog)
     {
@@ -240,7 +240,7 @@ void MainWindow::add1Player()
         return;
     }
 
-    dialog.init(tDialog->getSectionNames());
+    AddPlayerDialog dialog(this, tDialog->getSectionNames());
     dialog.exec();
 
     QList<PlayerInfo> players = dialog.getPlayers();

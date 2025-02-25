@@ -1,7 +1,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include "info.h"
+#include "../helpers/headers/info.h"
 
 #include <QObject>
 #include <QTableView>

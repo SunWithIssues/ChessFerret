@@ -1,7 +1,7 @@
 #ifndef SECTIONDIALOG_H
 #define SECTIONDIALOG_H
 
-#include "info.h"
+#include "../helpers/headers/info.h"
 
 #include <QDialog>
 

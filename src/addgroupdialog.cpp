@@ -7,8 +7,8 @@
 #include <QTextStream>
 #include <QMessageBox>
 
-AddGroupDialog::AddGroupDialog(QWidget *parent)
-    : QDialog(parent)
+AddGroupDialog::AddGroupDialog(QWidget *parent, QList<QString> sectionNames)
+    : QDialog(parent), AddPlayer(sectionNames)
     , ui(new Ui::AddGroupDialog)
 {
     ui->setupUi(this);

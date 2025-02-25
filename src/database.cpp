@@ -1,8 +1,5 @@
 #include "headers/database.h"
 
-#include "headers/info.h"
-
-
 #include <QStringBuilder>
 #include <QSql>
 #include <QSqlQuery>
