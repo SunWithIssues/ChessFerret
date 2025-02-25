@@ -16,7 +16,6 @@ public:
     ~SetupDialog();
 
     static QList<QString> populateLangChoices();
-    // static QString langPath;
 
 private:
     Ui::SetupDialog *ui;
