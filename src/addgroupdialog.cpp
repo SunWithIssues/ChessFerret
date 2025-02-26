@@ -91,6 +91,16 @@ void AddGroupDialog::verifyCombos()
             chosen.insert(txt);
         }
     }
+
+    /// how??? should and when should i convert/get playerInfo
+    /// ---- (apple hiring)
+    ///
+
+
+
+
+
+
     if(flag && ui->sectionComboBox->currentText() == "")
     {
         // TODO: message box detailing that player sections must be selected manually and continue
@@ -108,6 +118,7 @@ void AddGroupDialog::verifyCombos()
         {
             // TODO: get the players from csv and convert to playerInfo list
 
+
             // TODO: open the new dialog with players inserted first??
             PlayerToSectionDialog dialog(this);
         }
@@ -119,6 +130,10 @@ void AddGroupDialog::verifyCombos()
 
     }
     if(flag){
+
+        // TODO: get the players from csv and convert to playerInfo list
+
+
         ui->nextButton->setDisabled(false);
     }
 
