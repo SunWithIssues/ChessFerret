@@ -61,6 +61,7 @@ private:
     void createEmptyRoster();
     void additionalUiSetup();
     void updateTableViews();
+    void resetUi();
     QVector<headerPreferences> populateHeaderPreferences();
 
 

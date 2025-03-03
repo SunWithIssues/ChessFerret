@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     createMenus();
     additionalUiSetup();
 
+    tDialog = nullptr;
     sDialog = new SetupDialog(this);
-
     db = new Database();
 }
 
@@ -303,12 +303,7 @@ void MainWindow::newTournamentDialog()
 
         if(tDialog)
         {
-            for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
-                ui->sectionTabWidget->removeTab(i);
-            }
-
-            delete db;
-            db = new Database();
+            resetUi();
         }
 
         db->newDatabase(dialog->getFilePath());
@@ -344,6 +339,10 @@ void MainWindow::loadExistingTournament()
     }
     filepaths = dialog.selectedFiles();
 
+    if(tDialog){
+        resetUi();
+    }
+
     // Retrieve info from database
     db->openDatabase(filepaths[0]);
     auto ti = db->setupTournament();
@@ -366,5 +365,16 @@ void MainWindow::loadExistingTournament()
 
     emit closeOnStartUp();
 
+}
+
+void MainWindow::resetUi()
+{
+    for (int i = ui->sectionTabWidget->count()-1; i > 0 ; --i) {
+        delete ui->sectionTabWidget->widget(i);
+        ui->sectionTabWidget->removeTab(i);
+    }
+
+    delete db;
+    db = new Database();
 }
 
