@@ -235,10 +235,12 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
+    // All TableView
     QAbstractItemModel *model_ptr = db->selectAll();
     ui->currentAllView->setModel(model_ptr);
     formatTableView(ui->currentAllView);
 
+    // Section TableView
     QHash<int, SectionInfo> sections = tDialog->getSectionsInfo();
     QList<int> ids = tDialog->getSectionIds();
     SectionInfo s;
@@ -427,6 +429,17 @@ QWidget* MainWindow::emptyTabQWidget(){
 
 void MainWindow::formatTableView(QTableView *tv){
     tv->horizontalHeader()->setStretchLastSection(true);
+    tv->verticalHeader()->hide();
+    tv->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    // TODO: all these should be changable in setup
+    QHeaderView *verticalHeader = tv->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setDefaultSectionSize(20);
+
+    QFont f = tv->font();
+    f.setPixelSize(15);
+    tv->setFont(f);
 }
 
 void MainWindow::restartUiState()
