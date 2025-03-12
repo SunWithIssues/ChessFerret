@@ -5,7 +5,6 @@
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
-#include "headers/addgroupdialog.h"
 
 
 #include <QMenu>
@@ -203,28 +202,6 @@ void MainWindow::addNPlayers()
         return;
     }
 
-
-    AddGroupDialog dialog(this, tDialog->getSectionNames());
-    // connect(&dialog, &AddGroupDialog::valueChanged, db, &Database::setValue);
-    // dialog.setValue(QStringList({"hello", "world"}));
-    // qDebug() << db->m_value;
-
-    connect(&dialog, &AddGroupDialog::specialQuery, db, &Database::runSpecialQueries);
-
-    connect(&dialog, &AddGroupDialog::accepted, this, &MainWindow::updateTableViews);
-
-    // dialog.init(tDialog->getSectionNames());
-    dialog.exec();
-
-    // QList<PlayerInfo> players = dialog.getPlayers();
-
-
-    // // Inserts a player if they exist
-    // foreach (auto player, players) {
-    //     db->insertPlayer(player);
-    // }
-
-    // Updates Table Views Accordingly
     updateTableViews();
 
 }
