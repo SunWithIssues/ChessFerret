@@ -12,34 +12,42 @@ CONFIG += c++17
 
 SOURCES += \
     src/helpers/addplayer.cpp \
+    src/aboutdialog.cpp \
     src/addplayerdialog.cpp \
     src/database.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/onstartupdialog.cpp \
     src/sectiondialog.cpp \
     src/setupdialog.cpp \
     src/tournamentdialog.cpp \
 
 
 HEADERS += \
+    src/helpers/headers/info.h \
     src/helpers/headers/addplayer.h \
+    src/headers/aboutdialog.h \
     src/headers/addplayerdialog.h \
     src/headers/database.h \
-    src/helpers/headers/info.h \
     src/headers/mainwindow.h \
+    src/headers/onstartupdialog.h \
     src/headers/sectiondialog.h \
     src/headers/setupdialog.h \
-    src/headers/tournamentdialog.h
+    src/headers/tournamentdialog.h \
 
 FORMS += \
+    src/forms/aboutdialog.ui \
     src/forms/addplayerdialog.ui \
     src/forms/mainwindow.ui \
     src/forms/sectiondialog.ui \
     src/forms/setupdialog.ui \
-    src/forms/tournamentdialog.ui
+    src/forms/tournamentdialog.ui \
+    src/forms/onstartupdialog.ui \
 
 TRANSLATIONS += \
-    translations/ChessFerret_en_US.ts
+    translations/ChessFerret_en_US.ts \
+    translations/ChessFerret_es_419.ts
+
 CONFIG += lrelease
 CONFIG += embed_translations
 
@@ -48,6 +56,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    configs/default-config.txt
-    configs/personal-config.txt
+RESOURCES = application.qrc
+

@@ -5,6 +5,8 @@
 #include "headers/setupdialog.h"
 #include "headers/sectiondialog.h"
 #include "headers/addplayerdialog.h"
+#include "headers/onstartupdialog.h"
+#include "headers/aboutdialog.h"
 
 
 #include <QMenu>
@@ -25,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     createMenus();
     additionalUiSetup();
 
+    tDialog = nullptr;
+    sDialog = new SetupDialog(this);
     db = new Database();
 
 }
@@ -35,6 +39,18 @@ MainWindow::~MainWindow()
     delete db;
 }
 
+
+void MainWindow::show(OnStartUpDialog* dialog)
+{
+    QMainWindow::show();
+
+    connect(dialog, &QDialog::rejected, qApp, QCoreApplication::quit);
+    connect(dialog, &OnStartUpDialog::newTournamentClicked, this, &MainWindow::newTournamentDialog);
+    connect(dialog, &OnStartUpDialog::openTournamentClicked, this, &MainWindow::loadExistingTournament);
+    connect(this, &MainWindow::closeOnStartUp, dialog, &QDialog::accept);
+
+    dialog->setModal(true);
+}
 
 void MainWindow::createMenus()
 {
@@ -155,6 +171,8 @@ void MainWindow::createMenus()
 
     helpMenu->addAction(documentationAct);
     helpMenu->addAction(aboutAct);
+
+    connect(aboutAct, &QAction::triggered, this, &MainWindow::openAboutDialog);
 
 }
 
@@ -328,10 +346,15 @@ void MainWindow::newSection()
 
 }
 
+void MainWindow::openAboutDialog()
+{
+    AboutDialog dialog(this);
 
+    dialog.exec();
+}
 void MainWindow::openSetupDialog()
 {
-    sDialog = new SetupDialog(this);
+
     sDialog->show();
 
 
@@ -349,7 +372,7 @@ void MainWindow::newTournamentDialog()
 
         if(tDialog)
         {
-            restartUiState();
+            resetUi();
         }
 
         db->newDatabase(dialog->getFilePath());
@@ -367,6 +390,7 @@ void MainWindow::newTournamentDialog()
 
 
         tDialog = dialog;
+        emit closeOnStartUp();
     }
 
 
@@ -388,9 +412,9 @@ void MainWindow::loadExistingTournament()
     }
     filepaths = dialog.selectedFiles();
 
-    if(tDialog)
-    {
-        restartUiState();
+
+    if(tDialog){
+        resetUi();
     }
 
     // Retrieve info from database
@@ -403,6 +427,9 @@ void MainWindow::loadExistingTournament()
 
     // Populate Header Preferences b4 tabwidget decisions
     populateHeaderPreferences();
+
+    // UI. Tournament Name.
+    ui->tournamentName->setText(ti->tournamentName);
 
     // UI. Add Tabs
 
@@ -418,6 +445,20 @@ void MainWindow::loadExistingTournament()
 
     // UI. Update Tables
     updateTableViews();
+
+    emit closeOnStartUp();
+
+}
+
+void MainWindow::resetUi()
+{
+    for (int i = ui->sectionTabWidget->count()-1; i > 0 ; --i) {
+        delete ui->sectionTabWidget->widget(i);
+        ui->sectionTabWidget->removeTab(i);
+    }
+
+    delete db;
+    db = new Database();
 }
 
 QWidget* MainWindow::emptyTabQWidget(){
@@ -442,13 +483,3 @@ void MainWindow::formatTableView(QTableView *tv){
     tv->setFont(f);
 }
 
-void MainWindow::restartUiState()
-{
-    for (int i = ui->sectionTabWidget->count()-1; i > 0; i--) {
-        ui->sectionTabWidget->removeTab(i);
-    }
-
-    delete db;
-    db = new Database();
-
-}

@@ -4,6 +4,7 @@
 #include "tournamentdialog.h"
 #include "setupdialog.h"
 #include "database.h"
+#include "onstartupdialog.h"
 
 #include <QMainWindow>
 #include <QApplication>
@@ -22,6 +23,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void show(OnStartUpDialog* dialog);
+
+    void init();
+
     struct headerPreferences
     {
         QHash<QString, QString> *roster;
@@ -30,7 +35,8 @@ public:
     };
 
 
-protected:
+signals:
+    void closeOnStartUp();
 
 public slots:
 
@@ -39,7 +45,7 @@ private slots:
     void newTournamentDialog();
     void loadExistingTournament();
     void openSetupDialog();
-
+    void openAboutDialog();
     void newSection();
     void viewSection();
 
@@ -53,12 +59,14 @@ private:
     void createMenus();
     void createEmptyRoster();
     void additionalUiSetup();
-    void restartUiState();
     void updateTableViews();
+    void resetUi();
+
     QWidget* emptyTabQWidget();
     void formatTableView(QTableView *tv);
 
     void populateHeaderPreferences();
+
 
 
     Ui::MainWindow *ui;

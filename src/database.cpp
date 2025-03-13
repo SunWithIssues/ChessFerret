@@ -123,12 +123,14 @@ bool Database::insertTournament(TournamentInfo *ti)
 {
     QSqlQuery query(db);
     QString q = "INSERT INTO tournament ( tournament_name,"
+                "federation, "
                 "location, "
                 "begin_date, "
                 "end_date )"
-                "VALUES (:tName, :loc, :bDate, :eDate)";
+                "VALUES (:tName, :fed, :loc, :bDate, :eDate)";
 
     query.prepare(q);
+    query.bindValue(":fed", ti->federation);
     query.bindValue(":tName", ti->tournamentName);
     query.bindValue(":loc", ti->location);
     query.bindValue(":bDate", ti->beginDate);
@@ -161,7 +163,7 @@ bool Database::insertSection(SectionInfo si)
     query.bindValue(":sName", si.sectionName);
     query.bindValue(":sNamePrint", si.sectionNameForPrinting);
     query.bindValue(":nRounds", si.numRounds);
-    query.bindValue(":pStyles", si.pairingRule);
+    query.bindValue(":pStyle", si.pairingRule);
     query.bindValue(":sStyle", si.scoringStyle);
     query.bindValue(":minRtg", si.ratingRangeMin);
     query.bindValue(":maxRtg", si.ratingRangeMax);
@@ -190,7 +192,7 @@ bool Database::insertPlayer(PlayerInfo pi)
                                         "rtg_fide,"
                                         "section ,"
                                         "teams )"
-                "VALUES (:birthdateVal, :nameVal, :genderVal, :id_nationlVal,  "
+                "VALUES (:birthdateVal, :nameVal, :genderVal, :id_nationalVal,  "
                         ":rtg_nationalVal, :id_fideVal, :rtg_fideVal, :sectionVal, "
                         ":teamsVal)";
 
@@ -302,6 +304,9 @@ TournamentInfo* Database::setupTournament()
     idx = query.record().indexOf("location");
     ti->location= query.value(idx).toString();
 
+    idx = query.record().indexOf("federation");
+    ti->federation= query.value(idx).toString();
+
     ti->sections = sections;
     ti->sectionIds = sectionIds;
     ti->filepath = db.databaseName();
@@ -357,6 +362,7 @@ bool Database::newDatabase(QString filepath)
 
         q = "CREATE TABLE tournament"
             "(tournament_name TEXT NOT NULL,"
+            "federation TEXT,"
             "location TEXT,"
             "begin_date DATE,"
             "end_date DATE)";

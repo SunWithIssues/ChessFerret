@@ -15,8 +15,14 @@ public:
     explicit SetupDialog(QWidget *parent = nullptr);
     ~SetupDialog();
 
+    static QList<QString> populateLangChoices();
+
 private:
     Ui::SetupDialog *ui;
+
+    QString langDirectory();
+
+
 };
 
 #endif // SETUPDIALOG_H

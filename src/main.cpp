@@ -1,8 +1,10 @@
 #include "headers/mainwindow.h"
+#include "headers/onstartupdialog.h"
 
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -17,9 +19,15 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    OnStartUpDialog* dialog = new OnStartUpDialog();
+
     MainWindow w;
     w.setWindowTitle("ChessFerret");
-    w.show();
+    w.show(dialog);
+
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
 
     return a.exec();
 }

@@ -23,8 +23,6 @@ TournamentDialog::~TournamentDialog()
     delete ui;
 }
 
-
-
 void TournamentDialog::init(TournamentInfo* ti)
 {
     info = ti;
@@ -97,9 +95,19 @@ void TournamentDialog::replaceSectionInfo(int id, SectionInfo si)
 void TournamentDialog::additionalUiSetup()
 {
     ui->savePathEdit->setText(QDir::homePath());
+
+    ui->beginDateEdit->setDisplayFormat("MM/dd/yyyy");
+    ui->endDateEdit->setDisplayFormat("MM/dd/yyyy");
+
+    ui->beginDateEdit->setDate(QDate::currentDate());
+    ui->endDateEdit->setDate(QDate::currentDate());
+
+    ui->buttonBox->setDisabled(true);
+
     connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
     connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
+
 }
 
 void TournamentDialog::on_buttonBox_accepted()
@@ -110,6 +118,7 @@ void TournamentDialog::on_buttonBox_accepted()
     info->location = ui->locationEdit->text();
     info->beginDate = ui->beginDateEdit->date();
     info->endDate = ui->endDateEdit->date();
+    info->federation = ui->fedComboBox->currentText();
     info->filepath = forceDbEnding(ui->savePathEdit->text());
     info->sections = tempSections;
     info->sectionIds = tempSectionIds;
@@ -169,6 +178,10 @@ void TournamentDialog::removeSection(){
     if(selected.count() < 1){
         return;
     }
+    if(tempSections.count() == 1)
+    {
+        ui->buttonBox->setDisabled(true);
+    }
 
     int idx = ui->sectionsTreeWidget->currentIndex().row();
     int id = tempSectionIds.value(idx);
@@ -196,6 +209,8 @@ void TournamentDialog::addSection()
                         static_cast<QTreeWidget *>(nullptr),
                         QStringList() << dialog.info.sectionName
             ));
+
+        ui->buttonBox->setDisabled(false);
     }
 }
 
