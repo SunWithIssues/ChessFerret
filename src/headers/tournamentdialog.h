@@ -38,12 +38,15 @@ public:
 signals:
 
 private slots:
+
     void on_buttonBox_accepted();
     void on_toolButton_clicked();
 
     void addSection();
     void removeSection();
     void viewSection();
+    void moveSectionUp();
+    void moveSectionDown();
 
 private:
     Ui::TournamentDialog *ui;

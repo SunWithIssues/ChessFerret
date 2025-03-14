@@ -182,8 +182,8 @@ void MainWindow::createMenus()
 void MainWindow::additionalUiSetup()
 {
 
+    ui->sectionTabWidget->setMovable(true);
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
-
 }
 
 
@@ -255,26 +255,26 @@ void MainWindow::add1Player()
 void MainWindow::updateTableViews()
 {
 
-    // All TableView
-    QAbstractItemModel *model_ptr = db->selectAll();
-    ui->currentAllView->setModel(model_ptr);
-    formatTableView(ui->currentAllView);
 
-    // Section TableView
-    QHash<int, SectionInfo> sections = tDialog->getSectionsInfo();
-    QList<int> ids = tDialog->getSectionIds();
-    SectionInfo s;
+    QAbstractItemModel *model_ptr;
+
     QTableView *tv;
+    QString tn;
     int len = ui->sectionTabWidget->count();
-    for(int i=1; i < len; i++)
+    for(int i=0; i < len; i++)
     {
-        s = sections.value(ids.value(i-1));
-
-        model_ptr = db->selectPlayersFromSection(s.sectionName);
-
-        // TODO: this is def not the best way to get tv widget
-
         tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
+        tn = ui->sectionTabWidget->tabText(i);
+
+        // All TableView
+        if (tv == ui->currentAllView){
+            model_ptr = db->selectAll();
+        }
+        else // Section TableView
+        {
+            model_ptr = db->selectPlayersFromSection(tn);
+        }
+
         tv->setModel(model_ptr);
         formatTableView(tv);
     }

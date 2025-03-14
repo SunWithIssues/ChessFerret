@@ -64,7 +64,7 @@ QList<int> TournamentDialog::getSectionIds()
 QList<QString> TournamentDialog::getSectionNames()
 {
     QList<QString> sn;
-    for(auto id: info->sectionIds)
+    foreach(auto id, info->sectionIds)
     {
         sn.append(info->sections.value(id).sectionName);
     }
@@ -107,7 +107,39 @@ void TournamentDialog::additionalUiSetup()
     connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
     connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
+    connect(ui->upButton, &QPushButton::released, this, &TournamentDialog::moveSectionUp);
+    connect(ui->downButton, &QPushButton::released, this, &TournamentDialog::moveSectionDown);
+}
 
+
+void TournamentDialog::moveSectionUp()
+{
+
+    auto selected = ui->sectionsTreeWidget->selectedItems();
+    if(selected.count() < 1){
+        return;
+    }
+    int idx = ui->sectionsTreeWidget->currentIndex().row();
+    if (idx == 0)
+    {
+        return;
+    }
+    tempSectionIds.swapItemsAt(idx, idx-1);
+}
+
+void TournamentDialog::moveSectionDown()
+{
+
+    auto selected = ui->sectionsTreeWidget->selectedItems();
+    if(selected.count() < 1){
+        return;
+    }
+    int idx = ui->sectionsTreeWidget->currentIndex().row();
+    if (idx == tempSectionIds.count()-1)
+    {
+        return;
+    }
+    tempSectionIds.swapItemsAt(idx, idx+1);
 }
 
 void TournamentDialog::on_buttonBox_accepted()
