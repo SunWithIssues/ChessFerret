@@ -60,6 +60,10 @@ private:
 
     QString forceDbEnding(QString filepath);
     void additionalUiSetup();
+
+    void moveSectionBy(int offset);
+    bool isSectionSelected();
+
 };
 
 #endif // TOURNAMENTDIALOG_H

@@ -111,36 +111,59 @@ void TournamentDialog::additionalUiSetup()
     connect(ui->downButton, &QPushButton::released, this, &TournamentDialog::moveSectionDown);
 }
 
-
-void TournamentDialog::moveSectionUp()
+void TournamentDialog::moveSectionBy(int offset)
 {
-
-    auto selected = ui->sectionsTreeWidget->selectedItems();
-    if(selected.count() < 1){
-        return;
-    }
+    offset = -offset;
     int idx = ui->sectionsTreeWidget->currentIndex().row();
-    if (idx == 0)
+    if ((offset > 0 && idx+offset >= tempSectionIds.count()) ||
+        (offset <= 0 && idx+offset < 0))
     {
         return;
     }
-    tempSectionIds.swapItemsAt(idx, idx-1);
+    tempSectionIds.swapItemsAt(idx, idx+offset);
+    QTreeWidgetItem* twi = ui->sectionsTreeWidget->takeTopLevelItem(idx);
+    ui->sectionsTreeWidget->insertTopLevelItem(idx+offset, twi);
+}
+
+bool TournamentDialog::isSectionSelected()
+{
+    auto selected = ui->sectionsTreeWidget->selectedItems();
+    if(selected.count() < 1){
+        return false;
+    }
+
+    return true;
+}
+
+QString TournamentDialog::forceDbEnding(QString filepath){
+    if(!filepath.endsWith(".db")){
+        filepath.append(".db");
+    }
+
+    return filepath;
+}
+
+
+// -------------------------------------
+// PRIVATE SLOTS
+// -------------------------------------
+void TournamentDialog::moveSectionUp()
+{
+
+    if(isSectionSelected()){
+        moveSectionBy(1);
+    }
 }
 
 void TournamentDialog::moveSectionDown()
 {
 
-    auto selected = ui->sectionsTreeWidget->selectedItems();
-    if(selected.count() < 1){
-        return;
+    if(isSectionSelected()){
+        moveSectionBy(-1);
     }
-    int idx = ui->sectionsTreeWidget->currentIndex().row();
-    if (idx == tempSectionIds.count()-1)
-    {
-        return;
-    }
-    tempSectionIds.swapItemsAt(idx, idx+1);
 }
+
+
 
 void TournamentDialog::on_buttonBox_accepted()
 {
@@ -175,10 +198,10 @@ void TournamentDialog::on_toolButton_clicked()
 
 void TournamentDialog::viewSection()
 {
-    auto selected = ui->sectionsTreeWidget->selectedItems();
-    if(selected.count() < 1){
+    if(!isSectionSelected()){
         return;
     }
+
     int idx = ui->sectionsTreeWidget->currentIndex().row();
     int id = tempSectionIds.value(idx);
     SectionInfo si = tempSections.value(id);
@@ -189,13 +212,14 @@ void TournamentDialog::viewSection()
 
     if(dialog.exec() == QDialog::Accepted)
     {
-        if(dialog.info.sectionName != selected.at(0)->text(0)){
+        auto selected = ui->sectionsTreeWidget->selectedItems().at(0);
+        if(dialog.info.sectionName != selected->text(0)){
             // Update UI accordingly
             ui->sectionsTreeWidget->addTopLevelItem(new QTreeWidgetItem(
                 static_cast<QTreeWidget *>(nullptr),
                 QStringList() << dialog.info.sectionName
                 ));
-            delete selected.at(0);
+            delete selected;
         }
 
 
@@ -206,23 +230,20 @@ void TournamentDialog::viewSection()
 
 }
 void TournamentDialog::removeSection(){
-    auto selected = ui->sectionsTreeWidget->selectedItems();
-    if(selected.count() < 1){
-        return;
+    if(isSectionSelected()){
+        if(tempSections.count() == 1)
+        {
+            ui->buttonBox->setDisabled(true);
+        }
+
+        int idx = ui->sectionsTreeWidget->currentIndex().row();
+        int id = tempSectionIds.value(idx);
+
+        tempSections.remove(id);
+        tempSectionIds.remove(idx);
+
+        delete ui->sectionsTreeWidget->selectedItems().at(0);
     }
-    if(tempSections.count() == 1)
-    {
-        ui->buttonBox->setDisabled(true);
-    }
-
-    int idx = ui->sectionsTreeWidget->currentIndex().row();
-    int id = tempSectionIds.value(idx);
-
-    tempSections.remove(id);
-    tempSectionIds.remove(idx);
-
-    delete selected.at(0);
-
 }
 
 void TournamentDialog::addSection()
@@ -246,11 +267,4 @@ void TournamentDialog::addSection()
     }
 }
 
-QString TournamentDialog::forceDbEnding(QString filepath){
-    if(!filepath.endsWith(".db")){
-        filepath.append(".db");
-    }
-
-    return filepath;
-}
 
