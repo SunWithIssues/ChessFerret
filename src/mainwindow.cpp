@@ -37,6 +37,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete db;
+    delete tDialog;
+    delete sDialog;
 }
 
 
@@ -381,11 +383,14 @@ void MainWindow::newTournamentDialog()
         // Populate Header Preferences b4 tabwidget decisions
         populateHeaderPreferences();
 
-
-        foreach (auto section, dialog->getSectionsInfo()) {
+        QString sn;
+        QHash<int, SectionInfo> si = dialog->getSectionsInfo();
+        foreach (auto id, dialog->getSectionIds()) {
+            sn = si.value(id).sectionName;
             auto w = emptyTabQWidget();
-            ui->sectionTabWidget->addTab(w, section.sectionName);
-            db->insertSection(section);
+
+            ui->sectionTabWidget->addTab(w, sn);
+            db->insertSection(si.value(id));
         }
 
 

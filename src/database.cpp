@@ -229,12 +229,16 @@ TournamentInfo* Database::setupTournament()
 
     QSqlQuery query(db);
 
-    QString q = "SELECT seq FROM sqlite_sequence WHERE name = " % TBL_SECTIONS;
+    QString q = "SELECT seq FROM sqlite_sequence WHERE name = \"" % TBL_SECTIONS % "\"";
     query.prepare(q);
-    if(query.exec()){
+    query.exec();
+
+    if(query.next()){
         sectionSeq = query.value(0).toInt();
     }
-    else{ sectionSeq = 0; }
+    else{
+        sectionSeq = 0;
+    }
 
     q = "SELECT * FROM " % TBL_SECTIONS;
     query.prepare(q);
