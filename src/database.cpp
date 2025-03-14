@@ -343,7 +343,7 @@ bool Database::newDatabase(QString filepath)
 
         q = "CREATE TABLE sections "
             "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "section_name PRIMARY KEY,"
+            "section_name TEXT,"
             "section_name_print TEXT,"
             "num_rounds INTEGER,"
             "pairing_style TEXT,"
