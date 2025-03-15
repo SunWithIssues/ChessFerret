@@ -9,11 +9,27 @@ SetupDialog::SetupDialog(QWidget *parent)
     , ui(new Ui::SetupDialog)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle(tr("Preferences"));
+
+    connect(ui->treeWidget, &QTreeWidget::currentItemChanged, this, &SetupDialog::displayWidget);
+
 }
 
 SetupDialog::~SetupDialog()
 {
     delete ui;
+}
+
+void SetupDialog::displayWidget()
+{
+    auto twi = ui->treeWidget->currentItem();
+    QString txt = twi->text(0);
+    if(twi->parent()){
+        txt.prepend(twi->parent()->text(0) + " - ");
+    }
+    ui->titleLabel->setText(txt);
+
 }
 
 QList<QString> SetupDialog::populateLangChoices()

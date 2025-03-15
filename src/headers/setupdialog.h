@@ -17,6 +17,9 @@ public:
 
     static QList<QString> populateLangChoices();
 
+private slots:
+    void displayWidget();
+
 private:
     Ui::SetupDialog *ui;
 

@@ -86,15 +86,15 @@ void MainWindow::createMenus()
     // ----------------------------------------
     // Setup
     // ----------------------------------------
-    QMenu *setupMenu = menuBar()->addMenu("Setup");
+    QMenu *setupMenu = menuBar()->addMenu(tr("Setup"));
 
-    auto playerHeaderAct = new QAction(tr("Player Header Preferences"));
+    auto *prefAct = new QAction(tr("Preferences"));
 
     // Add Actions
-    setupMenu->addAction(playerHeaderAct);
+    setupMenu->addAction(prefAct);
 
     // Connections
-    connect(playerHeaderAct, &QAction::triggered, this, &MainWindow::openSetupDialog);
+    connect(prefAct, &QAction::triggered, this, &MainWindow::openSetupDialog);
 
     // ----------------------------------------
     // Database
