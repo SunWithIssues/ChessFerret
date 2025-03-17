@@ -16,6 +16,10 @@ SetupDialog::SetupDialog(QWidget *parent)
     // Set Title
     this->setWindowTitle(tr("Preferences"));
 
+    // Search Filter LineEdit
+    ui->searchLineEdit->setPlaceholderText(tr("Filter"));
+
+
     // Display First Row
     ui->titleLabel->setText(ui->listWidget->item(0)->text());
     ui->stackedWidget->setCurrentIndex(0);

@@ -485,10 +485,9 @@ void MainWindow::formatTableView(QTableView *tv){
     tv->verticalHeader()->hide();
     tv->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    // TODO: all these should be changable in setup
     QHeaderView *verticalHeader = tv->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader->setDefaultSectionSize(sDialog->heightSize);
+    verticalHeader->setDefaultSectionSize(sDialog->heightSize); // TODO: name of variable might change
 
     verticalHeader->setFont(sDialog->headerFonts);
     tv->setFont(sDialog->cellFonts);
