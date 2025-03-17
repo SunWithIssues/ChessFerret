@@ -483,8 +483,12 @@ void MainWindow::formatTableView(QTableView *tv){
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(20);
 
-    QFont f = tv->font();
-    f.setPixelSize(15);
-    tv->setFont(f);
+    verticalHeader->setFont(sDialog->headerFonts);
+
+    tv->setFont(sDialog->cellFonts);
+
+    // QFont f = tv->font();
+    // f.setPixelSize(15);
+    // tv->setFont(f);
 }
 

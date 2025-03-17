@@ -2,6 +2,7 @@
 #define SETUPDIALOG_H
 
 #include <QDialog>
+// #include <QFont>
 
 namespace Ui {
 class SetupDialog;
@@ -16,12 +17,15 @@ public:
     ~SetupDialog();
 
     static QList<QString> populateLangChoices();
+    QFont headerFonts;
+    QFont cellFonts;
 
 private slots:
-    void displayWidget();
+    void displayTitle();
 
 private:
     Ui::SetupDialog *ui;
+
 
     QString langDirectory();
 

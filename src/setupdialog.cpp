@@ -10,10 +10,31 @@ SetupDialog::SetupDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Set Title
     this->setWindowTitle(tr("Preferences"));
 
-    connect(ui->treeWidget, &QTreeWidget::currentItemChanged, this, &SetupDialog::displayWidget);
+    // // Display First Row
+    // ui->titleLabel->setText(ui->listWidget->item(0)->text());
+    // ui->stackedWidget->setCurrentIndex(0);
 
+    // Table Fonts
+    QFont f("Ubuntu", 20, QFont::Bold);
+
+    ui->headerFontComboBox->setCurrentFont(f);
+    ui->headerFontSpinBox->setValue(f.pixelSize());
+
+    headerFonts = f;
+
+    QFont f2("Ubuntu", 10);
+
+    ui->cellsFontComboBox->setCurrentFont(f);
+    ui->cellsFontSpinBox->setValue(f2.pixelSize());
+
+    cellFonts = f2;
+
+    // Connections
+    connect(ui->listWidget, &QListWidget::currentItemChanged, this, &SetupDialog::displayTitle);
+    connect(ui->listWidget, &QListWidget::currentRowChanged, ui->stackedWidget, &QStackedWidget::setCurrentIndex);
 }
 
 SetupDialog::~SetupDialog()
@@ -21,15 +42,12 @@ SetupDialog::~SetupDialog()
     delete ui;
 }
 
-void SetupDialog::displayWidget()
-{
-    auto twi = ui->treeWidget->currentItem();
-    QString txt = twi->text(0);
-    if(twi->parent()){
-        txt.prepend(twi->parent()->text(0) + " - ");
-    }
-    ui->titleLabel->setText(txt);
 
+void SetupDialog::displayTitle()
+{
+
+    auto idx = ui->listWidget->currentRow();
+    ui->titleLabel->setText(ui->listWidget->item(idx)->text());
 }
 
 QList<QString> SetupDialog::populateLangChoices()
