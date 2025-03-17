@@ -24,12 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    createMenus();
-    additionalUiSetup();
-
     tDialog = nullptr;
     sDialog = new SetupDialog(this);
     db = new Database();
+
+    createMenus();
+    additionalUiSetup();
+
+
 
 }
 
@@ -94,7 +96,8 @@ void MainWindow::createMenus()
     setupMenu->addAction(prefAct);
 
     // Connections
-    connect(prefAct, &QAction::triggered, this, &MainWindow::openSetupDialog);
+    connect(prefAct, &QAction::triggered, sDialog, &SetupDialog::show);
+
 
     // ----------------------------------------
     // Database
@@ -184,9 +187,22 @@ void MainWindow::additionalUiSetup()
 
     ui->sectionTabWidget->setMovable(true);
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
+
+    connect(sDialog, &SetupDialog::valuesChanged, this, &MainWindow::fullRedraw);
 }
 
+void MainWindow::fullRedraw()
+{
+    QTableView *tv;
+    int len = ui->sectionTabWidget->count();
+    for(int i=0; i < len; i++)
+    {
+        tv = (QTableView*)ui->sectionTabWidget->widget(i)->children().value(1);
+        formatTableView(tv);
+    }
 
+
+}
 
 void MainWindow::populateHeaderPreferences()
 {
@@ -354,15 +370,6 @@ void MainWindow::openAboutDialog()
 
     dialog.exec();
 }
-void MainWindow::openSetupDialog()
-{
-
-    sDialog->show();
-
-
-
-    //TODO::IMPORTANT
-}
 
 void MainWindow::newTournamentDialog()
 {
@@ -481,14 +488,9 @@ void MainWindow::formatTableView(QTableView *tv){
     // TODO: all these should be changable in setup
     QHeaderView *verticalHeader = tv->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader->setDefaultSectionSize(20);
+    verticalHeader->setDefaultSectionSize(sDialog->heightSize);
 
     verticalHeader->setFont(sDialog->headerFonts);
-
     tv->setFont(sDialog->cellFonts);
-
-    // QFont f = tv->font();
-    // f.setPixelSize(15);
-    // tv->setFont(f);
 }
 

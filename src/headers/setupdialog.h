@@ -19,10 +19,13 @@ public:
     static QList<QString> populateLangChoices();
     QFont headerFonts;
     QFont cellFonts;
+    int heightSize;
+
+signals:
+    void valuesChanged();
 
 private slots:
-    void displayTitle();
-    void onApply();
+    void displayWidget();
     void onClose();
     void onAccept();
 

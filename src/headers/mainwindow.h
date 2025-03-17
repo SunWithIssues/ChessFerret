@@ -41,10 +41,10 @@ signals:
 public slots:
 
 
+
 private slots:
     void newTournamentDialog();
     void loadExistingTournament();
-    void openSetupDialog();
     void openAboutDialog();
     void newSection();
     void viewSection();
@@ -53,7 +53,7 @@ private slots:
     void add1Player();
     void addNPlayers();
 
-
+    void fullRedraw();
 
 private:
     void createMenus();

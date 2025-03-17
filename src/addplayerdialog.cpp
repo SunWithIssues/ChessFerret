@@ -3,7 +3,6 @@
 
 #include <QDate>
 
-
 AddPlayerDialog::AddPlayerDialog(QWidget *parent, QList<QString> sectionNames)
     : QDialog(parent), AddPlayer(sectionNames)
     , ui(new Ui::AddPlayerDialog)
