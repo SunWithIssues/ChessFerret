@@ -22,6 +22,9 @@ public:
 
 private slots:
     void displayTitle();
+    void onApply();
+    void onClose();
+    void onAccept();
 
 private:
     Ui::SetupDialog *ui;
