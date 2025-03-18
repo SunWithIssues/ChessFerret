@@ -222,6 +222,16 @@ bool Database::removePlayer()
     return false;
 }
 
+bool Database::withdrawPlayer(int row, QString section)
+{
+    // TODO:
+    QSqlQuery query(db);
+    QString q = "UPDATE players"
+                "SET ranking = (:withdrawValue)"
+                "WHERE section = (:sectionName)";
+    return false;
+}
+
 
 
 TournamentInfo* Database::setupTournament()

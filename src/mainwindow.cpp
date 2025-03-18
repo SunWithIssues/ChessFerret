@@ -128,6 +128,8 @@ void MainWindow::createMenus()
     // Connections
     connect(add1Act, &QAction::triggered, this, &MainWindow::add1Player);
     connect(addNAct, &QAction::triggered, this, &MainWindow::addNPlayers);
+    connect(withdraw1Act, &QAction::triggered, this, &MainWindow::withdrawPlayer);
+    connect(remove1Act, &QAction::triggered, this, &MainWindow::removePlayer);
 
     // ----------------------------------------
     // Sections
@@ -187,7 +189,7 @@ void MainWindow::additionalUiSetup()
 
     ui->sectionTabWidget->setMovable(true);
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
-
+    connect(ui->withdraw1PlayerButton, &QPushButton::clicked, this, &MainWindow::withdrawPlayer);
     connect(sDialog, &SetupDialog::valuesChanged, this, &MainWindow::fullRedraw);
 }
 
@@ -298,6 +300,36 @@ void MainWindow::updateTableViews()
 
 }
 
+
+void MainWindow::removePlayer(){
+    auto tab = ui->sectionTabWidget->currentWidget();
+    auto tv = (QTableView*) tab->children().value(1);
+    auto qmi = tv->currentIndex();
+
+
+}
+
+void MainWindow::withdrawPlayer(){
+    int idx = ui->sectionTabWidget->currentIndex();
+    QTableView* tv = (QTableView*) ui->sectionTabWidget->widget(idx)->children().value(1);
+    QModelIndex qmi = tv->currentIndex();
+
+    QVariant v(-1);
+    QVariant s("nb");
+    qDebug() << tv->model()->setData(qmi.sibling(qmi.row(), 2), v);
+    qDebug() << tv->model()->setData(qmi.sibling(qmi.row(), 4), s);
+    qDebug() << tv->model()->sibling(qmi.row(), 0, qmi).data();
+    qDebug() << qmi.data();
+    qDebug() << qmi.sibling(qmi.row(), 2).data();
+
+    // if(tv == ui->currentAllView)
+    // {
+    //     db->withdrawPlayer(qmi.row());
+    // }else{
+    //     db->withdrawPlayer(qmi.row(), ui->sectionTabWidget->tabText(idx));
+    // }
+
+}
 
 
 
@@ -444,8 +476,6 @@ void MainWindow::loadExistingTournament()
     ui->tournamentName->setText(ti->tournamentName);
 
     // UI. Add Tabs
-
-
     QString sn;
     foreach (auto id, ti->sectionIds) {
 
@@ -477,6 +507,7 @@ QWidget* MainWindow::emptyTabQWidget(){
     QWidget *w = new QWidget();
     QGridLayout *l = new QGridLayout(w);
     l->addWidget(new QTableView(), 0,0);
+
     return w;
 }
 

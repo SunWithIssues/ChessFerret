@@ -52,6 +52,8 @@ private slots:
 
     void add1Player();
     void addNPlayers();
+    void withdrawPlayer();
+    void removePlayer();
 
     void fullRedraw();
 
@@ -67,7 +69,7 @@ private:
 
     void populateHeaderPreferences();
 
-
+    void debug(QModelIndex qmi, QTableView *tv);
 
     Ui::MainWindow *ui;
     TournamentDialog *tDialog;

@@ -34,6 +34,7 @@ public:
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
     bool removePlayer();
+    bool withdrawPlayer(int row, QString section="");
     bool removeSection();
     bool openDatabase(QString filepath);
     bool newDatabase(QString filepath);
