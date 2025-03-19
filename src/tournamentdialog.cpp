@@ -15,6 +15,7 @@ TournamentDialog::TournamentDialog(QWidget *parent)
     , ui(new Ui::TournamentDialog)
 {
     ui->setupUi(this);
+    isGameStarted = false;
     additionalUiSetup();
 }
 
@@ -26,6 +27,7 @@ TournamentDialog::~TournamentDialog()
 void TournamentDialog::init(TournamentInfo* ti)
 {
     info = ti;
+    isGameStarted = ti->isGameStarted;
 }
 
 TournamentInfo* TournamentDialog::getTournamentInfo()
@@ -177,6 +179,7 @@ void TournamentDialog::on_buttonBox_accepted()
     info->filepath = forceDbEnding(ui->savePathEdit->text());
     info->sections = tempSections;
     info->sectionIds = tempSectionIds;
+    info->isGameStarted = isGameStarted;
 
 
     // Removes existing filepath for overwriting purposes in database.cpp

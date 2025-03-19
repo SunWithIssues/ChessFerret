@@ -19,6 +19,7 @@ public:
     ~TournamentDialog();
 
     void init(TournamentInfo* ti);
+    bool isGameStarted;
 
     QString getTournamentName();
     QString getLocation();
