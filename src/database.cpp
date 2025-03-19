@@ -126,8 +126,9 @@ bool Database::insertTournament(TournamentInfo *ti)
                 "federation, "
                 "location, "
                 "begin_date, "
-                "end_date )"
-                "VALUES (:tName, :fed, :loc, :bDate, :eDate)";
+                "end_date,"
+                "is_running )"
+                "VALUES (:tName, :fed, :loc, :bDate, :eDate, :isRun)";
 
     query.prepare(q);
     query.bindValue(":fed", ti->federation);
@@ -135,6 +136,7 @@ bool Database::insertTournament(TournamentInfo *ti)
     query.bindValue(":loc", ti->location);
     query.bindValue(":bDate", ti->beginDate);
     query.bindValue(":eDate", ti->endDate);
+    query.bindValue(":isRun", ti->isGameStarted);
 
     if(!query.exec())
     {
@@ -321,6 +323,9 @@ TournamentInfo* Database::setupTournament()
     idx = query.record().indexOf("federation");
     ti->federation= query.value(idx).toString();
 
+    idx = query.record().indexOf("is_running");
+    ti->isGameStarted = query.value(idx).toBool();
+
     ti->sections = sections;
     ti->sectionIds = sectionIds;
     ti->filepath = db.databaseName();
@@ -379,7 +384,8 @@ bool Database::newDatabase(QString filepath)
             "federation TEXT,"
             "location TEXT,"
             "begin_date DATE,"
-            "end_date DATE)";
+            "end_date DATE,"
+            "is_running INTEGER)";
 
         if(!query.exec(q))
         {
