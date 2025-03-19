@@ -6,9 +6,7 @@ This is an open source chess management software. The project is trying to reduc
 <p align="center">
 <img src="./images/documentation/program-start.png" 
 	alt="The application with a popup having two buttons ('New Tournament', 'Open Tournament') and a dropdown with English selected." width="300" height="300">
-</p>
 
-<p align="center">
 <img src="./images/documentation/open-roster.png" 
 	alt="The open section's roster is displayed with top players in the USCF." width="300" height="300">
 </p>
