@@ -3,7 +3,7 @@
 This is an open source chess management software. The project is trying to reduce the costs associated with being a Tournament Director/Arbiter, while also allowing for a completely offline management tool for linux operating systems.
 
 
-<p float="left">
+<p align="middle" float="left">
    <img src="./images/documentation/program-start.png" 
 		alt="The application with a popup having two buttons ('New Tournament', 'Open Tournament') and a dropdown with English selected." width="300" height="300">
 
