@@ -109,6 +109,7 @@ void TournamentDialog::additionalUiSetup()
     connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
     connect(ui->upButton, &QPushButton::released, this, &TournamentDialog::moveSectionUp);
     connect(ui->downButton, &QPushButton::released, this, &TournamentDialog::moveSectionDown);
+    connect(ui->beginDateEdit, &QDateEdit::dateChanged, this, [=](){ if (ui->beginDateEdit->date() > ui->endDateEdit->date()) {ui->endDateEdit->setDate(ui->beginDateEdit->date());} });
 }
 
 void TournamentDialog::moveSectionBy(int offset)
