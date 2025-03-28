@@ -16,6 +16,7 @@ AddPlayerDialog::AddPlayerDialog(QWidget *parent, QList<QString> sectionNames)
 
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &AddPlayerDialog::onAccepted);
     connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &AddPlayerDialog::onApplied);
+    connect(ui->nameLineEdit, &QLineEdit::textEdited, this, &AddPlayerDialog::shouldDisableButtons);
 
     additionalUiSetup();
 }
@@ -35,16 +36,26 @@ void AddPlayerDialog::additionalUiSetup(){
     ui->fideIDEdit->setText("");
     ui->natIdEdit->setText("");
     ui->teamsEdit->setText("");
+
+    ui->buttonBox->button(QDialogButtonBox::Apply)->setDisabled(true);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
 }
 
 void AddPlayerDialog::onAccepted()
 {
-    addPlayerToList(getUiPlayerInfo());
+    PlayerInfo pi = getUiPlayerInfo();
+    if(!pi.player_name.isEmpty()){
+        addPlayerToList(pi);
+    }
 
 }
 void AddPlayerDialog::onApplied()
 {
-    addPlayerToList(getUiPlayerInfo());
+    PlayerInfo pi = getUiPlayerInfo();
+    if(!pi.player_name.isEmpty()){
+        addPlayerToList(pi);
+    }
+
     additionalUiSetup();
 }
 
@@ -63,4 +74,14 @@ PlayerInfo AddPlayerDialog::getUiPlayerInfo()
     pi.teams = ui->teamsEdit->text();
 
     return pi;
+}
+
+void AddPlayerDialog::shouldDisableButtons(QString s){
+    if (!s.isEmpty()){
+        ui->buttonBox->button(QDialogButtonBox::Apply)->setDisabled(false);
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(false);
+    }else{
+        ui->buttonBox->button(QDialogButtonBox::Apply)->setDisabled(true);
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
+    }
 }
