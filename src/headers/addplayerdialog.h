@@ -30,6 +30,7 @@ private:
 private slots:
     void onAccepted();
     void onApplied();
+    void shouldDisableButtons(QString s);
 
 
 };
