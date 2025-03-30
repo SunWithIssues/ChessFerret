@@ -23,6 +23,8 @@ Database::Database(QObject *parent)
     TBL_TOURNAMENT = "tournament";
     TBL_PLAYERS = "players";
 
+    WITHDRAW_VALUE = -1;
+
     cols_tournament = {
         header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date","DATE"},
         header{"end_date", "DATE"}
@@ -218,20 +220,38 @@ bool Database::insertPlayer(PlayerInfo pi)
     return true;
 
 }
-bool Database::removePlayer()
+bool Database::removePlayer(int id)
 {
-    // TODO:
-    return false;
+    QSqlQuery query(db);
+    QString q = "DELETE FROM " % TBL_PLAYERS % " WHERE id = (:idVal)";
+    query.prepare(q);
+    query.bindValue(":idVal", id);
+    if(!query.exec())
+    {
+        qDebug() << "Could not delete <player> with id = " << id;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
 }
 
-bool Database::withdrawPlayer(int row, QString section)
+bool Database::withdrawPlayer(int id)
 {
     // TODO:
     QSqlQuery query(db);
-    QString q = "UPDATE players"
-                "SET ranking = (:withdrawValue)"
-                "WHERE section = (:sectionName)";
-    return false;
+    QString q = "UPDATE " % TBL_PLAYERS % " SET ranking = (:withdrawVal) WHERE id = (:idVal)";
+    query.prepare(q);
+    query.bindValue(":withdrawVal", WITHDRAW_VALUE);
+    query.bindValue(":idVal", id);
+
+
+    if(!query.exec())
+    {
+        qDebug() << "Could not withdraw <player> with id = " << id;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
 }
 
 

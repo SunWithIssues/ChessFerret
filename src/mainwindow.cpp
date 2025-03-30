@@ -302,11 +302,10 @@ void MainWindow::updateTableViews()
 
 
 void MainWindow::removePlayer(){
-    if(!tDialog->isGameStarted){
+    if(tDialog->isGameStarted){
         QMessageBox mbox;
 
-        mbox.setText(tr("Can't remove a player while a game is in progress."));
-        mbox.setDetailedText(tr("Withdraw player instead"));
+        mbox.setText(tr("Can't REMOVE a player while a game is in progress. \n WITHDRAW the player instead."));
         mbox.setWindowTitle(tr("Warning"));
 
         QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -317,12 +316,11 @@ void MainWindow::removePlayer(){
         mbox.exec();
     }
     auto tab = ui->sectionTabWidget->currentWidget();
-    auto tv = (QTableView*) tab->children().value(1);
-    auto qmi = tv->currentIndex();
+    QTableView* tv = (QTableView*) tab->children().value(1);
+    QModelIndex qmi = tv->currentIndex();
 
-    qDebug() << tv->model()->removeRow(qmi.row(), qmi);
-
-
+    db->removePlayer(qmi.sibling(qmi.row(),0).data().toInt());
+    updateTableViews();
 
 }
 
@@ -331,26 +329,9 @@ void MainWindow::withdrawPlayer(){
     QTableView* tv = (QTableView*) ui->sectionTabWidget->widget(idx)->children().value(1);
     QModelIndex qmi = tv->currentIndex();
 
-    QModelIndex child = tv->model()->index(qmi.row(),2, qmi.parent());
-    // bool bEditRole =  model->setData(child, QVariant(slink), Qt::EditRole); // working great can fetch the data later
 
-
-    QVariant v(-1);
-    QVariant s("nb");
-    qDebug() << tv->model()->setData(child, v, Qt::EditRole);
-    qDebug() << tv->model()->setData(qmi.sibling(qmi.row(), 4), s,Qt::DisplayRole);
-    qDebug() << tv->model()->sibling(qmi.row(), 0, qmi).data();
-    qDebug() << qmi.data();
-    qDebug() << qmi.sibling(qmi.row(), 2).data();
-
-
-    // if(tv == ui->currentAllView)
-    // {
-    //     db->withdrawPlayer(qmi.row());
-    // }else{
-    //     db->withdrawPlayer(qmi.row(), ui->sectionTabWidget->tabText(idx));
-    // }
-
+    db->withdrawPlayer(qmi.sibling(qmi.row(),0).data().toInt());
+    updateTableViews();
 }
 
 

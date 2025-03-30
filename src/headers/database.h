@@ -33,8 +33,8 @@ public:
     bool insertTournament(TournamentInfo* ti);
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
-    bool removePlayer();
-    bool withdrawPlayer(int row, QString section="");
+    bool removePlayer(int id);
+    bool withdrawPlayer(int id);
     bool removeSection();
     bool openDatabase(QString filepath);
     bool newDatabase(QString filepath);
@@ -61,6 +61,7 @@ private:
     QString TBL_SECTIONS ;
     QString TBL_TOURNAMENT ;
     QString TBL_PLAYERS ;
+    int WITHDRAW_VALUE;
 
 
 };
