@@ -15,19 +15,11 @@ public:
     explicit Database(QObject *parent = nullptr);
     ~Database();
 
-    struct header
-    {
-        QString name;
-        QString type;
-    };
-
     QAbstractItemModel* selectAll();
     QAbstractItemModel* selectPlayersFromSection(QString section_name);
 
 
     int getSectionsSeq();
-
-
 
 
     bool insertTournament(TournamentInfo* ti);
@@ -40,7 +32,6 @@ public:
     bool newDatabase(QString filepath);
     void closeDatabase();
 
-    QList<header> getColsPlayers();
 
     TournamentInfo* setupTournament();
 
@@ -50,10 +41,6 @@ public slots:
 
 private:
     QSqlDatabase db;
-
-    QList<header> cols_players;
-    QList<header> cols_sections;
-    QList<header> cols_tournament;
 
     int sectionSeq;
 

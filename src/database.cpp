@@ -25,22 +25,6 @@ Database::Database(QObject *parent)
 
     WITHDRAW_VALUE = -1;
 
-    cols_tournament = {
-        header{"tournament_name", "TEXT"}, header{"location", "TEXT"}, header{"begin_date","DATE"},
-        header{"end_date", "DATE"}
-    };
-    cols_sections = {
-        header{"section_name", "TEXT"}, header{"section_name_print", "TEXT"},
-        header{"num_rounds", "INTEGER"}, header{"pairing_style", "TEXT"},
-        header{"scoring_style", "TEXT"}, header{"min_rtg", "INTEGER"},
-        header{"max_rtg", "INTEGER"}, header{"time_control", "TEXT"}
-    };
-    cols_players = {
-        header{"name", "TEXT"}, header{"ranking", "INTEGER"}, header{"birthdate", "DATE"},
-        header{"gender", "TEXT"}, header{"id_national", "TEXT"},
-        header{"rtg_national ","INTEGER"}, header{"id_fide","TEXT"},
-        header{"rtg_fide","INTEGER"}, header{"section", "TEXT"}, header{"teams", "TEXT"}
-    };
 }
 
 Database::~Database()
@@ -52,10 +36,6 @@ int Database::getSectionsSeq(){
     return sectionSeq;
 }
 
-QList<Database::header> Database::getColsPlayers()
-{
-    return cols_players;
-}
 
 void Database::runSpecialQueries(QList<QString> queries)
 {
@@ -72,12 +52,11 @@ void Database::runSpecialQueries(QList<QString> queries)
 
 
         QSqlQuery query(dbTemp);
-        qDebug() << "queries " << queries;
 
         foreach(auto q, queries){
             query.prepare(q);
             if(!query.exec()){
-                qDebug() << "special query failed" << q;
+                qDebug() << "Special query failed" << q;
                 qDebug() << query.lastError().databaseText() << query.lastError().driverText();
                 break;
                 // return false;
@@ -94,12 +73,12 @@ void Database::runSpecialQueries(QList<QString> queries)
 
 QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
 {
-    QString q = "SELECT * FROM players WHERE section = '" % section_name % "'";
+    QString q = "SELECT * FROM " % TBL_PLAYERS % " WHERE section = '" % section_name % "'";
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setQuery(q, db);
     if (model->lastError().isValid())
     {
-        qDebug() << "table could not be retrived";
+        qDebug() << "Table could not be retrived";
         qDebug() << model->lastError().databaseText() << model->lastError().driverText();
         return nullptr;
     }
@@ -109,10 +88,11 @@ QAbstractItemModel* Database::selectPlayersFromSection(QString section_name)
 QAbstractItemModel* Database::selectAll()
 {
     QSqlQueryModel *model = new QSqlQueryModel();
-    model->setQuery("SELECT * FROM players", db);
+    QString q = "SELECT * FROM " % TBL_PLAYERS;
+    model->setQuery(q, db);
     if (model->lastError().isValid())
     {
-        qDebug() << "table could not be retrived";
+        qDebug() << "Table could not be retrived";
         qDebug() << model->lastError().databaseText() << model->lastError().driverText();
         return nullptr;
     }
@@ -124,7 +104,7 @@ QAbstractItemModel* Database::selectAll()
 bool Database::insertTournament(TournamentInfo *ti)
 {
     QSqlQuery query(db);
-    QString q = "INSERT INTO tournament ( tournament_name,"
+    QString q = "INSERT INTO " % TBL_TOURNAMENT % " ( tournament_name,"
                 "federation, "
                 "location, "
                 "begin_date, "
@@ -152,7 +132,7 @@ bool Database::insertTournament(TournamentInfo *ti)
 bool Database::insertSection(SectionInfo si)
 {
     QSqlQuery query(db);
-    QString q = "INSERT INTO sections ( section_name,"
+    QString q = "INSERT INTO " % TBL_SECTIONS %" ( section_name,"
                                         "section_name_print,"
                                         "num_rounds,"
                                         "pairing_style,"
@@ -187,7 +167,7 @@ bool Database::insertSection(SectionInfo si)
 bool Database::insertPlayer(PlayerInfo pi)
 {
     QSqlQuery query(db);
-    QString q = "INSERT INTO players (  birthdate, "
+    QString q = "INSERT INTO " % TBL_PLAYERS % " (  birthdate, "
                                         "name,"
                                         "gender,"
                                         "id_national,"
@@ -213,7 +193,7 @@ bool Database::insertPlayer(PlayerInfo pi)
 
     if(!query.exec())
     {
-        qDebug() << "Did not insert <player>";
+        qDebug() << "Could not insert player";
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return false;
     }
@@ -228,7 +208,7 @@ bool Database::removePlayer(int id)
     query.bindValue(":idVal", id);
     if(!query.exec())
     {
-        qDebug() << "Could not delete <player> with id = " << id;
+        qDebug() << "Could not delete player with id = " << id;
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return false;
     }
@@ -244,10 +224,9 @@ bool Database::withdrawPlayer(int id)
     query.bindValue(":withdrawVal", WITHDRAW_VALUE);
     query.bindValue(":idVal", id);
 
-
     if(!query.exec())
     {
-        qDebug() << "Could not withdraw <player> with id = " << id;
+        qDebug() << "Could not withdraw player with id = " << id;
         qDebug() << query.lastError().databaseText() << query.lastError().driverText();
         return false;
     }

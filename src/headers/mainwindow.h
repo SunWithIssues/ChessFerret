@@ -67,7 +67,6 @@ private:
     QWidget* emptyTabQWidget();
     void formatTableView(QTableView *tv);
 
-    void populateHeaderPreferences();
 
     void debug(QModelIndex qmi, QTableView *tv);
 

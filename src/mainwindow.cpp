@@ -206,30 +206,6 @@ void MainWindow::fullRedraw()
 
 }
 
-void MainWindow::populateHeaderPreferences()
-{
-
-    // TODO::IMPORTANT:: this is a quick dirty method for associating
-    //   database attributes with columns headers. will prob change in future
-
-
-    hp = new headerPreferences();
-
-    auto cols = db->getColsPlayers();
-    auto r = new QHash<QString, QString>({
-        {tr("Name"), cols.at(0).name}, {tr("Ranking"), cols.at(1).name},
-        {tr("Birthdate"), cols.at(2).name}, {tr("Gender"), cols.at(3).name},
-        {tr("ID National"), cols.at(4).name}, {tr("Rating National"), cols.at(5).name},
-        {tr("ID FIDE"), cols.at(6).name}, {tr("Rating FIDE"), cols.at(7).name},
-        {tr("Section"), cols.at(8).name}, {tr("Teams"), cols.at(9).name}
-    });
-
-    hp->roster = r;
-
-
-}
-
-
 
 void MainWindow::addNPlayers()
 {
@@ -422,8 +398,7 @@ void MainWindow::newTournamentDialog()
         db->newDatabase(dialog->getFilePath());
         db->insertTournament(dialog->getTournamentInfo());
 
-        // Populate Header Preferences b4 tabwidget decisions
-        populateHeaderPreferences();
+        // TODO: Populate Header Preferences b4 tabwidget decisions
 
         QString sn;
         QHash<int, SectionInfo> si = dialog->getSectionsInfo();
@@ -472,8 +447,7 @@ void MainWindow::loadExistingTournament()
     tDialog = new TournamentDialog(this);
     tDialog->init(ti);
 
-    // Populate Header Preferences b4 tabwidget decisions
-    populateHeaderPreferences();
+    // TODO: Populate Header Preferences b4 tabwidget decisions
 
     // UI. Tournament Name.
     ui->tournamentName->setText(ti->tournamentName);
