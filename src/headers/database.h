@@ -27,7 +27,7 @@ public:
     bool insertPlayer(PlayerInfo pi);
     bool removePlayer(int id);
     bool withdrawPlayer(int id);
-    bool removeSection();
+    bool removeSection(int id);
     bool openDatabase(QString filepath);
     bool newDatabase(QString filepath);
     void closeDatabase();

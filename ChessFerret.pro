@@ -12,6 +12,7 @@ CONFIG += c++17
 
 SOURCES += \
     src/helpers/addplayer.cpp \
+    src/helpers/standards.cpp \
     src/aboutdialog.cpp \
     src/addplayerdialog.cpp \
     src/database.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     src/helpers/headers/info.h \
     src/helpers/headers/addplayer.h \
+    src/helpers/headers/standards.h \
     src/headers/aboutdialog.h \
     src/headers/addplayerdialog.h \
     src/headers/database.h \
@@ -33,7 +35,7 @@ HEADERS += \
     src/headers/onstartupdialog.h \
     src/headers/sectiondialog.h \
     src/headers/setupdialog.h \
-    src/headers/tournamentdialog.h \
+    src/headers/tournamentdialog.h
 
 FORMS += \
     src/forms/aboutdialog.ui \

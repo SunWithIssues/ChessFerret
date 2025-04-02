@@ -215,6 +215,21 @@ bool Database::removePlayer(int id)
     return true;
 }
 
+bool Database::removeSection(int id)
+{
+    QSqlQuery query(db);
+    QString q = "DELETE FROM " % TBL_SECTIONS % " WHERE id = (:idVal)";
+    query.prepare(q);
+    query.bindValue(":idVal", id);
+    if(!query.exec())
+    {
+        qDebug() << "Could not delete section with id = " << id;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
+}
+
 bool Database::withdrawPlayer(int id)
 {
     // TODO:

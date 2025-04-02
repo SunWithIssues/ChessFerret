@@ -8,6 +8,7 @@
 #include "headers/onstartupdialog.h"
 #include "headers/aboutdialog.h"
 
+#include "helpers/headers/standards.h"
 
 #include <QMenu>
 #include <QDebug>
@@ -149,6 +150,7 @@ void MainWindow::createMenus()
 
     connect(add1SectionAct, &QAction::triggered, this, &MainWindow::newSection);
     connect(editSectionAct, &QAction::triggered, this, &MainWindow::viewSection);
+    connect(removeSectionAct, &QAction::triggered, this, &MainWindow::removeSection);
 
     // ----------------------------------------
     // Teams
@@ -290,6 +292,7 @@ void MainWindow::removePlayer(){
 
 
         mbox.exec();
+        return;
     }
     auto tab = ui->sectionTabWidget->currentWidget();
     QTableView* tv = (QTableView*) tab->children().value(1);
@@ -310,7 +313,25 @@ void MainWindow::withdrawPlayer(){
     updateTableViews();
 }
 
+void MainWindow::newSection()
+{
+    QTabWidget *tabWidget = ui->sectionTabWidget;
 
+    //Open New Section Dialog
+    SectionDialog dialog(this);
+    if(dialog.exec() == QDialog::Accepted)
+    {
+        // Update DB then add to tDialog
+        db->insertSection(dialog.info);
+        tDialog->addSectionInfo(db->getSectionsSeq(), dialog.info);
+
+        // Change UI Accordingly
+        auto w = emptyTabQWidget();
+        tabWidget->addTab(w, dialog.info.sectionName);
+
+    }
+
+}
 
 void MainWindow::viewSection()
 {
@@ -337,43 +358,37 @@ void MainWindow::viewSection()
     }
     else
     {
-        QMessageBox mbox;
-
-        mbox.setText(tr("ALL is not a section."));
-        mbox.setWindowTitle(tr("Warning"));
-
-        QSpacerItem* horizontalSpacer = new QSpacerItem(300, 50, QSizePolicy::Minimum, QSizePolicy::Minimum);
-        QGridLayout* layout = (QGridLayout*)mbox.layout();
-        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-
-        mbox.exec();
+        auto mbox = Standards::warning(tr("ALL is not a section."));
+        mbox->exec();
     }
 
 
 
 }
 
-
-void MainWindow::newSection()
+void MainWindow::removeSection()
 {
-    QTabWidget *tabWidget = ui->sectionTabWidget;
-
-    //Open New Section Dialog
-    SectionDialog dialog(this);
-    if(dialog.exec() == QDialog::Accepted)
+    int idx = ui->sectionTabWidget->currentIndex();
+    if(idx != 0)
     {
-        // Update DB then add to tDialog
-        db->insertSection(dialog.info);
-        tDialog->addSectionInfo(db->getSectionsSeq(), dialog.info);
+        if(tDialog->isGameStarted)
+        {
+            // TODO: mBox that says can't remove while tourney is ongoing & recommend merge
 
-        // Change UI Accordingly
-        auto w = emptyTabQWidget();
-        tabWidget->addTab(w, dialog.info.sectionName);
+            return;
+        }
+        // TODO: mBox are you sure & recommend merge
 
+    }
+    else
+    {
+        Standards::warning(tr("ALL is not a section."));
     }
 
 }
+
+
+
 
 void MainWindow::openAboutDialog()
 {
@@ -500,4 +515,6 @@ void MainWindow::formatTableView(QTableView *tv){
     verticalHeader->setFont(sDialog->headerFonts);
     tv->setFont(sDialog->cellFonts);
 }
+
+
 
