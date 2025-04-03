@@ -91,6 +91,14 @@ void TournamentDialog::replaceSectionInfo(int id, SectionInfo si)
 
 }
 
+void TournamentDialog::removeSection(int id)
+{
+    int idx = info->sections.value(id).sectionId;
+
+    info->sections.remove(id);
+    info->sectionIds.remove(idx);
+}
+
 // -------------------------------------
 // PRIVATE FUNCTIONS
 // -------------------------------------
@@ -106,9 +114,9 @@ void TournamentDialog::additionalUiSetup()
 
     ui->buttonBox->setDisabled(true);
 
-    connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addSection);
-    connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeSection);
-    connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewSection);
+    connect(ui->addSectionButton, &QPushButton::released, this, &TournamentDialog::addTempSection);
+    connect(ui->removeButton, &QPushButton::released, this, &TournamentDialog::removeTempSection);
+    connect(ui->viewEditButton, &QPushButton::released, this, &TournamentDialog::viewTempSection);
     connect(ui->upButton, &QPushButton::released, this, &TournamentDialog::moveSectionUp);
     connect(ui->downButton, &QPushButton::released, this, &TournamentDialog::moveSectionDown);
     connect(ui->beginDateEdit, &QDateEdit::dateChanged, this, [=](){ if (ui->beginDateEdit->date() > ui->endDateEdit->date()) {ui->endDateEdit->setDate(ui->beginDateEdit->date());} });
@@ -200,7 +208,7 @@ void TournamentDialog::on_toolButton_clicked()
 }
 
 
-void TournamentDialog::viewSection()
+void TournamentDialog::viewTempSection()
 {
     if(!isSectionSelected()){
         return;
@@ -233,7 +241,7 @@ void TournamentDialog::viewSection()
     }
 
 }
-void TournamentDialog::removeSection(){
+void TournamentDialog::removeTempSection(){
     if(isSectionSelected()){
         if(tempSections.count() == 1)
         {
@@ -250,7 +258,7 @@ void TournamentDialog::removeSection(){
     }
 }
 
-void TournamentDialog::addSection()
+void TournamentDialog::addTempSection()
 {
     //Open New Section Dialog
     SectionDialog dialog(this);

@@ -206,6 +206,7 @@ bool Database::removePlayer(int id)
     QString q = "DELETE FROM " % TBL_PLAYERS % " WHERE id = (:idVal)";
     query.prepare(q);
     query.bindValue(":idVal", id);
+
     if(!query.exec())
     {
         qDebug() << "Could not delete player with id = " << id;
@@ -221,6 +222,8 @@ bool Database::removeSection(int id)
     QString q = "DELETE FROM " % TBL_SECTIONS % " WHERE id = (:idVal)";
     query.prepare(q);
     query.bindValue(":idVal", id);
+
+    qDebug() << query.lastQuery() << query.boundValues();
     if(!query.exec())
     {
         qDebug() << "Could not delete section with id = " << id;

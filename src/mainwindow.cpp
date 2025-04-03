@@ -360,6 +360,7 @@ void MainWindow::viewSection()
     {
         auto mbox = Standards::warning(tr("ALL is not a section."));
         mbox->exec();
+        delete mbox;
     }
 
 
@@ -374,10 +375,33 @@ void MainWindow::removeSection()
         if(tDialog->isGameStarted)
         {
             // TODO: mBox that says can't remove while tourney is ongoing & recommend merge
+            auto mbox = Standards::warning(tr("Can't remove a section after the tournament has started, \n recommend  merging a section"));
+            mbox->exec();
+            delete mbox;
 
             return;
         }
         // TODO: mBox are you sure & recommend merge
+        QWidget* tab = ui->sectionTabWidget->currentWidget();
+        QTableView* tv = (QTableView*) tab->children().value(1);
+        auto id = tDialog->getSectionIds().at(idx-1);
+
+        if(tv->model()->rowCount() > 0){
+            auto mbox = Standards::warningYesNo(tr("You are about to remove a whole section. Are you sure? \n recommend merging a section"));
+            if(mbox->exec() == QMessageBox::Yes){
+                db->removeSection(id);
+                tDialog->removeSection(id);
+                ui->sectionTabWidget->removeTab(idx);
+                delete tab;
+            }
+            delete mbox;
+
+        }
+
+        db->removeSection(id);
+        tDialog->removeSection(id);
+        ui->sectionTabWidget->removeTab(idx);
+        delete tab;
 
     }
     else

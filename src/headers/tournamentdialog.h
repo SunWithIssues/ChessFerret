@@ -35,6 +35,7 @@ public:
     void swapSectionIds(int index0, int index1);
     void addSectionInfo(int id, SectionInfo si);
     void replaceSectionInfo(int id, SectionInfo si);
+    void removeSection(int id);
 
 signals:
 
@@ -43,9 +44,9 @@ private slots:
     void on_buttonBox_accepted();
     void on_toolButton_clicked();
 
-    void addSection();
-    void removeSection();
-    void viewSection();
+    void addTempSection();
+    void removeTempSection();
+    void viewTempSection();
     void moveSectionUp();
     void moveSectionDown();
 

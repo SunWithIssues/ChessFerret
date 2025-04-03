@@ -19,3 +19,13 @@ QMessageBox* Standards::warning(QString msg, QString title)
 
     return mbox;
 }
+
+QMessageBox* Standards::warningYesNo(QString msg, QString title)
+{
+    QMessageBox* mbox = warning(msg, title);
+
+    mbox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    mbox->setDefaultButton(QMessageBox::No);
+
+    return mbox;
+}
