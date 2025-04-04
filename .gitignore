@@ -81,3 +81,4 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /ref_database*/
+/qt-doc/
