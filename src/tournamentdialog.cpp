@@ -234,7 +234,7 @@ void TournamentDialog::viewTempSection()
             delete selected;
         }
 
-
+        dialog.info.sectionId = id;
         tempSections.insert(id, dialog.info);
 
 
