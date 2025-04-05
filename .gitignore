@@ -80,5 +80,5 @@ CMakeLists.txt.user*
 .rcc/
 .uic/
 /build*/
-/ref_database*/
-/qt-doc/
+# /ref_database*/
+# /qt-doc/
