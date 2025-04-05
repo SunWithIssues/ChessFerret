@@ -24,7 +24,7 @@ struct PlayerInfo
 
 struct SectionInfo
 {
-    int sectionId;
+    int sectionIdx;
 
     QString sectionName;
     int numRounds;
