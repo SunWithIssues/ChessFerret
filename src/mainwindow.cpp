@@ -187,7 +187,7 @@ void MainWindow::createMenus()
 void MainWindow::additionalUiSetup()
 {
 
-    ui->sectionTabWidget->setMovable(true);
+    ui->sectionTabWidget->setMovable(false); // TODO: bad patch for movable bug
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
     connect(ui->withdraw1PlayerButton, &QPushButton::clicked, this, &MainWindow::withdrawPlayer);
     connect(sDialog, &SetupDialog::valuesChanged, this, &MainWindow::fullRedraw);
