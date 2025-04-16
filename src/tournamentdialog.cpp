@@ -91,14 +91,18 @@ void TournamentDialog::replaceSectionInfo(int id, SectionInfo si)
 
 }
 
-void TournamentDialog::removeSection(int id)
+void TournamentDialog::removeSection(int idx)
 {
-    int idx = info->sections.value(id).sectionIdx;
+    int id = info->sectionIds.at(idx);
 
     qDebug() << "section id " << id << " sectionIds idx " << idx;
+    qDebug() << "before " << info->sectionIds;
 
     info->sections.remove(id);
     info->sectionIds.remove(idx);
+
+    qDebug() << "after " << info->sectionIds;
+
 }
 
 // -------------------------------------
@@ -236,7 +240,7 @@ void TournamentDialog::viewTempSection()
             delete selected;
         }
 
-        dialog.info.sectionIdx = idx;
+        dialog.info.sectionId = id;
         tempSections.insert(id, dialog.info);
 
 

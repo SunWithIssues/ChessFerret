@@ -306,11 +306,10 @@ TournamentInfo* Database::setupTournament()
         idx = query.record().indexOf("id");
         id = query.value(idx).toInt();
 
-
+        si.sectionId = id;
         sections.insert(id, si);
         sectionIds.append(id);
 
-        si.sectionIdx = sectionIds.size() - 1;
     }
 
 
