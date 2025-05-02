@@ -95,13 +95,8 @@ void TournamentDialog::removeSection(int idx)
 {
     int id = info->sectionIds.at(idx);
 
-    qDebug() << "section id " << id << " sectionIds idx " << idx;
-    qDebug() << "before " << info->sectionIds;
-
     info->sections.remove(id);
     info->sectionIds.remove(idx);
-
-    qDebug() << "after " << info->sectionIds;
 
 }
 

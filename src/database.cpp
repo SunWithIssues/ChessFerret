@@ -24,6 +24,7 @@ Database::Database(QObject *parent)
     TBL_PLAYERS = "players";
 
     WITHDRAW_VALUE = -1;
+    UNPAIRED_SECTION = "*";
 
 }
 
@@ -129,6 +130,7 @@ bool Database::insertTournament(TournamentInfo *ti)
     return true;
 
 }
+
 bool Database::insertSection(SectionInfo si)
 {
     QSqlQuery query(db);
@@ -200,6 +202,41 @@ bool Database::insertPlayer(PlayerInfo pi)
     return true;
 
 }
+
+bool Database::mergeSection(QString fromSection)
+{
+    QSqlQuery query(db);
+    QString q = "UPDATE " % TBL_PLAYERS % " SET section = (:toSection) WHERE section = (:fromSection)";
+    query.prepare(q);
+    query.bindValue(":toSection", UNPAIRED_SECTION);
+    query.bindValue(":fromSection", fromSection);
+
+    if(!query.exec())
+    {
+        qDebug() << "Could not merge section == " << fromSection;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
+}
+
+bool Database::mergeSection(QString fromSection, QString toSection)
+{
+    QSqlQuery query(db);
+    QString q = "UPDATE " % TBL_PLAYERS % " SET section = (:toSection) WHERE section = (:fromSection)";
+    query.prepare(q);
+    query.bindValue(":toSection", toSection);
+    query.bindValue(":fromSection", fromSection);
+
+    if(!query.exec())
+    {
+        qDebug() << "Could not merge section == " << fromSection;
+        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
+        return false;
+    }
+    return true;
+}
+
 bool Database::removePlayer(int id)
 {
     QSqlQuery query(db);
@@ -223,7 +260,6 @@ bool Database::removeSection(int id)
     query.prepare(q);
     query.bindValue(":idVal", id);
 
-    qDebug() << query.lastQuery() << query.boundValues();
     if(!query.exec())
     {
         qDebug() << "Could not delete section with id = " << id;

@@ -193,6 +193,7 @@ void MainWindow::additionalUiSetup()
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
     connect(ui->withdraw1PlayerButton, &QPushButton::clicked, this, &MainWindow::withdrawPlayer);
     connect(sDialog, &SetupDialog::valuesChanged, this, &MainWindow::fullRedraw);
+    // connect(ui->sectionTabWidget, &QTabWidget::)
 }
 
 void MainWindow::fullRedraw()
@@ -315,7 +316,6 @@ void MainWindow::withdrawPlayer(){
 
 void MainWindow::newSection()
 {
-    QTabWidget *tabWidget = ui->sectionTabWidget;
 
     //Open New Section Dialog
     SectionDialog dialog(this);
@@ -327,7 +327,7 @@ void MainWindow::newSection()
 
         // Change UI Accordingly
         auto w = emptyTabQWidget();
-        tabWidget->addTab(w, dialog.info.sectionName);
+        ui->sectionTabWidget->addTab(w, dialog.info.sectionName);
 
     }
 
@@ -369,44 +369,40 @@ void MainWindow::viewSection()
 
 void MainWindow::removeSection()
 {
+
     int idx = ui->sectionTabWidget->currentIndex();
     if(idx != 0)
     {
         if(tDialog->isGameStarted)
         {
-            // TODO: mBox that says can't remove while tourney is ongoing & recommend merge
+
             auto mbox = Standards::warning(tr("Can't remove a section after the tournament has started. \n Recommend  merging a section"));
             mbox->exec();
             delete mbox;
 
             return;
         }
-        // TODO: mBox are you sure & recommend merge
         QWidget* tab = ui->sectionTabWidget->currentWidget();
         QTableView* tv = (QTableView*) tab->children().value(1);
         auto id = tDialog->getSectionIds().at(idx-1);
 
-        if(tv->model()->rowCount() > 0){
+        if(tv->model() && tv->model()->rowCount() > 0){
             auto mbox = Standards::warningYesNo(tr("You are about to remove a whole section. Are you sure? \n Recommend merging a section, otherwise players will not be paired."));
             auto ret = mbox->exec();
             delete mbox;
             if(ret != QMessageBox::Yes){
                 return;
             }
+            db->mergeSection(tDialog->getSectionsInfo().value(id).sectionName);
         }
-
-        qDebug() << "section id " << id << " tab idx " << idx;
-
 
         db->removeSection(id);
         tDialog->removeSection(idx-1);
         ui->sectionTabWidget->removeTab(idx);
         delete tab;
 
-    }
-    else
-    {
-        Standards::warning(tr("ALL is not a section."));
+        updateTableViews();
+
     }
 
 }
