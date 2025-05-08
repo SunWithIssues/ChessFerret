@@ -49,6 +49,7 @@ private slots:
 
     void newSection();
     void viewSection();
+    void mergeSection();
     void removeSection();
 
     void add1Player();

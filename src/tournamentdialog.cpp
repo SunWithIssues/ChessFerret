@@ -15,6 +15,7 @@ TournamentDialog::TournamentDialog(QWidget *parent)
     , ui(new Ui::TournamentDialog)
 {
     ui->setupUi(this);
+    this->setWindowTitle(tr("Tournament Setup"));
     isGameStarted = false;
     additionalUiSetup();
 }

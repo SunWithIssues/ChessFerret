@@ -203,22 +203,6 @@ bool Database::insertPlayer(PlayerInfo pi)
 
 }
 
-bool Database::mergeSection(QString fromSection)
-{
-    QSqlQuery query(db);
-    QString q = "UPDATE " % TBL_PLAYERS % " SET section = (:toSection) WHERE section = (:fromSection)";
-    query.prepare(q);
-    query.bindValue(":toSection", UNPAIRED_SECTION);
-    query.bindValue(":fromSection", fromSection);
-
-    if(!query.exec())
-    {
-        qDebug() << "Could not merge section == " << fromSection;
-        qDebug() << query.lastError().databaseText() << query.lastError().driverText();
-        return false;
-    }
-    return true;
-}
 
 bool Database::mergeSection(QString fromSection, QString toSection)
 {

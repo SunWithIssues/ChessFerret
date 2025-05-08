@@ -43,9 +43,9 @@ public:
 
     void init(SectionInfo si);
 
+public slots:
+    virtual void accept();
 
-private slots:
-    void on_buttonBox_accepted();
 
 private:
     Ui::SectionDialog *ui;

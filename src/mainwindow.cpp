@@ -7,6 +7,7 @@
 #include "headers/addplayerdialog.h"
 #include "headers/onstartupdialog.h"
 #include "headers/aboutdialog.h"
+#include "headers/mergedialog.h"
 
 #include "helpers/headers/standards.h"
 
@@ -151,6 +152,7 @@ void MainWindow::createMenus()
     connect(add1SectionAct, &QAction::triggered, this, &MainWindow::newSection);
     connect(editSectionAct, &QAction::triggered, this, &MainWindow::viewSection);
     connect(removeSectionAct, &QAction::triggered, this, &MainWindow::removeSection);
+    connect(mergeSectionAct, &QAction::triggered, this, &MainWindow::mergeSection);
 
     // ----------------------------------------
     // Teams
@@ -363,9 +365,26 @@ void MainWindow::viewSection()
         delete mbox;
     }
 
-
-
 }
+
+void MainWindow::mergeSection()
+{
+    auto sn = tDialog->getSectionNames();
+
+    MergeDialog dialog(this);
+    dialog.init(sn);
+
+    if(dialog.exec() == QDialog::Accepted)
+    {
+        // TODO: idk idk idk
+        qDebug() << "FROM ";
+        foreach (auto item, dialog.fromItems()) {
+            qDebug() << item->text();
+        }
+        qDebug() << "TO " << dialog.toItems()->text();
+    }
+}
+
 
 void MainWindow::removeSection()
 {
@@ -393,7 +412,7 @@ void MainWindow::removeSection()
             if(ret != QMessageBox::Yes){
                 return;
             }
-            db->mergeSection(tDialog->getSectionsInfo().value(id).sectionName);
+            db->mergeSection(tDialog->getSectionsInfo().value(id).sectionName, db->UNPAIRED_SECTION);
         }
 
         db->removeSection(id);

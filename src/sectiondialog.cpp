@@ -1,6 +1,10 @@
 #include "headers/sectiondialog.h"
 #include "ui_sectiondialog.h"
 
+#include "helpers/headers/standards.h"
+
+#include <QPushButton>
+
 SectionDialog::SectionDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::SectionDialog)
@@ -17,7 +21,6 @@ SectionDialog::SectionDialog(QWidget *parent)
 
     ui->setupUi(this);
     additionalUiSetup();
-
 }
 
 void SectionDialog::init(SectionInfo si)
@@ -40,8 +43,16 @@ SectionDialog::~SectionDialog()
 }
 
 
-void SectionDialog::on_buttonBox_accepted()
+void SectionDialog::accept()
 {
+    if(ui->nameEdit->text().length() < 3)
+    {
+        auto mbox = Standards::warning(tr("Section name must be at least 3 characters in length."));
+        mbox->exec();
+        delete mbox;
+        return;
+    }
+
     info.sectionName = ui->nameEdit->text();
     info.numRounds = ui->roundsSpinBox->value();
     info.ratingRangeMax = ui->maxSpinBox->value();
@@ -49,6 +60,9 @@ void SectionDialog::on_buttonBox_accepted()
     info.sectionNameForPrinting = ui->printNameEdit->text();
     info.timeControl = ui->timeControlEdit->text();
     info.pairingRule = ui->pairingComboBox->currentText();
+
+    QDialog::accept();
+
 }
 
 void SectionDialog::additionalUiSetup()

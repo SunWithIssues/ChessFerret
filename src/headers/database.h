@@ -26,7 +26,6 @@ public:
     bool insertSection(SectionInfo si);
     bool insertPlayer(PlayerInfo pi);
     bool mergeSection(QString fromSection, QString toSection);
-    bool mergeSection(QString fromSection);
     bool removeSection(int id);
     bool removePlayer(int id);
     bool withdrawPlayer(int id);
@@ -36,6 +35,9 @@ public:
 
 
     TournamentInfo* setupTournament();
+
+
+    QString UNPAIRED_SECTION;
 
 public slots:
     void runSpecialQueries(QList<QString> queries);
@@ -51,7 +53,7 @@ private:
     QString TBL_TOURNAMENT ;
     QString TBL_PLAYERS ;
     int WITHDRAW_VALUE;
-    QString UNPAIRED_SECTION;
+
 
 
 };

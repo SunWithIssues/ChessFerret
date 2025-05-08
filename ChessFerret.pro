@@ -18,6 +18,7 @@ SOURCES += \
     src/database.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/mergedialog.cpp \
     src/onstartupdialog.cpp \
     src/sectiondialog.cpp \
     src/setupdialog.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 
 HEADERS += \
+    src/headers/mergedialog.h \
     src/helpers/headers/info.h \
     src/helpers/headers/addplayer.h \
     src/helpers/headers/standards.h \
@@ -38,6 +40,7 @@ HEADERS += \
     src/headers/tournamentdialog.h
 
 FORMS += \
+    src/forms/mergedialog.ui \
     src/forms/aboutdialog.ui \
     src/forms/addplayerdialog.ui \
     src/forms/mainwindow.ui \
