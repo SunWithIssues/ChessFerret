@@ -93,14 +93,9 @@ void MainWindow::createMenus()
     QMenu *setupMenu = menuBar()->addMenu(tr("Setup"));
 
     auto *prefAct = new QAction(tr("Preferences"));
-    auto *toggleUnpAct = new QAction(tr("Toggle Unpaired Section"));
-    auto *toggleAllAct = new QAction(tr("Toggle All Section"));
 
     // Add Actions
     setupMenu->addAction(prefAct);
-    setupMenu->addSeparator();
-    setupMenu->addAction(toggleUnpAct);
-    setupMenu->addAction(toggleAllAct);
 
     // Connections
     connect(prefAct, &QAction::triggered, sDialog, &SetupDialog::show);
@@ -201,7 +196,6 @@ void MainWindow::additionalUiSetup()
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
     connect(ui->withdraw1PlayerButton, &QPushButton::clicked, this, &MainWindow::withdrawPlayer);
     connect(sDialog, &SetupDialog::valuesChanged, this, &MainWindow::fullRedraw);
-    // connect(ui->sectionTabWidget, &QTabWidget::)
 }
 
 void MainWindow::fullRedraw()
@@ -321,6 +315,7 @@ void MainWindow::withdrawPlayer(){
     db->withdrawPlayer(qmi.sibling(qmi.row(),0).data().toInt());
     updateTableViews();
 }
+
 
 void MainWindow::newSection()
 {

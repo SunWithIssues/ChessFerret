@@ -17,7 +17,7 @@ MergeDialog::MergeDialog(QWidget *parent)
     f.setItalic(true);
     ui->label->setFont(f);
 
-    ui->label->setText(tr("Multiple selection is possible. "));
+    ui->label->setText(tr("Unpaired section is speciality section filled with all players who are not in playing section."));
 }
 
 MergeDialog::~MergeDialog()
@@ -26,6 +26,13 @@ MergeDialog::~MergeDialog()
 }
 
 void MergeDialog::init(QStringList section_names){
+    ui->fromListWidget->addItem("UNPAIRED SECTION");
+
+    QListWidgetItem* lwi = ui->fromListWidget->item(0);
+    auto f = lwi->font();
+    f.setItalic(true);
+    lwi->setFont(f);
+
     ui->fromListWidget->addItems(section_names);
     ui->toListWidget->addItems(section_names);
 }
