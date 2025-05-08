@@ -45,7 +45,7 @@ SectionDialog::~SectionDialog()
 
 void SectionDialog::accept()
 {
-    if(ui->nameEdit->text().length() < 3)
+    if(ui->nameEdit->text().length() < 4)
     {
         auto mbox = Standards::warning(tr("Section name must be at least 3 characters in length."));
         mbox->exec();

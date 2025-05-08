@@ -93,9 +93,14 @@ void MainWindow::createMenus()
     QMenu *setupMenu = menuBar()->addMenu(tr("Setup"));
 
     auto *prefAct = new QAction(tr("Preferences"));
+    auto *toggleUnpAct = new QAction(tr("Toggle Unpaired Section"));
+    auto *toggleAllAct = new QAction(tr("Toggle All Section"));
 
     // Add Actions
     setupMenu->addAction(prefAct);
+    setupMenu->addSeparator();
+    setupMenu->addAction(toggleUnpAct);
+    setupMenu->addAction(toggleAllAct);
 
     // Connections
     connect(prefAct, &QAction::triggered, sDialog, &SetupDialog::show);
@@ -191,6 +196,7 @@ void MainWindow::createMenus()
 void MainWindow::additionalUiSetup()
 {
 
+    ui->sectionTabWidget->setTabText(0, tr("ALL"));
     ui->sectionTabWidget->setMovable(false); // TODO: bad patch for movable bug
     connect(ui->add1PlayerButton, &QPushButton::clicked, this, &MainWindow::add1Player);
     connect(ui->withdraw1PlayerButton, &QPushButton::clicked, this, &MainWindow::withdrawPlayer);
@@ -381,7 +387,7 @@ void MainWindow::mergeSection()
         foreach (auto item, dialog.fromItems()) {
             qDebug() << item->text();
         }
-        qDebug() << "TO " << dialog.toItems()->text();
+        qDebug() << "TO " << dialog.toItem()->text();
     }
 }
 

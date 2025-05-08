@@ -19,7 +19,11 @@ public:
     void init(QStringList section_names);
 
     QList<QListWidgetItem*> fromItems();
-    QListWidgetItem* toItems();
+    QListWidgetItem* toItem();
+
+public slots:
+    virtual void accept();
+
 
 private:
     Ui::MergeDialog *ui;
